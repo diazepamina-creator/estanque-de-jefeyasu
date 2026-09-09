@@ -1,0 +1,2065 @@
+<!doctype html>
+<html lang="es" data-tema="tinta" data-texto="normal" data-fuente="legible" data-movimiento="normal">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<!--
+  EL ESTANQUE DE JEFEYASU · sistemas de ecuaciones para 2.º de ESO
+  Un solo archivo. Se abre en el navegador y no necesita nada más.
+
+  EL MODELO. Un sistema son dos cuentas sobre las mismas cosas que tienen
+  que salir a la vez, y la solución es la pareja que cumple las dos. En el
+  estanque hay grullas y tortugas: ocho cabezas y veintiséis patas. Con
+  ocho cabezas hay nueve repartos; solo uno da veintiséis patas. La
+  primera cuenta deja muchas parejas; la segunda elige una.
+
+  EL PUENTE. El método de la escuela japonesa (suponer que todas son
+  grullas y ver cuántas patas faltan) es el método de reducción con otro
+  nombre: multiplicar la ecuación de las cabezas por dos y restarla de la
+  de las patas. En la sala del ábaco se ve que era lo mismo.
+
+  LAS DEFINICIONES (Wu): un sistema de dos ecuaciones con dos incógnitas
+  son dos igualdades que tienen que cumplirse a la vez. Una solución es
+  una pareja que las cumple las dos; se comprueba sustituyendo. Los
+  métodos convierten el sistema en una ecuación con una incógnita sin
+  cambiar la solución.
+
+  LAS SALAS:
+    1. EL ESTANQUE · cabezas, patas, tortugas; los repartos; la suposición
+    2. LA TABLILLA · el sistema con letras; comprobar una pareja
+    3. EL ÁBACO · reducción, sobre las filas del soroban
+    4. LA SUSTITUCIÓN · despejar y poner en su lugar
+    5. LA IGUALACIÓN · despejar la misma en las dos
+    6. LAS DOS SENDAS · la gráfica: se cruzan, paralelas, la misma
+    ·  SEKI · sala oculta: la cuenta cruzada, el determinante de 1683
+
+  QUIÉN HABLA. Jefeyasu, señor del estanque, pide. Listaseki, el que echa
+  las cuentas, contesta con el ábaco. Orizuru, la grulla de papel, comenta
+  desde el borde. Quelona asoma del agua; Jefén Giskan viene por mar.
+
+  EL KIT DE EDO: tinta y papel, bermellón y añil, Shippori Mincho, las
+  olas del seigaiha, kamon(), el estanque como mando, la tablilla como
+  albarán, los grados de una escuela de wasan.
+
+  LO DE LA TERMINAL: arranque, las tablillas en la cabecera, franja de
+  grado con kamon, guía, glosario, ajustes, la tablilla como albarán,
+  asomos, taller con hoja, deudas, índice, diagnóstico y turno.
+-->
+<meta name="author" content="Andrés Asensio">
+<meta name="description" content="Sistemas de ecuaciones para 2.º de ESO: el estanque de grullas y tortugas, la tablilla, el ábaco, la sustitución, la igualación y las dos sendas.">
+<meta name="theme-color" content="#1A1719">
+<title>El estanque de Jefeyasu</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@400;600;700&family=Space+Mono:wght@400;700&family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+:root{
+  /* DE TINTA: el kit de Edo sobre sumi. Bermellón shu para el acento, añil
+     ai para el agua, musgo matcha para las tortugas, oro kin para lo que
+     brilla. Lo dibujado va en --figura para que el cambio de tema lo
+     invierta solo. */
+  --fondo:#1A1719; --panel:#242022; --panel2:#2E292B; --linea:#4A4144;
+  --tinta:#F1E8D6; --tenue:#B5A896;
+  --shu:#E06A50; --shuO:#A8402E; --ai:#7FA3CC; --aiO:#3E5F86; --matcha:#A6B86F; --matchaO:#6E7C3E;
+  --kin:#D9B24A; --mizu:#7FB3C9; --tancho:#E0473B; --sumi:#241F1E; --washi:#F1E8D6;
+  --acento:var(--shu); --acentoO:#A8402E; --acentoT:#1A1719; --mal:#E8562E; --bien:#8FB07A;
+  --figura:#F1E8D6; --figuraO:#B5A896; --hueco:#1A1719;
+  --sombra:rgba(0,0,0,.55); --cuenta:#D9B24A; --texto:15px;
+}
+[data-tema="papel"]{
+  /* DE PAPEL: washi para el proyector. Los colores, más hondos. */
+  --fondo:#F1E8D6; --panel:#F8F1E2; --panel2:#E8DCC4; --linea:#CDBFA4;
+  --tinta:#241F1E; --tenue:#6B5E52;
+  --shu:#C4553F; --shuO:#8E3A2C; --ai:#2E4A6B; --aiO:#1E3350; --matcha:#7A8B4E; --matchaO:#55622F;
+  --kin:#B8902E; --mizu:#5E8FA6; --tancho:#B8322A; --sumi:#241F1E; --washi:#F7F0DF;
+  --acentoO:#8E3A2C; --acentoT:#F8F1E2; --mal:#B3341A; --bien:#4E7A3C;
+  --figura:#241F1E; --figuraO:#4A4144; --hueco:#F1E8D6;
+  --sombra:rgba(36,31,30,.2); --cuenta:#8E3A2C;
+}
+[data-texto="grande"]{--texto:17.5px}
+*{box-sizing:border-box}
+[hidden]{display:none !important}
+html{background:var(--fondo)}
+html,body{overflow-x:clip}
+body{margin:0;color:var(--tinta);background:var(--fondo);
+  font-family:'Atkinson Hyperlegible',system-ui,sans-serif;font-size:var(--texto);line-height:1.5;
+  max-width:820px;margin:0 auto;padding:0 14px 40px}
+[data-fuente="mincho"] body{font-family:'Shippori Mincho','Atkinson Hyperlegible',serif;font-size:calc(var(--texto) + 1px)}
+[data-movimiento="menos"] *{animation-duration:.001ms !important;transition-duration:.001ms !important}
+
+/* EL FRISO DEL ESTANQUE: las olas del seigaiha, en añil. */
+.olas{height:22px;margin:0 -14px;background:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='48' height='22'><g fill='none' stroke='%237FA3CC' stroke-width='1.3'><path d='M0 22 a24 24 0 0 1 48 0'/><path d='M6 22 a18 18 0 0 1 36 0'/><path d='M12 22 a12 12 0 0 1 24 0'/><path d='M18 22 a6 6 0 0 1 12 0'/><path d='M-24 11 a24 24 0 0 1 48 0'/><path d='M-18 11 a18 18 0 0 1 36 0'/><path d='M-12 11 a12 12 0 0 1 24 0'/><path d='M24 11 a24 24 0 0 1 48 0'/><path d='M30 11 a18 18 0 0 1 36 0'/><path d='M36 11 a12 12 0 0 1 24 0'/></g></svg>") repeat-x left top / 48px 22px}
+[data-tema="papel"] .olas{background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='48' height='22'><g fill='none' stroke='%232E4A6B' stroke-width='1.3'><path d='M0 22 a24 24 0 0 1 48 0'/><path d='M6 22 a18 18 0 0 1 36 0'/><path d='M12 22 a12 12 0 0 1 24 0'/><path d='M18 22 a6 6 0 0 1 12 0'/><path d='M-24 11 a24 24 0 0 1 48 0'/><path d='M-18 11 a18 18 0 0 1 36 0'/><path d='M-12 11 a12 12 0 0 1 24 0'/><path d='M24 11 a24 24 0 0 1 48 0'/><path d='M30 11 a18 18 0 0 1 36 0'/><path d='M36 11 a12 12 0 0 1 24 0'/></g></svg>")}
+
+header .cabeza{display:flex;align-items:flex-end;gap:12px;flex-wrap:wrap;margin-top:14px}
+h1{font-family:'Shippori Mincho',serif;font-weight:700;font-size:33px;letter-spacing:.2px;margin:0;color:var(--acento);line-height:1.05}
+header .sub{font-family:'Space Mono',monospace;font-size:10.5px;letter-spacing:2px;text-transform:uppercase;color:var(--tenue);margin:4px 0 0}
+/* LAS TABLILLAS: una por cuenta hecha, colgadas en la pared del templo. */
+.tablillas{margin-left:auto;display:flex;align-items:center;gap:8px;font-family:'Space Mono',monospace;font-size:12px;letter-spacing:1px;color:var(--tenue);
+  border:1px solid var(--linea);border-radius:20px;padding:4px 12px;transition:border-color .3s, box-shadow .3s}
+.tablillas b{color:var(--acento);font-weight:400;font-variant-numeric:tabular-nums}
+.tablillas svg{width:22px;height:16px}
+.tablillas.brilla{border-color:var(--kin);box-shadow:0 0 18px var(--kin)}
+.barra{display:flex;gap:2px 14px;flex-wrap:wrap;margin:10px 0 0;font-family:'Shippori Mincho',serif;font-size:18px;letter-spacing:.3px}
+.barra a,.barra button{font:inherit;color:var(--tenue);background:none;border:0;padding:4px 0;cursor:pointer;text-decoration:none}
+.barra a:hover,.barra button:hover,.barra button[aria-pressed="true"]{color:var(--acento)}
+.barra a:focus-visible,.barra button:focus-visible{outline:2px solid var(--kin);outline-offset:2px}
+/* LA FRANJA DEL GRADO, con su kamon */
+.franja{margin:12px 0 0;padding:8px 12px;border:1px solid var(--linea);border-radius:10px;background:var(--panel);display:grid;grid-template-columns:40px 1fr;gap:6px 10px;align-items:center}
+.franja .kamon{grid-row:1/3;width:38px;height:38px}
+.franja .kamon svg{width:100%;height:100%;display:block}
+.franja .linea1{display:flex;justify-content:space-between;align-items:baseline;gap:10px;flex-wrap:wrap}
+.franja .rango{font-family:'Shippori Mincho',serif;font-size:19px;font-weight:600;color:var(--acento);letter-spacing:.2px}
+.franja .rango small{font-family:'Space Mono',monospace;font-size:10px;letter-spacing:1.4px;text-transform:uppercase;color:var(--tenue);margin-left:8px;font-weight:400}
+.franja .cuenta{font-family:'Space Mono',monospace;font-size:10.5px;letter-spacing:1.2px;text-transform:uppercase;color:var(--tenue)}
+.franja .barraR{height:6px;border-radius:3px;background:var(--fondo);overflow:hidden}
+.franja .barraR i{display:block;height:100%;width:0;border-radius:3px;background:linear-gradient(90deg,var(--acentoO),var(--acento));transition:width .5s ease}
+
+.panel{background:linear-gradient(180deg,var(--panel),var(--panel2));border:1px solid var(--linea);border-radius:12px;
+  padding:14px 14px 12px;margin:10px 0;box-shadow:0 6px 18px var(--sombra);position:relative}
+.salaRot{margin:-2px 0 10px}
+.salaRot b{font-family:'Shippori Mincho',serif;font-weight:700;font-size:22px;letter-spacing:.2px;color:var(--acento)}
+.salaRot b::before{content:'';display:inline-block;width:12px;height:12px;border-radius:50%;background:var(--acento);margin-right:8px;vertical-align:-1px}
+.salaRot span{font-family:'Shippori Mincho',serif;font-size:16px;color:var(--tenue);margin-left:8px}
+.fila{display:flex;gap:6px;align-items:center;flex-wrap:wrap;margin-top:8px}
+.etq{font-family:'Space Mono',monospace;font-size:10px;letter-spacing:1.4px;text-transform:uppercase;color:var(--tenue);min-width:82px}
+button.n{font-family:'Space Mono',monospace;font-weight:700;font-size:14px;min-width:34px;min-height:34px;padding:5px 9px;border-radius:8px;
+  border:1px solid var(--linea);background:var(--panel);color:var(--tinta);cursor:pointer}
+button.n[aria-pressed="true"]{background:var(--acento);border-color:var(--acento);color:var(--acentoT)}
+button.n.v{font-family:'Shippori Mincho',serif;font-weight:600;font-size:15px;letter-spacing:.2px}
+.cifra{display:inline-block;padding:5px 12px;font-family:'Space Mono',monospace;font-weight:700;font-size:14px;color:var(--kin);min-width:44px;text-align:center}
+button.b{font-family:'Shippori Mincho',serif;font-weight:600;font-size:16px;letter-spacing:.3px;min-height:36px;padding:5px 14px;border-radius:9px;
+  border:1px solid var(--linea);background:var(--panel);color:var(--tinta);cursor:pointer}
+button.b:hover{border-color:var(--acento)}
+button.b.ok{background:var(--acento);border-color:var(--acento);color:var(--acentoT)}
+button.b:disabled{opacity:.45;cursor:default}
+button.b[aria-pressed="true"]{border-color:var(--acento);color:var(--acento)}
+button.b.armado{border-color:var(--mal);color:var(--mal)}
+button:focus-visible{outline:2px solid var(--kin);outline-offset:2px}
+.escena{background:var(--fondo);border:1px solid var(--linea);border-radius:10px;padding:10px;margin-top:10px;overflow-x:auto;position:relative}
+.escena svg{display:block;width:100%;height:auto}
+.lectura{margin:10px 0 0;font-size:var(--texto);line-height:1.55}
+.lectura b{color:var(--acento)}
+.lectura .x{color:var(--ai);font-weight:700} .lectura .y{color:var(--matcha);font-weight:700}
+.lectura .cuenta{font-family:'Space Mono',monospace;font-size:13.5px;color:var(--cuenta);display:block;margin:6px 0 0;overflow-x:auto;white-space:nowrap;padding-bottom:2px}
+.lectura .def{display:block;margin:0 0 6px;padding:6px 10px;border-left:3px solid var(--ai);font-family:'Shippori Mincho',serif;font-size:calc(var(--texto) + 2px);color:var(--tinta);line-height:1.4}
+.lectura .murmullo{display:block;margin-top:6px;font-family:'Shippori Mincho',serif;font-size:15px;color:var(--tenue)}
+
+/* EL ENCARGO Y EL INFORME */
+.encargo{padding-left:70px;min-height:82px}
+.cara{position:absolute;left:12px;top:11px;width:46px;height:48px}
+.cara svg{width:100%;height:100%;display:block}
+.cara.toca{cursor:pointer}
+/* Orizuru vive en el borde del informe, a la derecha, y se despliega al tocarla */
+.cara.grulla{left:auto;right:10px;top:8px;width:40px;height:42px;transition:transform .35s ease}
+.cara.grulla.vuela{transform:translateY(-6px)}
+.informe .encTxt{padding-right:44px}
+.quien{font-family:'Space Mono',monospace;font-size:9.5px;letter-spacing:1.6px;text-transform:uppercase;color:var(--ai);margin-bottom:4px}
+.informe .quien{color:var(--kin)}
+.informe{border-left:3px solid var(--kin)}
+.informe.mal{border-left-color:var(--mal)}
+.encTxt{margin:0;font-size:var(--texto);line-height:1.55}
+.encTxt b{color:var(--acento)}
+.ops{display:grid;gap:6px;margin:10px 0 4px}
+.op{font-family:inherit;font-size:calc(var(--texto) - 1px);text-align:left;padding:10px 12px;border-radius:9px;border:1px solid var(--linea);
+  background:var(--panel);color:var(--tinta);cursor:pointer;line-height:1.4}
+.op[aria-pressed="true"]{border-color:var(--acento);background:var(--panel2)}
+.op.fallada{border-color:var(--mal);opacity:.65}
+.paso{font-family:'Space Mono',monospace;font-size:10.5px;letter-spacing:1.4px;text-transform:uppercase;color:var(--tenue);margin-left:auto}
+
+/* LOS ASOMOS, el sistema de la casa */
+.asomo{position:absolute;pointer-events:none;z-index:4;opacity:0;overflow:hidden;
+  transition:transform .44s cubic-bezier(.34,1.56,.64,1), opacity .2s ease}
+.asomo svg{width:100%;height:auto;display:block;filter:drop-shadow(0 3px 8px rgba(0,0,0,.5))}
+.asomo.arriba{right:14px;top:0;width:62px;transform:translateY(20px)}
+.asomo.arriba.mira{opacity:1;transform:translateY(calc(-64% + 2px))}
+.asomo.arriba.mira.falla{transform:translateY(calc(-42% + 2px));transition:transform .5s ease-out, opacity .2s ease}
+.asomo.lado{right:0;top:18px;width:70px;transform:translateX(80px)}
+.asomo.lado.mira{opacity:1;transform:translateX(26px)}
+.asomo.entero{right:14px;top:-10px;width:76px;transform:translateY(-20px) scale(.6)}
+.asomo.entero.mira{opacity:1;transform:translateY(-70%) scale(1)}
+.globo{position:absolute;right:96px;top:22px;max-width:200px;background:var(--washi);color:#241F1E;border-radius:12px;padding:8px 11px;
+  font-size:13px;line-height:1.35;z-index:5;opacity:0;transform:translateY(6px);transition:opacity .3s ease,transform .3s ease;pointer-events:none}
+.globo::after{content:'';position:absolute;right:-8px;top:14px;border:6px solid transparent;border-left-color:var(--washi)}
+.globo.mira{opacity:1;transform:none}
+/* la cara que brilla, y la lluvia de pétalos al llegar a kaiden */
+.cara.brilla svg{filter:drop-shadow(0 0 6px var(--kin)) drop-shadow(0 0 14px var(--kin));transition:filter .3s}
+.petalo{position:absolute;width:9px;height:7px;border-radius:50% 50% 50% 0;background:#F2A0A0;pointer-events:none;z-index:6;animation:cae linear forwards;opacity:.9}
+@keyframes cae{from{transform:translateY(-30px) rotate(0)}to{transform:translateY(420px) rotate(320deg);opacity:0}}
+/* la gota del suikinkutsu: un aro que se abre en la escena */
+.gota{position:absolute;width:12px;height:12px;border-radius:50%;border:2px solid var(--mizu);pointer-events:none;z-index:6;animation:onda 1s ease-out forwards}
+@keyframes onda{from{transform:scale(.3);opacity:1}to{transform:scale(4);opacity:0}}
+
+/* EL ÍNDICE, EL GLOSARIO, LAS DEUDAS */
+.listaEnc{margin-top:8px;max-height:260px;overflow-y:auto;border:1px solid var(--linea);border-radius:9px;background:var(--fondo)}
+.listaEnc button{display:block;width:100%;text-align:left;background:none;border:0;border-bottom:1px solid var(--linea);color:var(--tenue);cursor:pointer;
+  font-family:inherit;font-size:13px;padding:7px 10px;line-height:1.35}
+.listaEnc button:last-child{border-bottom:0}
+.listaEnc button:hover{background:var(--panel2);color:var(--tinta)}
+.listaEnc button b{color:var(--acento);font-family:'Space Mono',monospace;font-size:11px;margin-right:6px}
+.listaEnc button.hecho b{color:var(--bien)}
+.listaEnc button.actual{color:var(--tinta);background:var(--panel2)}
+#diag{font-family:'Space Mono',monospace;font-size:11.5px;line-height:1.5;margin-top:10px}
+#diag .ok{color:var(--bien)} #diag .ko{color:var(--mal)}
+.glosa{border-top:1px solid var(--linea);padding:9px 0;display:grid;grid-template-columns:130px 1fr;gap:4px 12px}
+.glosa:last-child{border-bottom:1px solid var(--linea)}
+.glosa b{font-family:'Shippori Mincho',serif;color:var(--acento);font-size:18px;font-weight:700}
+.glosa i{font-family:'Space Mono',monospace;font-style:normal;font-size:10px;color:var(--tenue);display:block;letter-spacing:1px}
+.glosa p{margin:0;font-size:14px;color:var(--tinta)}
+.glosa.marca{background:rgba(217,178,74,.12);border-radius:8px;padding:9px 8px}
+@media (max-width:460px){ .glosa{grid-template-columns:1fr} }
+.deuda{border:1px solid var(--linea);border-radius:10px;padding:10px 12px;margin-top:8px;background:var(--fondo)}
+.deuda summary{cursor:pointer;font-weight:700;color:var(--tinta);font-size:15px;list-style:none;display:flex;gap:10px;align-items:baseline}
+.deuda summary::before{content:'▸';color:var(--acento);font-size:13px}
+.deuda[open] summary::before{content:'▾'}
+.deuda p{font-size:14px;color:var(--tinta);margin:8px 0 0}
+.aviso{font-size:13px;color:var(--tenue);margin:8px 0 0}
+/* la sala oculta */
+.vetula .latin{font-family:'Shippori Mincho',serif;font-size:21px;color:var(--kin);margin:6px 0 2px;line-height:1.3}
+.vetula .trad{font-style:italic;color:var(--tenue);margin:0 0 10px;font-size:14px}
+
+/* EL TALLER */
+.tipos{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.tipos button.b{font-size:15px;padding:5px 10px;min-height:34px}
+.ejer{font-size:17px;margin:14px 0 8px;line-height:1.5}
+.ejer b{color:var(--acento)}
+.ejer .x{color:var(--ai);font-weight:700} .ejer .y{color:var(--matcha);font-weight:700}
+.resp{font-family:'Space Mono',monospace;font-size:16px;padding:8px 10px;border-radius:9px;border:1px solid var(--linea);background:var(--fondo);color:var(--tinta);width:150px}
+.veredicto{margin-top:9px;padding:9px 11px;border:1px solid var(--linea);border-radius:9px;font-size:14px;color:var(--tinta);background:var(--fondo)}
+.veredicto.bien{border-color:var(--kin)}
+.veredicto b{color:var(--acento)}
+.marcador{display:flex;gap:16px;margin-top:8px;font-family:'Space Mono',monospace;font-size:11px;letter-spacing:1.2px;text-transform:uppercase;color:var(--tenue)}
+.marcador b{color:var(--acento);font-size:13px;margin-left:4px}
+.hoja{display:none}
+body.imprimiendo .hoja{display:block;background:#fff;color:#222;padding:20px;font-family:Georgia,serif}
+body.imprimiendo > *:not(.hoja){display:none !important}
+.hoja h2{font-family:'Shippori Mincho',serif;font-size:22px;margin:0 0 4px}
+.hoja .cab{font-size:12px;color:#666;margin-bottom:14px}
+.hoja ol{padding-left:22px;font-size:15px;line-height:2.1}
+.hoja .clave{break-before:page;page-break-before:always;margin-top:30px;border-top:1px solid #999;padding-top:10px}
+.hoja .clave ol{line-height:1.7;font-size:13px}
+@media print{ .hoja{display:block} }
+
+/* LOS MODALES */
+.modal{position:fixed;inset:0;background:rgba(0,0,0,.6);display:flex;align-items:center;justify-content:center;z-index:50;padding:14px}
+.modal .caja{background:linear-gradient(180deg,var(--panel),var(--panel2));border:1px solid var(--linea);border-radius:14px;padding:18px 18px 14px;
+  width:min(520px,100%);max-height:92vh;overflow:auto;box-shadow:0 20px 50px rgba(0,0,0,.6)}
+.modal h2{font-family:'Shippori Mincho',serif;font-weight:700;font-size:24px;color:var(--acento);margin:0 0 2px;letter-spacing:.2px}
+.modal .sub{font-family:'Space Mono',monospace;font-size:10.5px;letter-spacing:1.6px;text-transform:uppercase;color:var(--tenue);margin:0 0 14px}
+.aj{display:grid;grid-template-columns:auto 1fr;gap:10px 14px;align-items:center}
+.aj .etq{min-width:0}
+.aj .ops2{display:flex;flex-wrap:wrap;gap:6px}
+.aj .ops2 button{font-family:'Space Mono',monospace;font-size:11.5px;padding:6px 10px;border-radius:8px;border:1px solid var(--linea);background:var(--fondo);color:var(--tinta);cursor:pointer}
+.aj .ops2 button[aria-pressed="true"]{background:var(--acento);border-color:var(--acento);color:var(--acentoT)}
+.aj .ops2 button:disabled{opacity:.4;cursor:default}
+.nombre{font-family:inherit;font-size:15px;padding:8px 10px;border-radius:9px;border:1px solid var(--linea);background:var(--fondo);color:var(--tinta);width:100%;margin-bottom:10px}
+.albaran{font-family:'Space Mono',monospace;font-size:12px;line-height:1.55;white-space:pre-wrap;background:var(--fondo);border:1px solid var(--linea);
+  border-radius:9px;padding:10px 12px;color:var(--tinta);word-break:break-all}
+.albaran .sello{color:var(--acento)}
+/* LA GUÍA */
+.tourCapa{position:fixed;inset:0;z-index:80;cursor:pointer}
+.tourFoco{position:fixed;border-radius:12px;border:2px solid var(--kin);pointer-events:none;
+  box-shadow:0 0 0 9999px rgba(0,0,0,.66), 0 0 24px var(--kin);transition:all .35s ease}
+.tourGlobo{position:fixed;max-width:320px;background:var(--panel);color:var(--tinta);border:1px solid var(--linea);border-radius:12px;padding:12px 14px;
+  box-shadow:0 12px 30px rgba(0,0,0,.6);cursor:default;transition:top .35s ease,left .35s ease}
+.tourGlobo b{font-family:'Shippori Mincho',serif;font-size:19px;color:var(--acento);display:block;margin-bottom:4px;font-weight:700}
+.tourGlobo p{margin:0 0 10px;font-size:14px;line-height:1.45}
+.tourGlobo .pie{display:flex;gap:8px;align-items:center;justify-content:space-between}
+.tourGlobo .num{font-family:'Space Mono',monospace;font-size:10.5px;letter-spacing:1.4px;color:var(--tenue)}
+.tourGlobo button{font-family:'Shippori Mincho',serif;font-size:16px;padding:5px 12px;border-radius:8px;
+  border:1px solid var(--linea);background:var(--panel);color:var(--tinta);cursor:pointer}
+.tourGlobo button.pri{background:var(--acento);border-color:var(--acento);color:var(--acentoT)}
+
+/* EL ARRANQUE: el estanque al amanecer. Salen las cabezas, se aclara el agua y se cuentan las patas. */
+.boot{position:fixed;inset:0;z-index:9999;background:#1A1719;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;
+  transition:opacity .5s ease;cursor:pointer}
+.boot.fuera{opacity:0;pointer-events:none}
+.boot .tit{font-family:'Shippori Mincho',serif;font-weight:700;font-size:clamp(26px,6.6vw,40px);color:#E06A50;letter-spacing:.2px;text-align:center;padding:0 16px}
+.bootEscena{position:relative;width:240px;height:200px}
+.bootEscena svg{width:100%;height:100%;display:block}
+.bootEscena .cabeza{opacity:0;transform-origin:center bottom;animation:sale .5s cubic-bezier(.34,1.56,.64,1) forwards}
+.bootEscena .pata{opacity:0;animation:aclara .4s ease-out forwards}
+.bootEscena .agua{animation:clarea 1.2s ease-out 1.3s forwards}
+@keyframes sale{from{opacity:0;transform:translateY(16px) scale(.6)}to{opacity:1;transform:none}}
+@keyframes aclara{from{opacity:0}to{opacity:1}}
+@keyframes clarea{from{fill-opacity:.85}to{fill-opacity:.35}}
+.boot .lista{font-family:'Space Mono',monospace;font-size:12px;letter-spacing:1.6px;text-transform:uppercase;color:#B5A896;display:flex;gap:14px;flex-wrap:wrap;justify-content:center;padding:0 16px}
+.boot .lista span{opacity:0;animation:pasaLista .3s forwards}
+.boot .saltar{position:absolute;bottom:26px;font-family:'Space Mono',monospace;font-size:10.5px;letter-spacing:1.6px;text-transform:uppercase;color:#B5A896;opacity:.8}
+@keyframes pasaLista{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+@keyframes aparece{from{opacity:0}to{opacity:1}}
+.nueva{animation:aparece .28s ease-out}
+@keyframes tiembla{0%,100%{transform:none}25%{transform:rotate(-6deg)}75%{transform:rotate(6deg)}}
+.tiembla{animation:tiembla .35s ease-in-out 3;transform-origin:center}
+
+footer.pie{margin-top:26px;padding-top:12px;border-top:1px solid var(--linea);display:flex;justify-content:center}
+footer.pie a{display:inline-flex;align-items:center;gap:10px;color:var(--tenue);text-decoration:none;font-family:'Space Mono',monospace;font-size:10.5px;letter-spacing:1.4px;text-transform:uppercase}
+footer.pie a:hover{color:var(--tinta)}
+footer.pie svg{width:100px;height:22px}
+footer.pie svg circle{fill:none;stroke:currentColor;stroke-width:1.6}
+footer.pie svg text{fill:currentColor;font-family:'Space Mono',monospace;font-size:9px;font-weight:700}
+@media (prefers-reduced-motion: reduce){
+  *{animation-duration:.001ms !important;transition-duration:.001ms !important}
+  .asomo.arriba.mira,.asomo.arriba.mira.falla{transform:translateY(calc(-64% + 2px))}
+}
+@media (max-width:520px){ h1{font-size:27px} .encargo{padding-left:64px} .etq{min-width:70px} }
+</style>
+</head><body>
+
+<div class="boot" id="boot" role="status" aria-live="polite">
+  <div class="tit">El estanque de Jefeyasu</div>
+  <div class="bootEscena" id="bootEscena">
+    <svg viewBox="0 0 240 200" aria-hidden="true" id="bootEstanque"></svg>
+  </div>
+  <div class="lista" id="bootLista"></div>
+  <div class="saltar">toca para saltar</div>
+</div>
+
+<header>
+  <div class="olas" aria-hidden="true"></div>
+  <div class="cabeza">
+    <div>
+      <h1>El estanque de Jefeyasu</h1>
+      <p class="sub">Sistemas de ecuaciones · el estanque</p>
+    </div>
+    <div class="tablillas" id="tablillas" aria-label="Tablillas colgadas"><svg viewBox="0 0 44 32" aria-hidden="true"><path d="M22 2 V8" stroke="currentColor" stroke-width="2"/><rect x="8" y="8" width="28" height="20" rx="2" fill="none" stroke="currentColor" stroke-width="2"/><path d="M14 15 H30 M14 21 H26" stroke="currentColor" stroke-width="1.6"/></svg><span>tablillas</span><b id="tablillasT">0</b></div>
+  </div>
+  <nav class="barra" id="barra">
+    <a href="https://diazepamina-creator.github.io/linea.html">← Materiales</a>
+    <button id="bGuia">Guía</button>
+    <button id="bTaller" aria-pressed="false">Taller</button>
+    <button id="bIndice" aria-pressed="false">Salas</button>
+    <button id="bGlosario" aria-pressed="false">Glosario</button>
+    <button id="bDeudas" aria-pressed="false">Deudas</button>
+    <span style="flex:1"></span>
+    <button id="bSello">La tablilla</button>
+    <button id="bAjustes">Ajustes</button>
+  </nav>
+  <div class="franja" id="franja">
+    <div class="kamon" id="rangoKamon" aria-hidden="true"></div>
+    <div class="linea1">
+      <span class="rango"><span id="rangoNom">Discípulo</span><small id="rangoSig"></small></span>
+      <span class="cuenta" id="rangoCuenta"></span>
+    </div>
+    <div class="barraR"><i id="rangoBarra"></i></div>
+  </div>
+</header>
+
+<div class="panel encargo" id="pEncargo">
+  <div class="asomo lado" id="asomoLado" aria-hidden="true"></div>
+  <div class="globo" id="globoLado" aria-hidden="true"></div>
+  <div class="asomo entero" id="asomoEntero" aria-hidden="true"></div>
+  <div class="cara" id="caraJefeyasu"></div>
+  <div class="quien">Jefeyasu, señor del estanque</div>
+  <p class="encTxt" id="encTxt"></p>
+  <div class="ops" id="ops" hidden></div>
+  <div class="fila">
+    <button class="b" id="atras" aria-label="Encargo anterior">◀</button>
+    <button class="b ok" id="comprobar">Comprobar</button>
+    <span class="paso" id="cual"></span>
+  </div>
+</div>
+<div class="panel informe encargo" id="informe" hidden>
+  <div class="asomo arriba" id="asomoArriba" aria-hidden="true"></div>
+  <div class="cara toca" id="caraListaseki" title="Listaseki"></div>
+  <div class="cara grulla toca" id="orizuru" title="Orizuru"></div>
+  <div class="quien">Listaseki, el que echa las cuentas</div>
+  <p class="encTxt" id="infTxt"></p>
+</div>
+
+<!-- ═══ EL TALLER ═══ -->
+<div class="panel taller" id="pTaller" hidden>
+  <div class="salaRot"><b>El taller</b><span>práctica libre, y a la sala si hace falta</span></div>
+  <div class="tipos" id="tipos"></div>
+  <div class="ejer" id="ejer"></div>
+  <div class="fila" style="margin-top:6px" id="filaSiNo" hidden>
+    <button class="b" id="bSi">Sí</button><button class="b" id="bNo">No</button>
+  </div>
+  <div class="fila" style="margin-top:6px" id="filaResp">
+    <input class="resp" id="resp" type="text" inputmode="text" autocomplete="off" placeholder="tu respuesta">
+    <button class="b ok" id="corrige">Corregir</button>
+  </div>
+  <div class="fila" style="margin-top:6px">
+    <button class="b" id="otro">Otro</button>
+    <button class="b" id="verlo" hidden>Verlo en la sala</button>
+  </div>
+  <div class="veredicto" id="verTaller" hidden></div>
+  <div class="marcador"><span>aciertos <b id="tAc">0</b></span><span>racha <b id="tRacha">0</b></span><span>mejor <b id="tMejor">0</b></span></div>
+  <div class="fila">
+    <button class="b" id="hojaDiez">Imprimir una hoja de diez</button>
+    <span class="etq" style="min-width:0">con la clave en hoja aparte</span>
+  </div>
+</div>
+<div class="hoja" id="hoja"></div>
+
+<!-- ═══ EL GLOSARIO ═══ -->
+<div class="panel" id="pGlosario" hidden>
+  <div class="salaRot"><b>El glosario</b><span>las palabras del estanque y de las cuentas</span></div>
+  <div id="glosas"></div>
+</div>
+
+<!-- ═══ LAS DEUDAS ═══ -->
+<div class="panel" id="pDeudas" hidden>
+  <div class="salaRot"><b>Las deudas</b><span>lo que se demuestra aquí, lo que se dice y lo que se demuestra en otro sitio</span></div>
+  <p class="aviso" style="margin:0 0 10px">Tres cosas de este estanque no se demuestran en las salas. Una se demuestra aquí en cuatro líneas; las otras dos son
+  verdad y se demuestran más adelante, y se dice dónde.</p>
+  <details class="deuda">
+    <summary>Por qué se puede multiplicar una ecuación entera, y sumar dos ecuaciones</summary>
+    <p>Si dos cosas son iguales, sus dobles son iguales: de 2g + 4t = 26 sale 4g + 8t = 52, y al revés, de la segunda sale la
+    primera dividiendo. Así que las dos tienen <b>las mismas soluciones</b>. Y si una pareja cumple dos ecuaciones, cumple también
+    la que sale de sumarlas: lo que es igual sumado a lo que es igual sigue siendo igual.</p>
+    <p>La trampa que el ábaco no esconde: la ecuación suma la cumple cualquier pareja que cumpla las dos, pero al revés no.
+    Por eso, al reducir, se <b>guarda una de las ecuaciones viejas</b> junto a la nueva. Con las dos, la solución es la misma
+    que antes; con la nueva sola, se habría perdido una condición.</p>
+  </details>
+  <details class="deuda">
+    <summary>Por qué las soluciones de una ecuación con dos incógnitas forman una recta</summary>
+    <p>En las sendas se ve: las parejas que cumplen g + t = 8 están en línea, y las de 2g + 4t = 26 también. Que siempre
+    salga una recta, para cualquier ecuación de primer grado con dos incógnitas, es verdad y se demuestra en tercero, con las
+    funciones: despejando la t queda t = algo − algo · g, que es la ecuación de una recta. Aquí se llaman <b>sendas</b> hasta
+    la lectura, y en la lectura se dice su nombre.</p>
+  </details>
+  <details class="deuda">
+    <summary>Por qué los tres métodos dan la misma pareja</summary>
+    <p>Porque ninguno de los pasos cambia el conjunto de soluciones: despejar es reescribir la misma igualdad; sustituir es
+    poner en su lugar algo que vale lo mismo; multiplicar y sumar ecuaciones, como dice la primera deuda, guarda la solución
+    común. Si el sistema tiene una sola pareja, cualquier camino que no la pierda llega a ella. Se dice así y se enseña con
+    el encargo doce, que lo pregunta.</p>
+  </details>
+</div>
+
+<!-- ═══ SEKI · oculta ═══ -->
+<div class="panel vetula" id="pSeki" hidden>
+  <div class="salaRot"><b>Seki</b><span>lo que no está en el índice</span></div>
+  <p class="latin">Las cuentas en aspa: arriba por abajo, menos abajo por arriba.</p>
+  <p class="trad">Lo que Seki Takakazu escribió en 1683, diez años antes que Leibniz y setenta antes que Cramer.</p>
+  <p><b>Seki Takakazu</b>, del que sale Listaseki, fue el matemático del Japón de Edo: hijo de samurái, contable de un señor, y
+  el primero que escribió lo que hoy se llama <b>determinante</b>. Para un sistema de dos ecuaciones hay una cuenta que da la
+  solución de golpe, sin despejar ni sustituir: se cruzan los números en aspa. No es de segundo, y no hace falta: es para
+  saber que alguien la encontró aquí, en una casa de Edo, con un ábaco.</p>
+  <div class="escena"><svg id="svgSeki" viewBox="0 0 540 290" role="img" aria-label="La cuenta cruzada de Seki sobre el sistema actual"></svg></div>
+  <p class="lectura" id="lecSeki"></p>
+  <p class="aviso">Esta sala se ha abierto porque alguien ha escrito el nombre de Seki, o ha tocado tres veces el ábaco de Listaseki. No sale en el índice.</p>
+</div>
+
+<!-- ═══ EL ÍNDICE ═══ -->
+<div class="panel" id="pIndice" hidden>
+  <div class="salaRot"><b>Índice</b><span>las salas, sueltas</span></div>
+  <div class="fila"><span class="etq">salas</span><span id="ixSalas"></span></div>
+  <div class="fila">
+    <button class="b" id="ixCerrar">Volver al encargo</button>
+    <button class="b" id="ixTodo">Marcar todo hecho</button>
+    <button class="b" id="ixCero">Empezar de cero</button>
+  </div>
+  <div class="etq" style="margin-top:12px">los encargos</div>
+  <div class="listaEnc" id="ixLista"></div>
+  <div class="fila">
+    <button class="b" id="ixDiag">Autodiagnóstico</button>
+    <span class="etq" style="min-width:0">prueba cada cuenta contra sí misma</span>
+  </div>
+  <div id="diag" hidden></div>
+</div>
+
+<!-- ═══ SALA 1 · EL ESTANQUE ═══ -->
+<div class="panel" id="pEstanque">
+  <div class="fila" style="margin-top:0"><span class="etq">cabezas</span><button class="n" id="cMenos" aria-label="Una cabeza menos">−</button><span class="cifra" id="cCabezas"></span><button class="n" id="cMas" aria-label="Una cabeza más">+</button></div>
+  <div class="fila"><span class="etq">patas</span><button class="n" id="pMenos" aria-label="Dos patas menos">−</button><span class="cifra" id="pPatas"></span><button class="n" id="pMas" aria-label="Dos patas más">+</button></div>
+  <div class="fila"><span class="etq">tortugas</span><button class="n" id="tMenos" aria-label="Una tortuga menos">−</button><span class="cifra" id="tTortugas"></span><button class="n" id="tMas" aria-label="Una tortuga más">+</button><button class="b" id="suponer">Suponer que todas son grullas</button></div>
+  <div class="escena"><svg id="svgEstanque" viewBox="0 0 540 330" role="img" aria-label="El estanque con las cabezas fuera del agua y las patas debajo, y la tabla de los repartos"></svg></div>
+  <p class="lectura" id="lecEstanque"></p>
+</div>
+
+<!-- ═══ SALA 2 · LA TABLILLA ═══ -->
+<div class="panel" id="pTablilla" hidden>
+  <div class="fila" style="margin-top:0"><span class="etq">el problema</span><span id="bProb"></span></div>
+  <div class="fila"><span class="etq">la pareja</span><span id="bPareja"></span></div>
+  <div class="escena"><svg id="svgTablilla" viewBox="0 0 540 300" role="img" aria-label="La tablilla de madera con las dos ecuaciones y la pareja que se prueba"></svg></div>
+  <p class="lectura" id="lecTablilla"></p>
+</div>
+
+<!-- ═══ SALA 3 · EL ÁBACO ═══ -->
+<div class="panel" id="pAbaco" hidden>
+  <div class="fila" style="margin-top:0"><span class="etq">el problema</span><span id="aProb"></span></div>
+  <div class="fila"><span class="etq">la primera, por</span><span id="aK1"></span></div>
+  <div class="fila"><span class="etq">la segunda, por</span><span id="aK2"></span></div>
+  <div class="fila"><span class="etq">y luego</span><span id="aOp"></span></div>
+  <div class="escena"><svg id="svgAbaco" viewBox="0 0 540 320" role="img" aria-label="Las dos ecuaciones como filas del ábaco, y la fila que sale de sumarlas o restarlas"></svg></div>
+  <p class="lectura" id="lecAbaco"></p>
+</div>
+
+<!-- ═══ SALA 4 · LA SUSTITUCIÓN ═══ -->
+<div class="panel" id="pSust" hidden>
+  <div class="fila" style="margin-top:0"><span class="etq">el problema</span><span id="sProb"></span></div>
+  <div class="fila"><span class="etq">despejar</span><span id="sDe"></span></div>
+  <div class="fila"><span class="etq">en la ecuación</span><span id="sEn"></span></div>
+  <div class="escena"><svg id="svgSust" viewBox="0 0 540 300" role="img" aria-label="La incógnita despejada en una ecuación y puesta en su lugar en la otra"></svg></div>
+  <p class="lectura" id="lecSust"></p>
+</div>
+
+<!-- ═══ SALA 5 · LA IGUALACIÓN ═══ -->
+<div class="panel" id="pIgual" hidden>
+  <div class="fila" style="margin-top:0"><span class="etq">el problema</span><span id="iProb"></span></div>
+  <div class="fila"><span class="etq">despejar</span><span id="iDe"></span></div>
+  <div class="escena"><svg id="svgIgual" viewBox="0 0 540 300" role="img" aria-label="La misma incógnita despejada en las dos ecuaciones, una frente a otra"></svg></div>
+  <p class="lectura" id="lecIgual"></p>
+</div>
+
+<!-- ═══ SALA 6 · LAS DOS SENDAS ═══ -->
+<div class="panel" id="pSendas" hidden>
+  <div class="fila" style="margin-top:0"><span class="etq">el problema</span><span id="nProb"></span></div>
+  <div class="fila"><span class="etq">la segunda senda</span><span id="nEc2"></span></div>
+  <div class="escena"><svg id="svgSendas" viewBox="0 0 540 400" role="img" aria-label="El jardín con las dos sendas de piedras y la piedra donde se cruzan"></svg></div>
+  <p class="lectura" id="lecSendas"></p>
+</div>
+
+<!-- ═══ LOS MODALES ═══ -->
+<div class="modal" id="mAjustes" hidden>
+  <div class="caja" role="dialog" aria-modal="true" aria-labelledby="ajTit">
+    <h2 id="ajTit">Ajustes</h2>
+    <p class="sub">Para el aula y para cada aparato</p>
+    <div class="aj" id="aj"></div>
+    <div class="fila" style="margin-top:14px">
+      <button class="b" id="ajCerrar">Cerrar</button>
+      <span class="etq" style="min-width:0">se guardan en este aparato</span>
+    </div>
+  </div>
+</div>
+<div class="modal" id="mSello" hidden>
+  <div class="caja" role="dialog" aria-modal="true" aria-labelledby="selloTit">
+    <h2 id="selloTit">La tablilla</h2>
+    <p class="sub">Lo hecho en esta sesión, para colgar donde haga falta</p>
+    <input class="nombre" id="selloNombre" placeholder="Nombre del discípulo" autocomplete="off" aria-label="Nombre">
+    <div class="albaran" id="selloTexto"></div>
+    <div class="fila" style="margin-top:12px">
+      <button class="b ok" id="selloCopiar">Copiar</button>
+      <button class="b" id="selloCerrar">Cerrar</button>
+      <span class="etq" id="selloAviso" style="min-width:0"></span>
+    </div>
+  </div>
+</div>
+<div class="tourCapa" id="tourCapa" hidden>
+  <div class="tourFoco" id="tourFoco"></div>
+  <div class="tourGlobo" id="tourGlobo" role="dialog" aria-modal="true">
+    <b id="tourTit"></b><p id="tourTxt"></p>
+    <div class="pie"><span class="num" id="tourNum"></span>
+      <span><button id="tourSalir">Salir</button> <button class="pri" id="tourSig">Siguiente</button></span></div>
+  </div>
+</div>
+
+<footer class="pie">
+  <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.es" rel="license" aria-label="Licencia Creative Commons Reconocimiento-NoComercial-CompartirIgual 4.0">
+    <svg viewBox="0 0 100 22" aria-hidden="true">
+      <circle cx="11" cy="11" r="10"/><text x="11" y="14.5" text-anchor="middle">CC</text>
+      <circle cx="37" cy="11" r="10"/><text x="37" y="14.5" text-anchor="middle">BY</text>
+      <circle cx="63" cy="11" r="10"/><text x="63" y="14.5" text-anchor="middle">NC</text>
+      <circle cx="89" cy="11" r="10"/><text x="89" y="14.5" text-anchor="middle">SA</text>
+    </svg>
+    <span>© 2026 Andrés Asensio · CC BY-NC-SA 4.0</span>
+  </a>
+</footer>
+
+<script>
+const $ = id => document.getElementById(id);
+const NS = 'http://www.w3.org/2000/svg';
+const redondo = (x, n = 2) => Math.round(x * 10**n) / 10**n;
+function cifra(x, n = 2){
+  const v = redondo(x, n); const neg = v < 0; const [ent, dec] = String(Math.abs(v)).split('.');
+  return (neg ? '−' : '') + ent.replace(/\B(?=(\d{3})+$)/g, '.') + (dec ? ',' + dec : '');
+}
+const al = (a, b) => a + Math.floor(Math.random() * (b - a + 1));
+const elige = arr => arr[al(0, arr.length - 1)];
+const el = (g, t, at, txt) => { const e = document.createElementNS(NS, t); for(const q in at) e.setAttribute(q, at[q]); if(txt !== undefined) e.textContent = txt; g.appendChild(e); return e; };
+const txt = (g, x, y, t, at = {}) => el(g, 'text', Object.assign({x, y, fill:'var(--tenue)', 'font-family':"'Space Mono',monospace", 'font-size':12.5}, at), t);
+const mincho = (g, x, y, t, at = {}) => txt(g, x, y, t, Object.assign({'font-family':"'Shippori Mincho',serif", 'font-size':17, 'font-weight':700, fill:'var(--acento)'}, at));
+/* un párrafo en SVG: se parte por palabras a ojo, con el ancho de la letra */
+function parrafo(g, x, y, texto, ancho, at = {}, alto = 15){
+  const fs = at['font-size'] || 12, porLetra = fs * (at['font-family'] && /Mincho/.test(at['font-family']) ? .52 : .6);
+  const lineas = [], palabras = texto.split(' '); let l = '';
+  palabras.forEach(p => { if((l + ' ' + p).trim().length * porLetra > ancho && l){ lineas.push(l); l = p; } else l = (l + ' ' + p).trim(); });
+  if(l) lineas.push(l);
+  lineas.forEach((t, i) => txt(g, x, y + i * alto, t, Object.assign({'font-size':fs}, at)));
+  return y + lineas.length * alto;
+}
+
+/* ── LOS RETRATOS, copiados de la línea del tiempo tal cual. Quelona es la
+   del taller; Jefén Giskan, el de la estepa. Orizuru es nueva. ── */
+const CARA_JEFEYASU = `<svg viewBox="0 0 46 48" aria-hidden="true">
+  <!-- JEFEYASU · el señor del estanque. De Tokugawa Ieyasu, con el mismo
+       juego que Jeuclides o Jefarturo. Debajo del casco está el verde de
+       siempre: morro largo, púas y gafas redondas. Lo que cambia es el
+       disfraz — coraza de láminas atadas con cordón, hombreras anchas y el
+       kabuto con la media luna. -->
+  <path d="M5 46 Q6 32 17 29 L29 29 Q40 32 41 46 Z" fill="#8E2F2A" stroke="#241C36" stroke-width="1.3"/>
+  <!-- las láminas de la coraza, atadas con cordón -->
+  <g stroke="#E0B24A" stroke-width=".9" opacity=".85">
+    <path d="M9 34 H37"/><path d="M8 38 H38"/><path d="M7.4 42 H38.6"/>
+  </g>
+  <g stroke="#241C36" stroke-width=".8" opacity=".5">
+    <path d="M15 31 V46"/><path d="M23 30 V46"/><path d="M31 31 V46"/>
+  </g>
+  <!-- las hombreras -->
+  <path d="M4.6 31 Q10 28 13.6 30.4 L12.4 37.6 Q7.6 35.4 4 36 Z" fill="#8E2F2A" stroke="#241C36" stroke-width="1.3" stroke-linejoin="round"/>
+  <path d="M41.4 31 Q36 28 32.4 30.4 L33.6 37.6 Q38.4 35.4 42 36 Z" fill="#8E2F2A" stroke="#241C36" stroke-width="1.3" stroke-linejoin="round"/>
+  <circle cx="23" cy="18" r="9.4" fill="#7FA35C" stroke="#241C36" stroke-width="1.3"/>
+  <path d="M18.6 18.4 L8.4 18.4 Q5 18.4 5 21.8 Q5 25.2 8.4 25.2 L18.6 25.2 Z" fill="#7FA35C" stroke="#241C36" stroke-width="1.3" stroke-linejoin="round"/>
+  <rect x="15" y="18.8" width="4.4" height="6" fill="#7FA35C"/>
+  <circle cx="7.6" cy="20.8" r=".8" fill="#241C36"/>
+  <path d="M6.8 23.9 H15.6" stroke="#241C36" stroke-width="1" stroke-linecap="round"/>
+  <path d="M27 14 L30.6 9.6 L29 15.6" fill="none" stroke="#5B6B3D" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round"/>
+  <circle cx="19.6" cy="17" r="3.6" fill="#f2f6fb" stroke="#241C36" stroke-width="1.3"/>
+  <circle cx="27.4" cy="16.6" r="3.6" fill="#f2f6fb" stroke="#241C36" stroke-width="1.3"/>
+  <path d="M23.2 16.9 H23.8" stroke="#241C36" stroke-width="1.3"/>
+  <circle cx="19.9" cy="17.2" r="1.4" fill="#140F1F"/><circle cx="27.7" cy="16.8" r="1.4" fill="#140F1F"/>
+  <!-- el kabuto: casco de láminas y media luna dorada -->
+  <path d="M12.6 12.4 Q23 3.6 33.4 12.4 L33.4 14.6 Q23 8.6 12.6 14.6 Z"
+        fill="#2E3440" stroke="#241C36" stroke-width="1.3" stroke-linejoin="round"/>
+  <path d="M13.4 12.8 Q23 6.4 32.6 12.8" fill="none" stroke="#E0B24A" stroke-width=".9" opacity=".7"/>
+  <path d="M11.4 13.4 Q9.6 16.6 10.6 20 L14.4 18.6 Q13.2 15.6 14 13.2 Z" fill="#2E3440" stroke="#241C36" stroke-width="1.2" stroke-linejoin="round"/>
+  <path d="M34.6 13.4 Q36.4 16.6 35.4 20 L31.6 18.6 Q32.8 15.6 32 13.2 Z" fill="#2E3440" stroke="#241C36" stroke-width="1.2" stroke-linejoin="round"/>
+  <path d="M17.6 6.4 Q23 1 28.4 6.4 Q23 4.2 17.6 6.4 Z" fill="#E0B24A" stroke="#241C36" stroke-width="1.2" stroke-linejoin="round"/>
+</svg>`;
+const CARA_LISTASEKI = `<svg viewBox="0 0 46 48" aria-hidden="true">
+  <!-- LISTASEKI · el que echa las cuentas. De Seki Takakazu, el matemático
+       japonés del XVII que dio con los determinantes antes que Leibniz.
+       ORDEN: cuerpo · kimono · cordón (detrás) · cabeza · eboshi · pico ·
+       ojos · cejas · ábaco. El cordón iba antes por delante y le rodeaba
+       la cara como un aro rojo; ahora sale de debajo del gorro y solo se
+       le ve lo que asoma por fuera de la cabeza. -->
+  <path d="M7 46 Q8 34 18 31 L28 31 Q38 34 39 46 Z" fill="#F2E8D0" stroke="#241C36" stroke-width="1.3"/>
+  <path d="M18 31 Q23 38 28 31 L30.6 32 Q23 41 15.4 32 Z" fill="#DCD0B4" stroke="#241C36" stroke-width="1.2" stroke-linejoin="round"/>
+  <path d="M19.6 34.6 Q23 37.6 26.4 34.6 L27.4 46 L18.6 46 Z" fill="#2E3440" stroke="#241C36" stroke-width="1.1" stroke-linejoin="round"/>
+  <!-- el cordón: bordeando la cabeza seguía haciéndole un aro rojo en la
+       cara. Solo se ve lo que de verdad se vería — el trozo que cruza por
+       DEBAJO de la barbilla, con su nudo — y sale de detrás del gorro. -->
+  <path d="M17 13.4 Q15.4 24 19.6 29.4" fill="none" stroke="#B0392C" stroke-width="1.6" stroke-linecap="round"/>
+  <path d="M29 13.4 Q30.6 24 26.4 29.4" fill="none" stroke="#B0392C" stroke-width="1.6" stroke-linecap="round"/>
+  <circle cx="23" cy="21" r="9" fill="#5FA0BE" stroke="#241C36" stroke-width="1.3"/>
+  <path d="M23 12 a9 9 0 0 0 0 18 a6 9 0 0 1 0 -18 z" fill="#7FC9E2" opacity=".5"/>
+  <!-- EL EBOSHI -->
+  <path d="M15.4 14.6 Q17.6 6.4 24.6 3.2 Q31 1 33.4 4.2 Q30.6 6.6 29.4 11
+           Q28.6 13.8 29.6 15.4 Q23 12 15.4 14.6 Z"
+        fill="#2E3440" stroke="#241C36" stroke-width="1.3" stroke-linejoin="round"/>
+  <path d="M19.6 9.6 Q25 5.2 31 3.8" fill="none" stroke="#4A5468" stroke-width="1" opacity=".8"/>
+  <path d="M19.6 29.4 Q23 31.4 26.4 29.4" fill="none" stroke="#B0392C" stroke-width="1.6" stroke-linecap="round"/>
+  <circle cx="23" cy="30.8" r="1.4" fill="#B0392C" stroke="#241C36" stroke-width=".9"/>
+  <!-- el pico, después del gorro para que nada lo corte -->
+  <path d="M28.8 21.2 L34.9 23.1 L28.8 25 Z" fill="#E0B24A" stroke="#241C36" stroke-width="1.1" stroke-linejoin="round"/>
+  <circle cx="25.4" cy="20.2" r="2.1" fill="#f2f6fb"/><circle cx="20.6" cy="20.2" r="1.9" fill="#f2f6fb"/>
+  <circle cx="25.7" cy="20.4" r=".95" fill="#140F1F"/><circle cx="20.9" cy="20.4" r=".85" fill="#140F1F"/>
+  <!-- las cejas, arqueadas: antes iban cerradas hacia dentro y le daban
+       cara de enfadado, y este es el que echa las cuentas con calma -->
+  <path d="M23.8 17.6 Q25.7 16.4 27.5 17.8" stroke="#241C36" stroke-width="1.1" fill="none" stroke-linecap="round"/>
+  <path d="M22.2 17.6 Q20.3 16.4 18.5 17.8" stroke="#241C36" stroke-width="1.1" fill="none" stroke-linecap="round"/>
+  <!-- el ábaco -->
+  <g transform="translate(4 33)">
+    <rect x="0" y="0" width="20" height="12" rx="1.6" fill="#C08A5E" stroke="#241C36" stroke-width="1.3"/>
+    <path d="M0 4.2 H20" stroke="#241C36" stroke-width="1.2"/>
+    <g stroke="#241C36" stroke-width=".7" opacity=".55">
+      <path d="M4 0 V12"/><path d="M8 0 V12"/><path d="M12 0 V12"/><path d="M16 0 V12"/></g>
+    <g fill="#2E3440">
+      <ellipse cx="4" cy="2.4" rx="1.5" ry="1.1"/><ellipse cx="12" cy="2.4" rx="1.5" ry="1.1"/>
+      <ellipse cx="4" cy="10" rx="1.5" ry="1.1"/><ellipse cx="8" cy="10" rx="1.5" ry="1.1"/>
+      <ellipse cx="16" cy="7.2" rx="1.5" ry="1.1"/><ellipse cx="16" cy="10" rx="1.5" ry="1.1"/></g>
+  </g>
+</svg>`;
+const CARA_QUELONA = `<svg viewBox="0 0 46 48" aria-hidden="true">
+  <!-- QUELONA · la tortuga del taller de Exequias, que comenta lo que sale.
+       Se llama así porque chelone es «tortuga» en griego, igual que Miut se
+       llama Miut. El caparazón no es adorno: es un teselado, placas que
+       cubren sin solaparse ni dejar hueco, que es la definición de área
+       paseándose. Y es el animal de Zenón, así que de límites sabe. -->
+  <ellipse cx="23" cy="45.4" rx="16" ry="2" fill="#140F1F" opacity=".5"/>
+  <g fill="#7E8F55" stroke="#241C36" stroke-width="1.2" stroke-linejoin="round">
+    <path d="M7.6 31.6 Q2.4 33.6 3 39.4 Q3.4 43.4 7 43.4 Q10.4 43.4 11.4 39.6 Z"/>
+    <path d="M38.4 31.6 Q43.6 33.6 43 39.4 Q42.6 43.4 39 43.4 Q35.6 43.4 34.6 39.6 Z"/>
+  </g>
+  <path d="M5.6 31.4 C5.6 13.6 12.4 7.4 23 7.4 C33.6 7.4 40.4 13.6 40.4 31.4 Q23 36.6 5.6 31.4 Z" fill="#CB6836" stroke="#241C36" stroke-width="1.5" stroke-linejoin="round"/>
+  <g fill="#AE5327"><path d="M15.6 10.6 Q23 8.2 30.4 10.6 L31 18 H15 Z"/><path d="M15 25.2 H31 L30.6 33 Q23 34.4 15.4 33 Z"/></g>
+  <g stroke="#241C36" stroke-width="1.1" fill="none">
+    <path d="M15.4 9.8 Q13.4 20 14.4 33.6"/><path d="M30.6 9.8 Q32.6 20 31.6 33.6"/>
+    <path d="M14.9 18 H31.1"/><path d="M14.9 25.2 H31.1"/><path d="M23 8 V33.9"/>
+  </g>
+  <g stroke="#241C36" stroke-width=".9" fill="none"><path d="M9.4 30.6 Q9.6 26 10.2 21"/><path d="M36.6 30.6 Q36.4 26 35.8 21"/></g>
+  <circle cx="23" cy="37.6" r="7.6" fill="#7E8F55" stroke="#241C36" stroke-width="1.3"/>
+  <circle cx="19.8" cy="36.2" r="2.7" fill="#EDE0C8" stroke="#241C36" stroke-width=".8"/>
+  <circle cx="26.2" cy="36.2" r="2.7" fill="#EDE0C8" stroke="#241C36" stroke-width=".8"/>
+  <circle cx="20.2" cy="36.4" r="1.35" fill="#140F1F"/><circle cx="26.6" cy="36.4" r="1.35" fill="#140F1F"/>
+  <circle cx="20.7" cy="35.7" r=".5" fill="#EDE0C8"/><circle cx="27.1" cy="35.7" r=".5" fill="#EDE0C8"/>
+  <g fill="#140F1F"><circle cx="21.7" cy="40.2" r=".55"/><circle cx="24.3" cy="40.2" r=".55"/></g>
+  <path d="M20.4 42.2 Q23 44.2 25.6 42.2" fill="none" stroke="#241C36" stroke-width="1.1" stroke-linecap="round"/>
+</svg>`;
+const CARA_JEFEN = `<svg viewBox="0 0 46 48" aria-hidden="true">
+  <!-- JEFÉN GISKAN · el que cuenta de diez en diez. De Gengis Kan,
+       partido en dos como Jeff Azzo y Liz Stillo, y con el mismo
+       verde de la casa debajo del gorro. Deel cruzado con faja, gorro de
+       fieltro con vuelta de piel, y el arco corto a la espalda: lo que hace
+       falta para contar un ejército organizado en potencias de diez. -->
+  <path d="M5 46 Q6 32 17 29 L29 29 Q40 32 41 46 Z" fill="#4E6B8C" stroke="#241C36" stroke-width="1.3"/>
+  <path d="M17 29 Q23 36 29 29 L31.6 30.2 Q23 40 14.4 30.2 Z" fill="#3E5570" stroke="#241C36" stroke-width="1.2" stroke-linejoin="round"/>
+  <path d="M11 38 H35 L34.4 43 H11.6 Z" fill="#8E2F2A" stroke="#241C36" stroke-width="1.2" stroke-linejoin="round"/>
+  <path d="M12 40.4 H34" stroke="#E0B24A" stroke-width="1" opacity=".8"/>
+  <!-- el arco corto, asomando por detrás del hombro -->
+  <path d="M36.6 24 Q42.6 31 38.4 39" fill="none" stroke="#C08A5E" stroke-width="2.6" stroke-linecap="round"/>
+  <path d="M36.6 24 Q40.4 31.4 38.4 39" fill="none" stroke="#241C36" stroke-width="1" stroke-dasharray="2 2"/>
+  <circle cx="23" cy="18" r="9.4" fill="#7FA35C" stroke="#241C36" stroke-width="1.3"/>
+  <path d="M18.6 18.4 L8.4 18.4 Q5 18.4 5 21.8 Q5 25.2 8.4 25.2 L18.6 25.2 Z" fill="#7FA35C" stroke="#241C36" stroke-width="1.3" stroke-linejoin="round"/>
+  <rect x="15" y="18.8" width="4.4" height="6" fill="#7FA35C"/>
+  <circle cx="7.6" cy="20.8" r=".8" fill="#241C36"/>
+  <path d="M6.8 23.9 H15.6" stroke="#241C36" stroke-width="1" stroke-linecap="round"/>
+  <path d="M27 14 L30.6 9.6 L29 15.6" fill="none" stroke="#5B6B3D" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round"/>
+  <circle cx="19.6" cy="17" r="3.6" fill="#f2f6fb" stroke="#241C36" stroke-width="1.3"/>
+  <circle cx="27.4" cy="16.6" r="3.6" fill="#f2f6fb" stroke="#241C36" stroke-width="1.3"/>
+  <path d="M23.2 16.9 H23.8" stroke="#241C36" stroke-width="1.3"/>
+  <circle cx="19.9" cy="17.2" r="1.4" fill="#140F1F"/><circle cx="27.7" cy="16.8" r="1.4" fill="#140F1F"/>
+  <!-- el gorro de fieltro con la vuelta de piel y su remate -->
+  <path d="M14.4 11.6 Q23 2.4 31.6 11.6 Z" fill="#6E5A46" stroke="#241C36" stroke-width="1.3" stroke-linejoin="round"/>
+  <path d="M12.6 10.8 Q23 6.4 33.4 10.8 L32.8 14.2 Q23 9.8 13.2 14.2 Z"
+        fill="#B9A88C" stroke="#241C36" stroke-width="1.3" stroke-linejoin="round"/>
+  <g stroke="#241C36" stroke-width=".7" opacity=".45">
+    <path d="M16.4 10.6 V13.4"/><path d="M20 9.4 V12.6"/><path d="M26 9.4 V12.6"/><path d="M29.6 10.6 V13.4"/></g>
+  <circle cx="23" cy="3.4" r="1.8" fill="#E0B24A" stroke="#241C36" stroke-width="1.1"/>
+</svg>`;
+const CARA_ORIZURU = `<svg viewBox="0 0 46 48" aria-hidden="true">
+  <!-- ORIZURU · la grulla de papel, un cuadrado doblado. Cola, ala de
+       detrás, cuerpo, cuello y cabeza, en ese orden para que cada pliegue
+       tape al anterior. La cabeza va redonda y el ojo grande, que es lo
+       que la hace kawaii; la corona roja de la grulla y un poco de rubor.
+       Sin patas, que el papel no las trae. -->
+  <path d="M31 33 L45 42 L34 37 Z" fill="#DCD0B4" stroke="#241C36" stroke-width="1.3" stroke-linejoin="round"/>
+  <path d="M22 23 L37 4 L31 31 Z" fill="#F7F0DF" stroke="#241C36" stroke-width="1.3" stroke-linejoin="round"/>
+  <path d="M29 13 L33 22" stroke="#C9BDA6" stroke-width="1"/>
+  <path d="M13 31 L23 22 L33 32 L23 42 Z" fill="#F2E8D0" stroke="#241C36" stroke-width="1.3" stroke-linejoin="round"/>
+  <path d="M23 22 L23 42" stroke="#C9BDA6" stroke-width="1"/>
+  <path d="M13 31 L9 15 L19 28 Z" fill="#F2E8D0" stroke="#241C36" stroke-width="1.3" stroke-linejoin="round"/>
+  <path d="M10 14 Q3.5 10.5 2.6 16.6 Q3.4 21.6 9.6 20 Q12.4 17.6 10 14 Z" fill="#F2E8D0" stroke="#241C36" stroke-width="1.3" stroke-linejoin="round"/>
+  <path d="M3 17.4 L0.6 20.4 L4.6 20.6 Z" fill="#E0B24A" stroke="#241C36" stroke-width="1.1" stroke-linejoin="round"/>
+  <circle cx="7.6" cy="17" r="2" fill="#140F1F"/><circle cx="8.3" cy="16.2" r=".8" fill="#fff"/>
+  <circle cx="10.2" cy="19.2" r="1.2" fill="#F2A0A0" opacity=".8"/>
+  <circle cx="7" cy="12.2" r="1.5" fill="#B8322A"/>
+</svg>`;
+const ORIZURU_ALAS = `<svg viewBox="0 0 46 48" aria-hidden="true">
+  <!-- ORIZURU con las alas abiertas: las dos alas suben y el cuello se
+       estira hacia delante. Para cuando la cuenta sale. -->
+  <path d="M31 33 L45 42 L34 37 Z" fill="#DCD0B4" stroke="#241C36" stroke-width="1.3" stroke-linejoin="round"/>
+  <path d="M23 23 L9 3 L19 28 Z" fill="#E8DCC4" stroke="#241C36" stroke-width="1.3" stroke-linejoin="round"/>
+  <path d="M23 23 L37 3 L27 28 Z" fill="#F7F0DF" stroke="#241C36" stroke-width="1.3" stroke-linejoin="round"/>
+  <path d="M13 31 L23 22 L33 32 L23 42 Z" fill="#F2E8D0" stroke="#241C36" stroke-width="1.3" stroke-linejoin="round"/>
+  <path d="M23 22 L23 42" stroke="#C9BDA6" stroke-width="1"/>
+  <path d="M13 31 L5 22 L17 29 Z" fill="#F2E8D0" stroke="#241C36" stroke-width="1.3" stroke-linejoin="round"/>
+  <path d="M6.4 21 Q0.6 19.6 1 25 Q2.6 29.6 8.4 27.4 Q10.6 24.4 6.4 21 Z" fill="#F2E8D0" stroke="#241C36" stroke-width="1.3" stroke-linejoin="round"/>
+  <path d="M1.4 26 L-0.4 29.6 L3.6 29 Z" fill="#E0B24A" stroke="#241C36" stroke-width="1.1" stroke-linejoin="round"/>
+  <circle cx="5.4" cy="24.6" r="2" fill="#140F1F"/><circle cx="6.1" cy="23.8" r=".8" fill="#fff"/>
+  <circle cx="8" cy="26.6" r="1.2" fill="#F2A0A0" opacity=".8"/>
+  <circle cx="4.6" cy="19.8" r="1.5" fill="#B8322A"/>
+</svg>`;
+const ORIZURU_DESDOBLADA = `<svg viewBox="0 0 46 48" aria-hidden="true">
+  <!-- ORIZURU desdoblada: el cuadrado con sus pliegues. La esquina de
+       arriba era la cabeza, y conserva el punto rojo y el ojo. -->
+  <path d="M23 4 L42 24 L23 44 L4 24 Z" fill="#F2E8D0" stroke="#241C36" stroke-width="1.3" stroke-linejoin="round"/>
+  <g stroke="#C9BDA6" stroke-width="1" fill="none">
+    <path d="M23 4 L23 44"/><path d="M4 24 L42 24"/>
+    <path d="M13.5 14 L32.5 34"/><path d="M32.5 14 L13.5 34"/>
+    <path d="M23 4 L13.5 34"/><path d="M23 4 L32.5 34"/><path d="M23 44 L13.5 14"/><path d="M23 44 L32.5 14"/>
+    <path d="M4 24 L32.5 14"/><path d="M4 24 L32.5 34"/><path d="M42 24 L13.5 14"/><path d="M42 24 L13.5 34"/>
+  </g>
+  <path d="M13.5 14 L32.5 14 L32.5 34 L13.5 34 Z" fill="none" stroke="#241C36" stroke-width=".8" stroke-dasharray="2 2"/>
+  <circle cx="23" cy="7.4" r="1.3" fill="#B8322A"/>
+  <circle cx="25.4" cy="10.4" r=".9" fill="#140F1F"/>
+</svg>`;
+$('caraJefeyasu').innerHTML = CARA_JEFEYASU;
+$('caraListaseki').innerHTML = CARA_LISTASEKI;
+$('orizuru').innerHTML = CARA_ORIZURU;
+
+/* ── EL SONIDO: la gota del suikinkutsu, la cuenta del ábaco, la campana
+   del templo, la grulla, y lo de siempre. ── */
+const Ruido = (() => {
+  let ctx = null;
+  const ac = () => { try{ if(!ctx) ctx = new (window.AudioContext || window.webkitAudioContext)(); return ctx; }catch(e){ return null; } };
+  const on = () => AJ.sonido === 'si';
+  const tono = (f, dur, vol = .08, tipo = 'sine', t0 = 0, f2) => {
+    const c = ac(); if(!c || !on()) return;
+    const o = c.createOscillator(), g = c.createGain();
+    o.type = tipo; o.frequency.setValueAtTime(f, c.currentTime + t0);
+    if(f2) o.frequency.exponentialRampToValueAtTime(f2, c.currentTime + t0 + dur);
+    g.gain.setValueAtTime(0, c.currentTime + t0);
+    g.gain.linearRampToValueAtTime(vol, c.currentTime + t0 + .01);
+    g.gain.exponentialRampToValueAtTime(.0001, c.currentTime + t0 + dur);
+    o.connect(g); g.connect(c.destination); o.start(c.currentTime + t0); o.stop(c.currentTime + t0 + dur + .02);
+  };
+  return {
+    despierta(){ const c = ac(); if(c && c.state === 'suspended') c.resume(); },
+    gota(){ tono(1900, .5, .06, 'sine', 0, 1300); tono(2850, .35, .025, 'sine', .04, 2000); },
+    abaco(k = 1){ for(let i = 0; i < Math.min(k, 6); i++) tono(1400 + Math.random() * 500, .03, .05, 'square', i * .06); },
+    campana(){ tono(220, 1.6, .08, 'sine'); tono(440, 1.1, .035, 'sine'); tono(660, .6, .02, 'triangle'); },
+    grulla(){ tono(1500, .12, .05, 'triangle', 0, 1900); tono(1700, .14, .05, 'triangle', .16, 1400); },
+    bien(){ this.gota(); tono(784, .18, .05, 'triangle', .08); },
+    mal(){ tono(150, .22, .1, 'square'); },
+    asciende(){ this.campana(); this.grulla(); }
+  };
+})();
+
+/* ── LOS AJUSTES. El tema es de tinta o de papel. ── */
+const AJ = {tema:'tinta', texto:'normal', fuente:'legible', movimiento:'normal', sonido:'si', lang:'es'};
+const AJ_OPS = {
+  tema:      {etq:'tema',        ops:[['tinta','de tinta'], ['papel','de papel · proyector']]},
+  texto:     {etq:'texto',       ops:[['normal','normal'], ['grande','grande']]},
+  fuente:    {etq:'tipografía',  ops:[['legible','legible'], ['mincho','mincho']]},
+  movimiento:{etq:'movimiento',  ops:[['normal','normal'], ['menos','menos']]},
+  sonido:    {etq:'sonido',      ops:[['si','sí'], ['no','no']]},
+  lang:      {etq:'idioma',      ops:[['es','castellano'], ['va','valencià · pronto']]}
+};
+function aplicaAjustes(){
+  const r = document.documentElement;
+  r.dataset.tema = AJ.tema; r.dataset.texto = AJ.texto; r.dataset.fuente = AJ.fuente; r.dataset.movimiento = AJ.movimiento;
+  document.querySelectorAll('#aj button').forEach(b => b.setAttribute('aria-pressed', String(AJ[b.dataset.k] === b.dataset.v)));
+}
+function pintaAjustes(){
+  const c = $('aj'); c.innerHTML = '';
+  Object.entries(AJ_OPS).forEach(([k, o]) => {
+    const e = document.createElement('span'); e.className = 'etq'; e.textContent = o.etq; c.appendChild(e);
+    const w = document.createElement('div'); w.className = 'ops2';
+    o.ops.forEach(([v, t]) => {
+      const b = document.createElement('button'); b.textContent = t; b.dataset.k = k; b.dataset.v = v;
+      if(k === 'lang' && v === 'va') b.disabled = true;
+      b.addEventListener('click', () => { AJ[k] = v; aplicaAjustes(); Ruido.despierta(); guardaTurno(); });
+      w.appendChild(b);
+    });
+    c.appendChild(w);
+  });
+  aplicaAjustes();
+}
+function tira(donde, valores, lee, pon, rotula = v => typeof v === 'number' ? cifra(v, 2) : v, clase = 'n'){
+  const c = $(donde); c.innerHTML = '';
+  valores.forEach(v => {
+    const b = document.createElement('button'); b.className = clase; b.textContent = rotula(v);
+    b.setAttribute('aria-pressed', String(lee() === v));
+    b.addEventListener('click', () => pon(v));
+    c.appendChild(b);
+  });
+}
+/* un mando de más y menos, con la cifra en medio y repetición al mantener */
+function masMenos(donde, lee, pon, min, max, paso = 1, rotula = v => String(v)){
+  const c = $(donde); c.innerHTML = '';
+  const b1 = document.createElement('button'); b1.className = 'n'; b1.textContent = '−'; b1.setAttribute('aria-label', 'menos');
+  const s = document.createElement('span'); s.className = 'cifra'; s.textContent = rotula(lee());
+  const b2 = document.createElement('button'); b2.className = 'n'; b2.textContent = '+'; b2.setAttribute('aria-label', 'más');
+  b1.disabled = lee() <= min; b2.disabled = lee() >= max;
+  b1.addEventListener('click', () => { if(lee() > min) pon(lee() - paso); });
+  b2.addEventListener('click', () => { if(lee() < max) pon(lee() + paso); });
+  c.appendChild(b1); c.appendChild(s); c.appendChild(b2);
+}
+function repite(boton, f){
+  let r = null, t = null;
+  const para = () => { clearTimeout(t); clearInterval(r); };
+  boton.addEventListener('pointerdown', () => { para(); t = setTimeout(() => { r = setInterval(() => { if(boton.disabled) para(); else f(); }, 110); }, 420); });
+  ['pointerup', 'pointerleave', 'pointercancel'].forEach(ev => boton.addEventListener(ev, para));
+}
+
+/* ═══ EL KAMON, la pieza del kit de Edo: el emblema redondo de cada casa,
+   en tinta, con su figura. El de Jefeyasu son tres hojas, como el de los
+   Tokugawa. ══════════════════════════════════════════════════════════ */
+function kamon(g, x, y, w, figura, extra = {}){
+  const s = w / 40;
+  const gg = el(g, 'g', Object.assign({transform:'translate(' + x + ' ' + y + ') scale(' + s + ')'}, extra));
+  const tinta = extra.tinta || 'var(--figura)', fondo = extra.fondo || 'var(--hueco)';
+  el(gg, 'circle', {cx:20, cy:20, r:19, fill:fondo, stroke:tinta, 'stroke-width':2.2});
+  const f = el(gg, 'g', {fill:tinta, stroke:'none'});
+  if(figura === 'hoja') el(f, 'path', {d:'M20 8 Q30 16 24 30 Q20 34 16 30 Q10 16 20 8 Z M20 12 V30', 'fill-rule':'evenodd'});
+  else if(figura === 'ola'){ const o = el(gg, 'g', {fill:'none', stroke:tinta, 'stroke-width':2.2, 'stroke-linecap':'round'});
+    el(o, 'path', {d:'M8 24 a12 12 0 0 1 24 0'}); el(o, 'path', {d:'M12 24 a8 8 0 0 1 16 0'}); el(o, 'path', {d:'M16 24 a4 4 0 0 1 8 0'}); el(o, 'path', {d:'M6 31 Q13 26 20 31 Q27 36 34 31'}); }
+  else if(figura === 'grulla'){ el(f, 'path', {d:'M20 30 Q10 26 8 16 Q14 18 18 24 L20 12 L22 24 Q26 18 32 16 Q30 26 20 30 Z'}); el(f, 'circle', {cx:20, cy:9.5, r:2.2}); }
+  else if(figura === 'tortuga'){ el(f, 'path', {d:'M9 22 Q20 8 31 22 Q20 30 9 22 Z'}); el(f, 'circle', {cx:33, cy:21, r:2.4}); [11, 16, 24, 29].forEach(px => el(f, 'rect', {x:px - 1.2, y:24, width:2.4, height:5, rx:1})); }
+  else if(figura === 'aoi'){ [0, 120, 240].forEach(a => el(f, 'path', {d:'M20 20 Q26 12 22 6 Q16 10 16 16 Q17 19 20 20 Z', transform:'rotate(' + a + ' 20 20)'})); el(f, 'circle', {cx:20, cy:20, r:2.2}); }
+  else if(figura === 'abaco'){ el(gg, 'rect', {x:9, y:11, width:22, height:18, rx:2, fill:'none', stroke:tinta, 'stroke-width':1.8});
+    el(gg, 'path', {d:'M9 17 H31', stroke:tinta, 'stroke-width':1.4}); [14, 20, 26].forEach(px => { el(gg, 'path', {d:'M' + px + ' 11 V29', stroke:tinta, 'stroke-width':.9}); el(f, 'ellipse', {cx:px, cy:14, rx:2.2, ry:1.5}); el(f, 'ellipse', {cx:px, cy:22 + (px % 8 === 4 ? 3 : 0), rx:2.2, ry:1.5}); }); }
+  if(extra.borde) el(gg, 'circle', {cx:20, cy:20, r:19, fill:'none', stroke:extra.borde, 'stroke-width':3});
+  return gg;
+}
+
+/* ═══ LOS SISTEMAS. Todas las salas trabajan sobre el mismo problema, que
+   se elige de una lista corta. Cada uno es a·x + b·y = c y d·x + e·y = f,
+   con solución entera y pequeña, para que quepa en el estanque y en el
+   jardín. ═══════════════════════════════════════════════════════════════ */
+const PROBLEMAS = {
+  grullas:   {n:'grullas y tortugas', x:'g', y:'t', X:'grullas', Y:'tortugas', a:1, b:1, c:8, d:2, e:4, f:26,
+              hist:'En el estanque se ven ocho cabezas y veintiséis patas. Las grullas tienen dos patas y las tortugas cuatro.', q1:'las cabezas', q2:'las patas'},
+  monedas:   {n:'las monedas', x:'u', y:'c', X:'monedas de un mon', Y:'monedas de cuatro mon', a:1, b:1, c:12, d:1, e:-1, f:4,
+              hist:'En la bolsa hay doce monedas, de un mon y de cuatro mon, y las de un mon son cuatro más que las de cuatro.', q1:'cuántas monedas', q2:'cuántas más'},
+  sacos:     {n:'los sacos', x:'a', y:'t', X:'sacos de arroz', Y:'sacos de té', a:1, b:1, c:5, d:3, e:2, f:12,
+              hist:'Cinco sacos pesan doce kan entre todos. Los de arroz pesan tres kan cada uno; los de té, dos.', q1:'los sacos', q2:'el peso'},
+  farolillos:{n:'los farolillos', x:'n', y:'p', X:'farolillos grandes', Y:'farolillos pequeños', a:1, b:1, c:9, d:5, e:2, f:30,
+              hist:'Nueve farolillos han costado treinta mon. Los grandes valen cinco mon; los pequeños, dos.', q1:'los farolillos', q2:'los mon'},
+  edades:    {n:'las edades', x:'p', y:'h', X:'años del paje', Y:'años de la hija del cocinero', a:1, b:-2, c:0, d:1, e:1, f:12,
+              hist:'El paje tiene el doble de años que la hija del cocinero, y entre los dos suman doce.', q1:'el doble', q2:'la suma'}
+};
+const PROB_ORDEN = ['grullas', 'monedas', 'sacos', 'farolillos', 'edades'];
+const det = P => P.a * P.e - P.b * P.d;
+const resuelve = P => { const D = det(P); return D ? {x:(P.c * P.e - P.b * P.f) / D, y:(P.a * P.f - P.c * P.d) / D, det:D} : {x:null, y:null, det:0}; };
+const cumple1 = (P, x, y) => P.a * x + P.b * y === P.c;
+const cumple2 = (P, x, y) => P.d * x + P.e * y === P.f;
+/* escribir una ecuación: 2g + 4t = 26, u − c = 4, p − 2h = 0 */
+function termino(k, letra, primero){ if(k === 0) return ''; const m = Math.abs(k); return (k < 0 ? (primero ? '−' : ' − ') : (primero ? '' : ' + ')) + (m === 1 ? '' : m) + letra; }
+function ecTexto(a, b, c, x, y){ let s = termino(a, x, true); s += termino(b, y, s === ''); return (s || '0') + ' = ' + c; }
+const ec1 = P => ecTexto(P.a, P.b, P.c, P.x, P.y), ec2 = P => ecTexto(P.d, P.e, P.f, P.x, P.y);
+const SUELTA = (P) => new RegExp('(?<![A-Za-zñáéíóúü])(' + P.x + '|' + P.y + ')(?![A-Za-zñáéíóúü])', 'g');
+const colorea = (s, P) => s.replace(SUELTA(P), m => '<span class="' + (m === P.x ? 'x' : 'y') + '">' + m + '</span>');
+/* una ecuación en SVG, con cada incógnita de su color */
+function ecSvg(g, x, y, s, P, at = {}){
+  const t = el(g, 'text', Object.assign({x, y, 'font-family':"'Shippori Mincho',serif", 'font-size':20, 'font-weight':700, fill:'var(--tinta)'}, at));
+  s.split(SUELTA(P)).forEach(p => { if(!p) return; const ts = document.createElementNS(NS, 'tspan'); ts.textContent = p; if(p === P.x) ts.setAttribute('fill', 'var(--ai)'); if(p === P.y) ts.setAttribute('fill', 'var(--matcha)'); t.appendChild(ts); });
+  return t;
+}
+/* k0 + k1·L, escrito limpio */
+function lin2(k0, k1, L){
+  if(k1 === 0) return cifra(k0, 2);
+  const m = Math.abs(k1), t = (m === 1 ? '' : m) + L;
+  if(k0 === 0) return (k1 < 0 ? '−' : '') + t;
+  return cifra(k0, 2) + (k1 < 0 ? ' − ' : ' + ') + t;
+}
+/* despejar una incógnita en una ecuación: de = (k0 + k1·otra)/div */
+function despeja(P, de, en){
+  const [A, B, C] = en === 1 ? [P.a, P.b, P.c] : [P.d, P.e, P.f];
+  let k0 = C, k1 = de === 'x' ? -B : -A, div = de === 'x' ? A : B;
+  if(div < 0){ k0 = -k0; k1 = -k1; div = -div; }
+  if(k0 % div === 0 && k1 % div === 0){ k0 /= div; k1 /= div; div = 1; }
+  const otra = de === 'x' ? P.y : P.x;
+  const cuerpo = lin2(k0, k1, otra);
+  const simple = k1 === 0 || k0 === 0;
+  return {k0, k1, div, otra, txt:div === 1 ? cuerpo : (simple ? cuerpo : '(' + cuerpo + ')') + '/' + div, simple};
+}
+const conParen = (k, d) => { const cuerpo = d.div !== 1 || d.simple ? d.txt : '(' + d.txt + ')'; return k === 1 ? cuerpo : k === -1 ? '−' + cuerpo : k + '·' + cuerpo; };
+
+/* ═══ SALA 1 · EL ESTANQUE ══════════════════════════════════════════════
+   Cabezas y patas, y cuántas tortugas se ponen. Con c cabezas hay c + 1
+   repartos; solo uno da las patas que se ven. Y el botón de la escuela:
+   suponer que todas son grullas y cambiar de una en una.                */
+const estanque = {cabezas:8, patas:26, tortugas:0};
+const tortugasDe = (c, p) => (p - 2 * c) / 2;
+function acotaPatas(){ const {cabezas} = estanque; estanque.patas = Math.max(2 * cabezas, Math.min(4 * cabezas, estanque.patas)); if(estanque.patas % 2) estanque.patas--; estanque.tortugas = Math.max(0, Math.min(cabezas, estanque.tortugas)); }
+function bicho(g, x, ys, tipo, s = 1){
+  const gg = el(g, 'g', {transform:'translate(' + x + ' ' + ys + ') scale(' + s + ')'});
+  if(tipo === 'g'){
+    el(gg, 'path', {d:'M-14 -6 q14 -18 30 -4 q-6 12 -30 4 z', fill:'var(--washi)', stroke:'var(--figura)', 'stroke-width':1.3});
+    el(gg, 'path', {d:'M-8 -14 q-4 -16 4 -30', fill:'none', stroke:'var(--figura)', 'stroke-width':4, 'stroke-linecap':'round'});
+    el(gg, 'path', {d:'M-8 -14 q-4 -16 4 -30', fill:'none', stroke:'var(--washi)', 'stroke-width':2.2, 'stroke-linecap':'round'});
+    el(gg, 'circle', {cx:-3, cy:-45, r:4.5, fill:'var(--washi)', stroke:'var(--figura)', 'stroke-width':1.2});
+    el(gg, 'circle', {cx:-3.4, cy:-48.6, r:1.6, fill:'var(--tancho)'});
+    el(gg, 'path', {d:'M1 -45 l9 1.4 l-9 1.8 z', fill:'var(--kin)', stroke:'var(--figura)', 'stroke-width':.8});
+    el(gg, 'circle', {cx:-1.2, cy:-45.4, r:.9, fill:'var(--figura)'});
+    el(gg, 'path', {d:'M-4 0 L-6 40 M4 0 L6 40', stroke:'var(--figura)', 'stroke-width':2, 'stroke-opacity':.8, 'stroke-linecap':'round'});
+  }else{
+    el(gg, 'path', {d:'M-16 -4 q16 -24 32 0 z', fill:'var(--matcha)', stroke:'var(--figura)', 'stroke-width':1.3});
+    el(gg, 'path', {d:'M-8 -6 v-9 M0 -6 v-14 M8 -6 v-9', stroke:'var(--figura)', 'stroke-width':1, 'stroke-opacity':.5});
+    el(gg, 'circle', {cx:19, cy:-8, r:5, fill:'var(--matcha)', stroke:'var(--figura)', 'stroke-width':1.2});
+    el(gg, 'circle', {cx:21, cy:-9.4, r:.9, fill:'var(--figura)'});
+    el(gg, 'path', {d:'M-12 0 v22 M-4 0 v22 M4 0 v22 M12 0 v22', stroke:'var(--figura)', 'stroke-width':3, 'stroke-opacity':.75, 'stroke-linecap':'round'});
+  }
+  return gg;
+}
+function pintaEstanque(){
+  const g = $('svgEstanque'); g.innerHTML = '';
+  const {cabezas:c, patas:p, tortugas:t} = estanque, gr = c - t, patasPuestas = 2 * gr + 4 * t, ts = tortugasDe(c, p);
+  mincho(g, 12, 24, c + ' cabezas · ' + p + ' patas · ' + (t === ts ? 'cuadra: ' + gr + ' grullas y ' + t + ' tortugas' : 'con ' + t + (t === 1 ? ' tortuga' : ' tortugas') + ' salen ' + patasPuestas + ' patas'));
+  /* el agua */
+  const filas = c <= 12 ? 1 : c <= 24 ? 2 : 4, porFila = Math.ceil(c / filas), s = filas === 1 ? Math.min(1, 12 / Math.max(c, 8)) : filas === 2 ? .62 : .42;
+  const x0 = 14, ancho = 386, altoFila = 100 * s + 14, yTop = 40;
+  el(g, 'rect', {x:x0 - 4, y:yTop + 52 * s, width:ancho + 8, height:filas * altoFila + 10, rx:12, fill:'var(--mizu)', 'fill-opacity':.2});
+  for(let f = 0; f < filas; f++){
+    const ys = yTop + 56 * s + f * altoFila, n = Math.min(porFila, c - f * porFila), dx = ancho / Math.max(porFila, 1);
+    for(let i = 0; i < Math.ceil(ancho / 44); i++) el(g, 'path', {d:'M' + (x0 + i * 44) + ' ' + ys + ' q11 -6 22 0 q11 6 22 0', fill:'none', stroke:'var(--mizu)', 'stroke-width':1, 'stroke-opacity':.7});
+    for(let i = 0; i < n; i++){ const k = f * porFila + i; bicho(g, x0 + dx * (i + .5), ys, k < gr ? 'g' : 't', s); }
+  }
+  const yBajo = yTop + 56 * s + filas * altoFila + 8;
+  txt(g, x0, yBajo + 14, 'fuera del agua: ' + c + ' cabezas', {'font-size':11, fill:'var(--tinta)'});
+  txt(g, x0, yBajo + 30, 'debajo: ' + gr + ' × 2 + ' + t + ' × 4 = ' + patasPuestas + ' patas', {'font-size':11, fill:patasPuestas === p ? 'var(--kin)' : 'var(--tinta)'});
+  if(patasPuestas !== p) txt(g, x0, yBajo + 46, (patasPuestas < p ? 'faltan ' + (p - patasPuestas) : 'sobran ' + (patasPuestas - p)) + ' patas', {'font-size':11, fill:'var(--mal)'});
+  /* la tabla de los repartos */
+  const tx = 414; txt(g, tx, 52, 'los repartos', {'font-size':10.5});
+  txt(g, tx, 66, 'tort. · grull. · patas', {'font-size':9.5});
+  let filasT = []; for(let k = 0; k <= c; k++) filasT.push(k);
+  if(filasT.length > 14){ const lo = Math.max(0, ts - 6), hi = Math.min(c, lo + 12); filasT = []; for(let k = lo; k <= hi; k++) filasT.push(k); }
+  filasT.forEach((k, i) => {
+    const y = 82 + i * 16, pk = 2 * (c - k) + 4 * k, es = pk === p;
+    if(k === t) el(g, 'rect', {x:tx - 6, y:y - 11, width:120, height:15, rx:3, fill:'var(--panel2)'});
+    txt(g, tx, y, String(k).padStart(2, ' ') + '  ·  ' + String(c - k).padStart(2, ' ') + '  ·  ' + String(pk).padStart(3, ' '), {'font-size':11, fill:es ? 'var(--kin)' : 'var(--tinta)', 'font-weight':es ? 700 : 400, 'xml:space':'preserve', style:'white-space:pre'});
+    if(es) txt(g, tx + 117, y, '←', {'font-size':11, fill:'var(--kin)'});
+  });
+  if(c + 1 > 14) txt(g, tx, 82 + filasT.length * 16 + 2, '… de ' + (c + 1) + ' repartos', {'font-size':9.5});
+  txt(g, 528, 322, 'solo un reparto da las patas que se ven', {'text-anchor':'end', 'font-size':10.5});
+}
+function leeEstanque(){
+  const {cabezas:c, patas:p, tortugas:t} = estanque, gr = c - t, pp = 2 * gr + 4 * t, ts = tortugasDe(c, p), gs = c - ts;
+  $('lecEstanque').innerHTML =
+    '<span class="def">Un sistema son dos cuentas sobre las mismas cosas que tienen que salir a la vez. Aquí, las cabezas y las patas. La solución es la pareja que cumple las dos.</span>'
+    + 'Con <b>' + c + '</b> cabezas hay ' + (c + 1) + ' repartos posibles, de ninguna tortuga a todas. La cuenta de las cabezas los deja todos; la de las patas elige uno. '
+    + (t === ts ? 'Con <b>' + t + '</b> tortugas y <b>' + gr + '</b> grullas salen ' + pp + ' patas: <b>cuadra</b>. Es la única pareja que cumple las dos cuentas. '
+       : 'Con ' + t + ' tortugas y ' + gr + ' grullas salen ' + pp + ' patas, y se ven ' + p + ': ' + (pp < p ? 'faltan ' + (p - pp) + '. Cada grulla que cambies por tortuga añade dos.' : 'sobran ' + (pp - p) + '. Cada tortuga que cambies por grulla quita dos.') + ' ')
+    + 'La cuenta de la escuela: si las ' + c + ' fueran grullas habría ' + 2 * c + ' patas; se ven ' + p + ', faltan ' + (p - 2 * c) + '; cada tortuga en vez de grulla añade dos, así que <b>' + ts + '</b> tortugas y <b>' + gs + '</b> grullas. Se llama <i>tsurukamezan</i>, la cuenta de la grulla y la tortuga.'
+    + (c === 35 && p === 94 ? '<span class="murmullo">Listaseki deja el ábaco: «Treinta y cinco y noventa y cuatro. Ésos son los números del libro chino, el <i>Sunzi suanjing</i>, de hace mil quinientos años: faisanes y conejos en una jaula. Veintitrés faisanes y doce conejos. Antes de ser grullas, fueron faisanes».</span>' : '')
+    + (t === ts && c === 8 && p === 26 ? '<span class="murmullo">Orizuru, desde el borde: «Yo tengo una cabeza y ninguna pata. No cuento. Es lo que tiene ser de papel».</span>' : '')
+    + '<span class="cuenta">' + ecTexto(1, 1, c, 'g', 't') + '   ·   ' + ecTexto(2, 4, p, 'g', 't') + '   ·   solución: g = ' + gs + ', t = ' + ts + '</span>';
+}
+let suponiendo = null;
+function mandosEstanque(){
+  $('cCabezas').textContent = estanque.cabezas; $('pPatas').textContent = estanque.patas; $('tTortugas').textContent = estanque.tortugas;
+  $('cMenos').disabled = estanque.cabezas <= 2; $('cMas').disabled = estanque.cabezas >= 40;
+  $('pMenos').disabled = estanque.patas <= 2 * estanque.cabezas; $('pMas').disabled = estanque.patas >= 4 * estanque.cabezas;
+  $('tMenos').disabled = estanque.tortugas <= 0; $('tMas').disabled = estanque.tortugas >= estanque.cabezas;
+}
+function pintaEstanque2(){ acotaPatas(); mandosEstanque(); pintaEstanque(); leeEstanque(); revisa(); if(estanque.cabezas === 35 && estanque.patas === 94) huevo('faisanes'); }
+$('cMenos').addEventListener('click', () => { if(estanque.cabezas > 2){ estanque.cabezas--; Ruido.abaco(); pintaEstanque2(); } });
+$('cMas').addEventListener('click', () => { if(estanque.cabezas < 40){ estanque.cabezas++; Ruido.abaco(); pintaEstanque2(); } });
+$('pMenos').addEventListener('click', () => { if(estanque.patas > 2 * estanque.cabezas){ estanque.patas -= 2; Ruido.abaco(); pintaEstanque2(); } });
+$('pMas').addEventListener('click', () => { if(estanque.patas < 4 * estanque.cabezas){ estanque.patas += 2; Ruido.abaco(); pintaEstanque2(); } });
+$('tMenos').addEventListener('click', () => { if(estanque.tortugas > 0){ estanque.tortugas--; Ruido.abaco(); pintaEstanque2(); } });
+$('tMas').addEventListener('click', () => { if(estanque.tortugas < estanque.cabezas){ estanque.tortugas++; Ruido.abaco(); pintaEstanque2(); } });
+['cMenos', 'cMas', 'pMenos', 'pMas', 'tMenos', 'tMas'].forEach(id => repite($(id), () => $(id).click()));
+$('suponer').addEventListener('click', () => {
+  clearInterval(suponiendo); estanque.tortugas = 0; pintaEstanque2(); Ruido.despierta();
+  const ts = tortugasDe(estanque.cabezas, estanque.patas);
+  suponiendo = setInterval(() => { if(estanque.tortugas >= ts){ clearInterval(suponiendo); return; } estanque.tortugas++; Ruido.abaco(2); pintaEstanque2(); }, 380);
+});
+
+/* ═══ SALA 2 · LA TABLILLA ══════════════════════════════════════════════
+   El mismo problema con letras. Una pareja se prueba sustituyendo en las
+   dos ecuaciones: cumple las dos, o no es solución.                     */
+const tablilla = {prob:'grullas', px:4, py:4};
+function pintaTablilla(){
+  const g = $('svgTablilla'); g.innerHTML = '';
+  const P = PROBLEMAS[tablilla.prob], {px, py} = tablilla, c1 = cumple1(P, px, py), c2 = cumple2(P, px, py), sol = resuelve(P);
+  mincho(g, 12, 24, P.n + ' · se prueba ' + P.x + ' = ' + px + ', ' + P.y + ' = ' + py + ' · ' + (c1 && c2 ? 'es solución' : c1 || c2 ? 'cumple una' : 'no cumple ninguna'));
+  /* la tablilla de madera, colgada */
+  el(g, 'path', {d:'M270 30 V44', stroke:'var(--figura)', 'stroke-width':1.6});
+  el(g, 'rect', {x:30, y:44, width:480, height:230, rx:8, fill:'#C08A5E', 'fill-opacity':.28, stroke:'var(--figura)', 'stroke-width':1.4});
+  for(let i = 0; i < 6; i++) el(g, 'path', {d:'M40 ' + (60 + i * 36) + ' q120 4 240 0 t230 0', fill:'none', stroke:'#8A5E3B', 'stroke-width':.7, 'stroke-opacity':.35});
+  parrafo(g, 44, 66, P.hist, 452, {'font-size':12, fill:'var(--tinta)'}, 15);
+  txt(g, 44, 104, P.x + ' = ' + P.X + '   ·   ' + P.y + ' = ' + P.Y, {'font-size':10.5});
+  ecSvg(g, 44, 138, ec1(P), P); txt(g, 300, 138, P.q1, {'font-size':10.5});
+  ecSvg(g, 44, 172, ec2(P), P); txt(g, 300, 172, P.q2, {'font-size':10.5});
+  /* la prueba */
+  const v1 = P.a * px + P.b * py, v2 = P.d * px + P.e * py;
+  txt(g, 44, 204, 'con ' + P.x + ' = ' + px + ' y ' + P.y + ' = ' + py + ':', {'font-size':11});
+  txt(g, 44, 226, sustituida(P.a, P.b, px, py) + ' = ' + v1 + (c1 ? '  ✓' : '  ✗  (había de ser ' + P.c + ')'), {'font-size':12.5, fill:c1 ? 'var(--kin)' : 'var(--mal)'});
+  txt(g, 44, 248, sustituida(P.d, P.e, px, py) + ' = ' + v2 + (c2 ? '  ✓' : '  ✗  (había de ser ' + P.f + ')'), {'font-size':12.5, fill:c2 ? 'var(--kin)' : 'var(--mal)'});
+  mincho(g, 496, 258, c1 && c2 ? 'solución' : 'no', {'text-anchor':'end', 'font-size':22, fill:c1 && c2 ? 'var(--kin)' : 'var(--mal)'});
+  txt(g, 528, 292, 'una solución cumple las dos', {'text-anchor':'end', 'font-size':10.5});
+}
+function sustituida(a, b, px, py){
+  const t = (k, v) => k === 0 ? '' : (Math.abs(k) === 1 ? '' : Math.abs(k) + '·') + v;
+  let s = (a < 0 ? '−' : '') + t(a, px);
+  if(b !== 0) s += (s ? (b < 0 ? ' − ' : ' + ') : (b < 0 ? '−' : '')) + t(b, py);
+  return s || '0';
+}
+function leeTablilla(){
+  const P = PROBLEMAS[tablilla.prob], {px, py} = tablilla, c1 = cumple1(P, px, py), c2 = cumple2(P, px, py), sol = resuelve(P);
+  $('lecTablilla').innerHTML =
+    '<span class="def">Una incógnita es lo que no se sabe y se escribe con una letra. Una ecuación es una cuenta que tiene que salir. Un sistema son dos ecuaciones con las mismas incógnitas, y su solución es una pareja de números que cumple las dos: se comprueba sustituyendo.</span>'
+    + 'En ' + P.n + ' las incógnitas son <span class="x">' + P.x + '</span>, ' + P.X + ', y <span class="y">' + P.y + '</span>, ' + P.Y + '. La primera ecuación dice ' + P.q1 + '; la segunda, ' + P.q2 + '. '
+    + 'La pareja <span class="x">' + P.x + '</span> = ' + px + ', <span class="y">' + P.y + '</span> = ' + py + (c1 && c2 ? ' <b>cumple las dos</b>: es la solución del sistema. Y es la única, porque dos rectas que se cruzan lo hacen en un punto; eso se ve en las sendas.'
+       : c1 ? ' cumple la primera y no la segunda: <b>no es solución</b>. Cumplir una ecuación es fácil, hay muchas parejas que lo hacen; la solución tiene que cumplir las dos.'
+       : c2 ? ' cumple la segunda y no la primera: <b>no es solución</b>. Hay que cumplir las dos a la vez.'
+       : ' no cumple ninguna: <b>no es solución</b>. Probad otra; hay una, y solo una, que cumple las dos.')
+    + (sol.det ? '<span class="cuenta">' + colorea(ec1(P), P) + '   ·   ' + colorea(ec2(P), P) + '   ·   solución: ' + P.x + ' = ' + sol.x + ', ' + P.y + ' = ' + sol.y + '</span>' : '');
+}
+function mandosTablilla(){
+  tira('bProb', PROB_ORDEN, () => tablilla.prob, v => { tablilla.prob = v; Ruido.abaco(); pintaTablilla2(); }, v => PROBLEMAS[v].n, 'n v');
+  const P = PROBLEMAS[tablilla.prob], c = $('bPareja'); c.innerHTML = '';
+  [['x', 'px'], ['y', 'py']].forEach(([L, k]) => {
+    const e = document.createElement('span'); e.className = 'etq'; e.style.minWidth = '0'; e.style.marginLeft = '4px'; e.textContent = P[L] + ' ='; c.appendChild(e);
+    const w = document.createElement('span'); w.id = 'par_' + k; c.appendChild(w);
+    masMenos('par_' + k, () => tablilla[k], v => { tablilla[k] = v; Ruido.abaco(); pintaTablilla2(); }, 0, 14);
+  });
+}
+function pintaTablilla2(){ mandosTablilla(); pintaTablilla(); leeTablilla(); revisa(); }
+
+/* ═══ SALA 3 · EL ÁBACO ════════════════════════════════════════════════
+   Reducción: cada ecuación es una fila del soroban; se multiplica una
+   fila entera por un número y se suma o resta a la otra. Cuando una
+   columna se queda a cero, esa incógnita se ha ido.                     */
+const abaco = {prob:'grullas', k1:1, k2:1, op:'restar'};
+function filaReducida(){
+  const P = PROBLEMAS[abaco.prob], {k1, k2, op} = abaco, s = op === 'sumar' ? 1 : -1;
+  return {A:k2 * P.d + s * k1 * P.a, B:k2 * P.e + s * k1 * P.b, C:k2 * P.f + s * k1 * P.c, f1:[k1 * P.a, k1 * P.b, k1 * P.c], f2:[k2 * P.d, k2 * P.e, k2 * P.f]};
+}
+function cuentas(g, x, y, k, color){
+  const n = Math.abs(k);
+  if(n === 0){ el(g, 'circle', {cx:x, cy:y, r:3, fill:'none', stroke:color, 'stroke-width':1, 'stroke-opacity':.5}); return; }
+  if(n > 9){ el(g, 'rect', {x:x - 16, y:y - 9, width:32, height:18, rx:4, fill:'var(--fondo)'}); txt(g, x, y + 5, cifra(k, 0), {'text-anchor':'middle', 'font-size':13, 'font-weight':700, fill:color}); return; }
+  for(let i = 0; i < n; i++){ const cx = x + (i - (n - 1) / 2) * 9; el(g, 'ellipse', {cx, cy:y, rx:4.2, ry:3.2, fill:k < 0 ? 'none' : color, stroke:color, 'stroke-width':1.4}); }
+}
+function pintaAbaco(){
+  const g = $('svgAbaco'); g.innerHTML = '';
+  const P = PROBLEMAS[abaco.prob], {k1, k2, op} = abaco, r = filaReducida(), sol = resuelve(P);
+  const ida = r.A === 0 && r.B !== 0 ? 'x' : r.B === 0 && r.A !== 0 ? 'y' : null;
+  mincho(g, 12, 24, P.n + ' · ' + (ida ? 'se va la ' + (ida === 'x' ? P.x : P.y) + ': ' + (ida === 'x' ? lin2(0, r.B, P.y) : lin2(0, r.A, P.x)) + ' = ' + r.C : 'quedan las dos incógnitas'));
+  /* el marco del soroban: tres columnas, x, y, y el número */
+  const x0 = 112, y0 = 44, w = 296, cols = [x0 + 56, x0 + 148, x0 + 246];
+  el(g, 'rect', {x:x0, y:y0, width:w, height:190, rx:6, fill:'#C08A5E', 'fill-opacity':.18, stroke:'var(--figura)', 'stroke-width':1.6});
+  cols.forEach(cx => el(g, 'path', {d:'M' + cx + ' ' + y0 + ' V' + (y0 + 190), stroke:'var(--figura)', 'stroke-width':.8, 'stroke-opacity':.5}));
+  ecSvg(g, cols[0], y0 + 18, P.x, P, {'text-anchor':'middle', 'font-size':15}); ecSvg(g, cols[1], y0 + 18, P.y, P, {'text-anchor':'middle', 'font-size':15}); txt(g, cols[2], y0 + 18, '=', {'text-anchor':'middle', 'font-size':15, fill:'var(--tinta)'});
+  const filas = [{n:'primera × ' + k1, v:r.f1}, {n:'segunda × ' + k2, v:r.f2}, {n:op === 'sumar' ? 'suma' : 'segunda − primera', v:[r.A, r.B, r.C]}];
+  filas.forEach((f, i) => {
+    const y = y0 + 58 + i * 52;
+    el(g, 'path', {d:'M' + (x0 + 8) + ' ' + y + ' H' + (x0 + w - 8), stroke:'var(--figura)', 'stroke-width':i === 2 ? 1.8 : 1, 'stroke-opacity':i === 2 ? .8 : .45});
+    if(i === 2) el(g, 'path', {d:'M' + (x0 + 8) + ' ' + (y - 26) + ' H' + (x0 + w - 8), stroke:'var(--acento)', 'stroke-width':1.2, 'stroke-dasharray':'4 3'});
+    txt(g, x0 - 4, y + 4, f.n, {'text-anchor':'end', 'font-size':9.5});
+    cuentas(g, cols[0], y, f.v[0], 'var(--ai)'); cuentas(g, cols[1], y, f.v[1], 'var(--matcha)'); cuentas(g, cols[2], y, f.v[2], 'var(--kin)');
+    txt(g, x0 + w + 8, y + 4, ecTexto(f.v[0], f.v[1], f.v[2], P.x, P.y), {'font-size':11.5, fill:i === 2 ? 'var(--tinta)' : 'var(--tenue)'});
+  });
+  txt(g, x0, 254, 'las cuentas huecas son negativas', {'font-size':10});
+  txt(g, 24, 254, '', {'font-size':10});
+  /* lo que queda */
+  let y = 268;
+  if(ida){
+    const L = ida === 'x' ? P.y : P.x, k = ida === 'x' ? r.B : r.A, v = r.C / k, otra = ida === 'x' ? P.x : P.y;
+    ecSvg(g, x0, y, lin2(0, k, L) + ' = ' + r.C + '  →  ' + L + ' = ' + cifra(v, 2), P, {'font-size':16}); y += 22;
+    if(Number.isInteger(v)){ const w2 = ida === 'x' ? (P.c - P.b * v) / P.a : (P.c - P.a * v) / P.b;
+      ecSvg(g, x0, y, 'y en la primera: ' + otra + ' = ' + cifra(w2, 2), P, {'font-size':16}); }
+  }else if(r.A === 0 && r.B === 0) ecSvg(g, x0, y, '0 = ' + r.C + ': eran la misma cuenta', P, {'font-size':16});
+  else ecSvg(g, x0, y, 'todavía hay dos incógnitas: probad otros números', P, {'font-size':14, fill:'var(--tenue)'});
+  txt(g, 528, 315, 'multiplicar una fila y sumarla no cambia la solución', {'text-anchor':'end', 'font-size':10.5});
+}
+function leeAbaco(){
+  const P = PROBLEMAS[abaco.prob], {k1, k2, op} = abaco, r = filaReducida(), sol = resuelve(P);
+  const ida = r.A === 0 && r.B !== 0 ? 'x' : r.B === 0 && r.A !== 0 ? 'y' : null;
+  const grullasRev = abaco.prob === 'grullas' && k1 === 2 && k2 === 1 && op === 'restar';
+  $('lecAbaco').innerHTML =
+    '<span class="def">Reducir es multiplicar una ecuación entera por un número y sumarla o restarla a la otra, para que una incógnita desaparezca. La solución no cambia, porque lo que es igual, doblado, sigue siendo igual, y sumado a lo que es igual también.</span>'
+    + 'La primera fila por <b>' + k1 + '</b> y la segunda por <b>' + k2 + '</b>; luego ' + (op === 'sumar' ? 'se suman' : 'se resta la primera de la segunda') + '. '
+    + (ida ? 'La columna de <b>' + (ida === 'x' ? P.x : P.y) + '</b> se queda a cero: esa incógnita se ha ido, y queda una ecuación con una sola letra, ' + colorea(lin2(0, ida === 'x' ? r.B : r.A, ida === 'x' ? P.y : P.x) + ' = ' + r.C, P) + '. Se resuelve, y el valor vuelve a una de las ecuaciones viejas para sacar la otra. '
+       : r.A === 0 && r.B === 0 ? 'Se han ido las dos a la vez: la segunda fila era la primera multiplicada. Eran la misma cuenta. '
+       : 'Ninguna columna se ha quedado a cero: hay que buscar los números que igualen una columna. Para que se vaya <b>' + P.y + '</b> hacen falta tantas cuentas de ' + P.y + ' en una fila como en la otra. ')
+    + (grullasRev ? '<span class="murmullo">Listaseki, sin levantar la vista: «Mirad la fila de abajo: 2' + P.y + ' = 10. Es la cuenta de la escuela. Dieciséis patas si todas fueran grullas, faltan diez, cada tortuga añade dos. <b>Suponer que todas son grullas era reducir</b>. Solo que nadie lo llamaba así».</span>' : '')
+    + '<span class="cuenta">' + colorea(ecTexto(r.f1[0], r.f1[1], r.f1[2], P.x, P.y), P) + '   ' + (op === 'sumar' ? '+' : '−') + '   ' + colorea(ecTexto(r.f2[0], r.f2[1], r.f2[2], P.x, P.y), P) + '   →   ' + colorea(ecTexto(r.A, r.B, r.C, P.x, P.y), P) + '</span>';
+}
+function mandosAbaco(){
+  tira('aProb', PROB_ORDEN, () => abaco.prob, v => { abaco.prob = v; Ruido.abaco(); pintaAbaco2(); }, v => PROBLEMAS[v].n, 'n v');
+  tira('aK1', [1, 2, 3, 4, 5], () => abaco.k1, v => { abaco.k1 = v; Ruido.abaco(v); pintaAbaco2(); }, v => '× ' + v);
+  tira('aK2', [1, 2, 3, 4, 5], () => abaco.k2, v => { abaco.k2 = v; Ruido.abaco(v); pintaAbaco2(); }, v => '× ' + v);
+  tira('aOp', ['sumar', 'restar'], () => abaco.op, v => { abaco.op = v; Ruido.abaco(); pintaAbaco2(); }, v => v === 'sumar' ? 'sumar las filas' : 'restar la primera de la segunda', 'n v');
+}
+function pintaAbaco2(){ mandosAbaco(); pintaAbaco(); leeAbaco(); revisa(); if(abaco.prob === 'grullas' && abaco.k1 === 2 && abaco.k2 === 1 && abaco.op === 'restar') huevo('escuela'); }
+
+/* ═══ SALA 4 · LA SUSTITUCIÓN ══════════════════════════════════════════
+   Despejar una incógnita en una ecuación y ponerla en su lugar en la
+   otra. La expresión baja como un sello al hueco.                       */
+const sust = {prob:'grullas', de:'x', en:1};
+function pasosSust(P, de, en){
+  const d = despeja(P, de, en), [D, E, F] = en === 1 ? [P.d, P.e, P.f] : [P.a, P.b, P.c];
+  const kDe = de === 'x' ? D : E, kOtra = de === 'x' ? E : D, otra = d.otra;
+  const l = [];
+  l.push({t:(de === 'x' ? P.x : P.y) + ' = ' + d.txt, n:'se despeja en la ' + (en === 1 ? 'primera' : 'segunda')});
+  const parte = conParen(kDe, d);
+  const linea2 = de === 'x' ? parte + termino(kOtra, otra, false) + ' = ' + F : (termino(kOtra, otra, true) || '') + (kDe < 0 ? ' − ' : ' + ') + conParen(Math.abs(kDe), d) + ' = ' + F;
+  l.push({t:linea2.replace(/^ \+ /, ''), n:'y se pone en su lugar en la ' + (en === 1 ? 'segunda' : 'primera')});
+  const kk = kDe * d.k1 + kOtra * d.div, k0 = kDe * d.k0, FF = F * d.div;
+  if(d.div !== 1) l.push({t:lin2(k0, kk, otra) + ' = ' + FF, n:'todo por ' + d.div + ', y se quitan los paréntesis'});
+  else l.push({t:lin2(k0, kk, otra) + ' = ' + FF, n:'se quitan los paréntesis'});
+  const val = (FF - k0) / kk;
+  l.push({t:lin2(0, kk, otra) + ' = ' + cifra(FF - k0, 2) + '  →  ' + otra + ' = ' + cifra(val, 2), n:'una ecuación, una incógnita'});
+  const deVal = (d.k0 + d.k1 * val) / d.div;
+  l.push({t:(de === 'x' ? P.x : P.y) + ' = ' + d.txt.replace(new RegExp(otra, 'g'), '(' + cifra(val, 2) + ')') + ' = ' + cifra(deVal, 2), n:'y el valor vuelve a lo despejado'});
+  return {l, d, val, deVal, otra};
+}
+function pintaSust(){
+  const g = $('svgSust'); g.innerHTML = '';
+  const P = PROBLEMAS[sust.prob], {de, en} = sust, ps = pasosSust(P, de, en), L = de === 'x' ? P.x : P.y;
+  mincho(g, 12, 24, P.n + ' · se despeja ' + L + ' en la ' + (en === 1 ? 'primera' : 'segunda') + ' · ' + P.x + ' = ' + cifra(de === 'x' ? ps.deVal : ps.val, 2) + ', ' + P.y + ' = ' + cifra(de === 'x' ? ps.val : ps.deVal, 2));
+  ecSvg(g, 30, 60, ec1(P), P, {'font-size':19, fill:en === 1 ? 'var(--acento)' : 'var(--tinta)'}); txt(g, 30, 76, 'primera', {'font-size':9.5});
+  ecSvg(g, 300, 60, ec2(P), P, {'font-size':19, fill:en === 2 ? 'var(--acento)' : 'var(--tinta)'}); txt(g, 300, 76, 'segunda', {'font-size':9.5});
+  /* el sello: lo despejado, que baja al hueco de la otra */
+  const xs = en === 1 ? 30 : 300, xd = en === 1 ? 300 : 30;
+  const caja = el(g, 'g', {class:'nueva'});
+  el(caja, 'rect', {x:xs, y:88, width:Math.max(90, ps.l[0].t.length * 9.5 + 16), height:28, rx:6, fill:'var(--panel2)', stroke:'var(--acento)', 'stroke-width':1.4});
+  ecSvg(caja, xs + 8, 108, ps.l[0].t, P, {'font-size':16});
+  el(g, 'path', {d:'M' + (xs + 60) + ' 118 L' + (xs + 60) + ' 130 Q' + (xs + 60) + ' 138 ' + (xs + 60 + (xd - xs) * .3) + ' 138 L' + (xd + 40) + ' 138 L' + (xd + 40) + ' 150', fill:'none', stroke:'var(--acento)', 'stroke-width':1.3, 'stroke-dasharray':'4 3', 'marker-end':'none'});
+  el(g, 'path', {d:'M' + (xd + 35) + ' 145 L' + (xd + 40) + ' 152 L' + (xd + 45) + ' 145', fill:'none', stroke:'var(--acento)', 'stroke-width':1.3});
+  ps.l.slice(1).forEach((p, i) => { const y = 176 + i * 28; ecSvg(g, 30, y, p.t, P, {'font-size':i === 0 ? 18 : 16, fill:i === 3 ? 'var(--kin)' : 'var(--tinta)'}); txt(g, 528, y, p.n, {'text-anchor':'end', 'font-size':9.5}); });
+  txt(g, 528, 292, 'sustituir es poner en su lugar', {'text-anchor':'end', 'font-size':10.5});
+}
+function leeSust(){
+  const P = PROBLEMAS[sust.prob], {de, en} = sust, ps = pasosSust(P, de, en), L = de === 'x' ? P.x : P.y;
+  $('lecSust').innerHTML =
+    '<span class="def">Sustituir es despejar una incógnita en una ecuación, es decir, dejarla sola a un lado, y poner lo que vale en el lugar de esa incógnita en la otra ecuación. Queda una ecuación con una sola incógnita.</span>'
+    + 'Se despeja <b>' + L + '</b> en la ' + (en === 1 ? 'primera' : 'segunda') + ': ' + colorea(ps.l[0].t, P) + '. Eso vale ' + L + ', así que donde la ' + (en === 1 ? 'segunda' : 'primera') + ' dice ' + L + ' se escribe ' + colorea(ps.d.txt, P) + ', entre paréntesis para que no se pierda ningún signo. '
+    + 'Queda ' + colorea(ps.l[1].t, P) + ', que tiene una sola letra y se resuelve: <b>' + ps.otra + ' = ' + cifra(ps.val, 2) + '</b>. Con ese valor, lo despejado da <b>' + L + ' = ' + cifra(ps.deVal, 2) + '</b>. '
+    + (ps.d.div !== 1 ? 'Como al despejar quedó una división, se multiplica todo por ' + ps.d.div + ' antes de quitar los paréntesis. ' : '')
+    + 'Conviene despejar la que tenga un uno delante: se despeja sin dividir.'
+    + '<span class="cuenta">' + colorea(ps.l.map(p => p.t).join('   →   '), P) + '</span>';
+}
+function mandosSust(){
+  const P = PROBLEMAS[sust.prob];
+  tira('sProb', PROB_ORDEN, () => sust.prob, v => { sust.prob = v; Ruido.abaco(); pintaSust2(); }, v => PROBLEMAS[v].n, 'n v');
+  tira('sDe', ['x', 'y'], () => sust.de, v => { sust.de = v; Ruido.abaco(); pintaSust2(); }, v => P[v]);
+  tira('sEn', [1, 2], () => sust.en, v => { sust.en = v; Ruido.abaco(); pintaSust2(); }, v => v === 1 ? 'primera' : 'segunda', 'n v');
+}
+function pintaSust2(){ mandosSust(); pintaSust(); leeSust(); revisa(); }
+
+/* ═══ SALA 5 · LA IGUALACIÓN ═══════════════════════════════════════════
+   Despejar la misma incógnita en las dos ecuaciones y poner una expresión
+   frente a la otra: dos formas de la misma cosa.                        */
+const igual = {prob:'grullas', de:'x'};
+function pasosIgual(P, de){
+  const d1 = despeja(P, de, 1), d2 = despeja(P, de, 2), otra = d1.otra, L = de === 'x' ? P.x : P.y;
+  const l = [];
+  l.push({t:L + ' = ' + d1.txt, n:'en la primera'}); l.push({t:L + ' = ' + d2.txt, n:'en la segunda'});
+  l.push({t:d1.txt + ' = ' + d2.txt, n:'las dos valen ' + L + ': se igualan'});
+  const k1 = d2.div * d1.k1 - d1.div * d2.k1, k0 = d1.div * d2.k0 - d2.div * d1.k0;
+  if(d1.div !== 1 || d2.div !== 1) l.push({t:lin2(d2.div * d1.k0, d2.div * d1.k1, otra) + ' = ' + lin2(d1.div * d2.k0, d1.div * d2.k1, otra), n:'en cruz, para quitar las divisiones'});
+  const val = k0 / k1;
+  l.push({t:lin2(0, k1, otra) + ' = ' + cifra(k0, 2) + '  →  ' + otra + ' = ' + cifra(val, 2), n:'se pasa todo a un lado'});
+  const deVal = (d1.k0 + d1.k1 * val) / d1.div;
+  l.push({t:L + ' = ' + d1.txt.replace(new RegExp(otra, 'g'), '(' + cifra(val, 2) + ')') + ' = ' + cifra(deVal, 2), n:'y el valor vuelve a una de las dos'});
+  return {l, val, deVal, otra, d1, d2};
+}
+function pintaIgual(){
+  const g = $('svgIgual'); g.innerHTML = '';
+  const P = PROBLEMAS[igual.prob], de = igual.de, ps = pasosIgual(P, de), L = de === 'x' ? P.x : P.y;
+  mincho(g, 12, 24, P.n + ' · se despeja ' + L + ' en las dos · ' + P.x + ' = ' + cifra(de === 'x' ? ps.deVal : ps.val, 2) + ', ' + P.y + ' = ' + cifra(de === 'x' ? ps.val : ps.deVal, 2));
+  ecSvg(g, 30, 60, ec1(P), P, {'font-size':18}); ecSvg(g, 300, 60, ec2(P), P, {'font-size':18});
+  [ps.l[0], ps.l[1]].forEach((p, i) => { const x = i ? 300 : 30; const caja = el(g, 'g', {class:'nueva'});
+    el(caja, 'rect', {x, y:78, width:Math.max(90, p.t.length * 9.5 + 16), height:28, rx:6, fill:'var(--panel2)', stroke:'var(--acento)', 'stroke-width':1.4}); ecSvg(caja, x + 8, 98, p.t, P, {'font-size':16}); });
+  el(g, 'path', {d:'M90 116 L90 130 Q90 140 110 140 L230 140 Q250 140 250 150 M360 116 L360 130 Q360 140 340 140 L270 140 Q250 140 250 150', fill:'none', stroke:'var(--acento)', 'stroke-width':1.3, 'stroke-dasharray':'4 3'});
+  el(g, 'path', {d:'M245 145 L250 152 L255 145', fill:'none', stroke:'var(--acento)', 'stroke-width':1.3});
+  ps.l.slice(2).forEach((p, i) => { const y = 178 + i * 28; ecSvg(g, 30, y, p.t, P, {'font-size':i === 0 ? 18 : 16, fill:i === ps.l.length - 3 ? 'var(--kin)' : 'var(--tinta)'}); txt(g, 528, y, p.n, {'text-anchor':'end', 'font-size':9.5}); });
+  txt(g, 528, 292, 'dos formas de la misma cosa', {'text-anchor':'end', 'font-size':10.5});
+}
+function leeIgual(){
+  const P = PROBLEMAS[igual.prob], de = igual.de, ps = pasosIgual(P, de), L = de === 'x' ? P.x : P.y;
+  $('lecIgual').innerHTML =
+    '<span class="def">Igualar es despejar la misma incógnita en las dos ecuaciones y poner una expresión frente a la otra: si las dos valen lo mismo, son iguales entre sí. Queda una ecuación con una sola incógnita.</span>'
+    + 'En la primera, ' + colorea(ps.l[0].t, P) + '; en la segunda, ' + colorea(ps.l[1].t, P) + '. Las dos son ' + L + ', así que ' + colorea(ps.l[2].t, P) + '. De ahí sale <b>' + ps.otra + ' = ' + cifra(ps.val, 2) + '</b>, y con ese valor en cualquiera de las dos, <b>' + L + ' = ' + cifra(ps.deVal, 2) + '</b>. '
+    + 'Es la misma pareja que con el ábaco y con la sustitución, y no es casualidad: ningún camino cambia la solución. '
+    + (ps.d1.div !== 1 || ps.d2.div !== 1 ? 'Cuando al despejar quedan divisiones, se multiplica en cruz antes de seguir. ' : 'Aquí las dos se despejan sin dividir, y sale limpio.')
+    + '<span class="cuenta">' + colorea(ps.l.map(p => p.t).join('   →   '), P) + '</span>';
+}
+function mandosIgual(){
+  const P = PROBLEMAS[igual.prob];
+  tira('iProb', PROB_ORDEN, () => igual.prob, v => { igual.prob = v; Ruido.abaco(); pintaIgual2(); }, v => PROBLEMAS[v].n, 'n v');
+  tira('iDe', ['x', 'y'], () => igual.de, v => { igual.de = v; Ruido.abaco(); pintaIgual2(); }, v => P[v]);
+}
+function pintaIgual2(){ mandosIgual(); pintaIgual(); leeIgual(); revisa(); }
+
+/* ═══ SALA 6 · LAS DOS SENDAS ══════════════════════════════════════════
+   El jardín del estanque, con la cuadrícula. Cada ecuación es una senda
+   de piedras; la solución, la piedra que está en las dos. La segunda
+   senda se puede cambiar: paralelas o la misma.                         */
+const sendas = {prob:'grullas', d:2, e:4, f:26, marca:null};
+function sistemaSendas(){ const P = PROBLEMAS[sendas.prob]; return Object.assign({}, P, {d:sendas.d, e:sendas.e, f:sendas.f}); }
+function casoSendas(P){
+  const D = det(P);
+  if(D !== 0) return 'cruzan';
+  return (P.a * P.f - P.d * P.c === 0 && P.b * P.f - P.e * P.c === 0) ? 'misma' : 'paralelas';
+}
+const R = 14;
+function pintaSendas(){
+  const g = $('svgSendas'); g.innerHTML = '';
+  const P = sistemaSendas(), caso = casoSendas(P), sol = resuelve(P);
+  mincho(g, 12, 24, caso === 'cruzan' ? 'se cruzan en ' + P.x + ' = ' + cifra(sol.x, 2) + ', ' + P.y + ' = ' + cifra(sol.y, 2) : caso === 'misma' ? 'la misma senda: todas las piedras valen' : 'paralelas: no se tocan nunca');
+  const x0 = 46, y0 = 36, L = 330, paso = L / R;
+  const X = v => x0 + v * paso, Y = v => y0 + L - v * paso;
+  el(g, 'rect', {x:x0, y:y0, width:L, height:L, fill:'var(--matcha)', 'fill-opacity':.08});
+  for(let i = 0; i <= R; i++){ el(g, 'path', {d:'M' + X(i) + ' ' + y0 + ' V' + (y0 + L), stroke:'var(--linea)', 'stroke-width':.6}); el(g, 'path', {d:'M' + x0 + ' ' + Y(i) + ' H' + (x0 + L), stroke:'var(--linea)', 'stroke-width':.6});
+    if(i % 2 === 0){ txt(g, X(i), y0 + L + 14, i, {'text-anchor':'middle', 'font-size':9.5}); txt(g, x0 - 6, Y(i) + 3.5, i, {'text-anchor':'end', 'font-size':9.5}); } }
+  txt(g, x0 + L / 2, y0 + L + 30, P.X + ' (' + P.x + ')', {'text-anchor':'middle', 'font-size':11, fill:'var(--ai)'});
+  txt(g, 14, y0 + L / 2, P.Y + ' (' + P.y + ')', {'text-anchor':'middle', 'font-size':11, fill:'var(--matcha)', transform:'rotate(-90 14 ' + (y0 + L / 2) + ')'});
+  /* cada senda: la recta, recortada al jardín, y las piedras enteras */
+  const senda = (a, b, c, color, k) => {
+    const pts = [];
+    const lim = [0, R];
+    if(b !== 0) lim.forEach(x => { const y = (c - a * x) / b; if(y >= 0 && y <= R) pts.push([x, y]); });
+    if(a !== 0) lim.forEach(y => { const x = (c - b * y) / a; if(x >= 0 && x <= R) pts.push([x, y]); });
+    if(pts.length >= 2){ const [p1, p2] = [pts[0], pts.reduce((m, p) => Math.hypot(p[0] - pts[0][0], p[1] - pts[0][1]) > Math.hypot(m[0] - pts[0][0], m[1] - pts[0][1]) ? p : m, pts[0])];
+      el(g, 'path', {d:'M' + X(p1[0]) + ' ' + Y(p1[1]) + ' L' + X(p2[0]) + ' ' + Y(p2[1]), stroke:color, 'stroke-width':k === 2 && caso === 'misma' ? 6 : 2.2, 'stroke-opacity':k === 2 && caso === 'misma' ? .35 : .8, 'stroke-dasharray':k === 2 ? '7 4' : 'none'}); }
+    for(let x = 0; x <= R; x++) for(let y = 0; y <= R; y++) if(a * x + b * y === c){
+      const st = el(g, 'circle', {cx:X(x), cy:Y(y), r:5.5, fill:color, 'fill-opacity':.85, stroke:'var(--hueco)', 'stroke-width':1.2, style:'cursor:pointer', class:'piedra', 'data-x':x, 'data-y':y});
+      if(k === 2 && caso === 'misma') st.setAttribute('r', '4'); }
+  };
+  senda(P.a, P.b, P.c, 'var(--ai)', 1); senda(P.d, P.e, P.f, 'var(--acento)', 2);
+  if(caso === 'cruzan' && sol.x >= 0 && sol.x <= R && sol.y >= 0 && sol.y <= R){
+    el(g, 'circle', {cx:X(sol.x), cy:Y(sol.y), r:11, fill:'none', stroke:'var(--kin)', 'stroke-width':2.4, class:'nueva'});
+    el(g, 'circle', {cx:X(sol.x), cy:Y(sol.y), r:6, fill:'var(--kin)', style:'cursor:pointer', class:'piedra', 'data-x':sol.x, 'data-y':sol.y});
+    txt(g, X(sol.x) + 14, Y(sol.y) - 10, '(' + cifra(sol.x, 2) + ', ' + cifra(sol.y, 2) + ')', {'font-size':11.5, fill:'var(--kin)', 'font-weight':700});
+  }
+  if(sendas.marca){ const [mx, my] = sendas.marca; el(g, 'path', {d:'M' + (X(mx) - 8) + ' ' + (Y(my) - 8) + ' l16 16 M' + (X(mx) + 8) + ' ' + (Y(my) - 8) + ' l-16 16', stroke:'var(--tinta)', 'stroke-width':2, 'stroke-linecap':'round'}); }
+  /* la leyenda */
+  const lx = 400;
+  el(g, 'path', {d:'M' + lx + ' 60 h22', stroke:'var(--ai)', 'stroke-width':2.2}); ecSvg(g, lx + 30, 64, ec1(P), P, {'font-size':13});
+  el(g, 'path', {d:'M' + lx + ' 88 h22', stroke:'var(--acento)', 'stroke-width':2.2, 'stroke-dasharray':'7 4'}); ecSvg(g, lx + 30, 92, ec2(P), P, {'font-size':13});
+  txt(g, lx, 122, 'cada piedra, una pareja', {'font-size':10});
+  txt(g, lx, 136, 'que cumple esa ecuación', {'font-size':10});
+  mincho(g, lx, 172, caso === 'cruzan' ? 'una solución' : caso === 'misma' ? 'infinitas' : 'ninguna', {'font-size':20, fill:caso === 'cruzan' ? 'var(--kin)' : caso === 'misma' ? 'var(--matcha)' : 'var(--mal)'});
+  txt(g, lx, 190, caso === 'cruzan' ? 'compatible determinado' : caso === 'misma' ? 'compatible indeterminado' : 'incompatible', {'font-size':10});
+  txt(g, lx, 222, 'toca una piedra', {'font-size':10.5});
+  if(sendas.marca){ const [mx, my] = sendas.marca, en1 = P.a * mx + P.b * my === P.c, en2 = P.d * mx + P.e * my === P.f;
+    txt(g, lx, 240, 'piedra (' + mx + ', ' + my + ')', {'font-size':11, fill:'var(--tinta)'});
+    txt(g, lx, 256, (en1 ? 'en la primera' : 'fuera de la primera'), {'font-size':10, fill:en1 ? 'var(--ai)' : 'var(--mal)'});
+    txt(g, lx, 270, (en2 ? 'en la segunda' : 'fuera de la segunda'), {'font-size':10, fill:en2 ? 'var(--acento)' : 'var(--mal)'});
+    if(en1 && en2) txt(g, lx, 288, 'en las dos: solución', {'font-size':10.5, fill:'var(--kin)', 'font-weight':700}); }
+  g.querySelectorAll('.piedra').forEach(c => c.addEventListener('click', () => { sendas.marca = [+c.getAttribute('data-x'), +c.getAttribute('data-y')]; Ruido.abaco(); pintaSendas2(); }));
+  txt(g, 528, 396, 'la piedra común es la solución', {'text-anchor':'end', 'font-size':10.5});
+}
+function leeSendas(){
+  const P = sistemaSendas(), caso = casoSendas(P), sol = resuelve(P);
+  $('lecSendas').innerHTML =
+    '<span class="def">Una ecuación con dos incógnitas tiene infinitas soluciones: son las piedras de una senda, y la senda es una recta. Un sistema son dos sendas, y su solución es la piedra que está en las dos. Si las sendas se cruzan hay una; si son paralelas, ninguna; si son la misma, todas.</span>'
+    + 'La senda azul son las parejas que cumplen ' + colorea(ec1(P), P) + '; la roja, las que cumplen ' + colorea(ec2(P), P) + '. '
+    + (caso === 'cruzan' ? 'Se cruzan en <b>una</b> piedra, ' + P.x + ' = ' + cifra(sol.x, 2) + ', ' + P.y + ' = ' + cifra(sol.y, 2) + ': es la única pareja que cumple las dos ecuaciones. El sistema se llama <b>compatible determinado</b>: tiene solución, y una sola.' + (Number.isInteger(sol.x) && Number.isInteger(sol.y) ? '' : ' Aquí la piedra cae entre dos enteras: la solución existe igual, aunque no sea de las que se pueden contar en el estanque.')
+       : caso === 'misma' ? 'Las dos ecuaciones dibujan <b>la misma senda</b>: la segunda es la primera multiplicada. Toda pareja que cumple una cumple la otra, así que hay <b>infinitas</b> soluciones. El sistema se llama <b>compatible indeterminado</b>.'
+       : 'Las dos sendas son <b>paralelas</b>: mismas pendientes y distinta altura, y no se tocan nunca. No hay ninguna pareja que cumpla las dos: el sistema es <b>incompatible</b>, sin solución.'
+         + (sendas.prob === 'grullas' ? '<span class="murmullo">Jefén Giskan, por el lado del mar: «Dos veces vine y dos veces me devolvió el viento. Éstas tampoco se tocan».</span>' : ''))
+    + '<span class="cuenta">' + colorea(ec1(P), P) + '   ·   ' + colorea(ec2(P), P) + '   ·   ' + (caso === 'cruzan' ? 'a·e − b·d = ' + det(P) + ' ≠ 0' : 'a·e − b·d = 0') + '</span>';
+}
+function mandosSendas(){
+  const P = PROBLEMAS[sendas.prob];
+  tira('nProb', PROB_ORDEN, () => sendas.prob, v => { sendas.prob = v; sendas.d = PROBLEMAS[v].d; sendas.e = PROBLEMAS[v].e; sendas.f = PROBLEMAS[v].f; sendas.marca = null; Ruido.abaco(); pintaSendas2(); }, v => PROBLEMAS[v].n, 'n v');
+  const c = $('nEc2'); c.innerHTML = '';
+  [['d', P.x, -4, 6], ['e', P.y, -4, 6], ['f', '=', -20, 60]].forEach(([k, L, min, max]) => {
+    const e = document.createElement('span'); e.className = 'etq'; e.style.minWidth = '0'; e.style.marginLeft = '4px'; e.textContent = k === 'f' ? '=' : (k === 'e' ? '+ ' : '') + L + ' ×'; c.appendChild(e);
+    const w = document.createElement('span'); w.id = 'sen_' + k; c.appendChild(w);
+    masMenos('sen_' + k, () => sendas[k], v => { sendas[k] = v; Ruido.abaco(); pintaSendas2(); }, min, max);
+  });
+}
+function pintaSendas2(){ mandosSendas(); pintaSendas(); leeSendas(); revisa(); if(sendas.prob === 'grullas' && casoSendas(sistemaSendas()) === 'paralelas') vientoAsoma(); }
+
+const SALAS = {estanque:'pEstanque', tablilla:'pTablilla', abaco:'pAbaco', sust:'pSust', igual:'pIgual', sendas:'pSendas'};
+const LEMAS = {
+  estanque:['El estanque', 'la solución es una pareja'],
+  tablilla:['La tablilla', 'comprobar es sustituir en las dos'],
+  abaco:   ['El ábaco', 'reducir es quitar una incógnita sin cambiar la solución'],
+  sust:    ['La sustitución', 'poner en su lugar'],
+  igual:   ['La igualación', 'dos formas de la misma cosa'],
+  sendas:  ['Las dos sendas', 'una ecuación es una recta; el sistema, donde se cortan']
+};
+const PINTA = {estanque:pintaEstanque2, tablilla:pintaTablilla2, abaco:pintaAbaco2, sust:pintaSust2, igual:pintaIgual2, sendas:pintaSendas2};
+function muestraSala(cual){ for(const k in SALAS) $(SALAS[k]).hidden = (k !== cual); PINTA[cual](); }
+
+/* ═══ LOS ENCARGOS ════════════════════════════════════════════════════
+   Quince. Jefeyasu pide como quien manda y no sabe álgebra ni quiere:
+   quiere el número. Listaseki contesta con el ábaco y lo explica dos
+   veces, como en la escuela y como se escribe con letras.               */
+const ENCARGOS = [
+  /* 1 · el estanque: repartir */
+  {sala:'estanque', pre(){ Object.assign(estanque, {cabezas:8, patas:26, tortugas:0}); },
+   t:'Listaseki, en el estanque veo <b>ocho cabezas</b> y <b>veintiséis patas</b>. Grullas y tortugas, y no sé cuántas de cada. <b>Reparte tortugas hasta que cuadren las patas</b> y dime cuántas hay.',
+   ok: () => estanque.cabezas === 8 && estanque.patas === 26 && estanque.tortugas === 5,
+   bien:'<b>Cinco tortugas y tres grullas</b>, mi señor: 5 × 4 + 3 × 2 = 26. Y es el único reparto de los nueve que cuadra. Con ocho cabezas, la cuenta de las cabezas deja nueve parejas; la de las patas elige una. Eso es una solución: <b>la pareja que cumple las dos cuentas</b>.',
+   mal(){ if(estanque.cabezas !== 8 || estanque.patas !== 26) return 'El estanque era de ocho cabezas y veintiséis patas, mi señor. Ponedlo así y repartid.';
+          const pp = 2 * (8 - estanque.tortugas) + 4 * estanque.tortugas; return 'Con ' + estanque.tortugas + ' tortugas salen ' + pp + ' patas, mi señor, y se ven 26: ' + (pp < 26 ? 'faltan ' + (26 - pp) + '. Cada grulla que cambiéis por tortuga añade dos.' : 'sobran ' + (pp - 26) + '. Cada tortuga que cambiéis por grulla quita dos.'); }},
+  /* 2 · el estanque: la suposición */
+  {sala:'estanque', pre(){ Object.assign(estanque, {cabezas:8, patas:26, tortugas:0}); },
+   t:'En la escuela lo hacen de otra manera, me han dicho. Suponen que todas son grullas. Si las <b>ocho fueran grullas</b>, ¿cuántas patas se verían?',
+   ops:[
+     {t:'Ocho: una por cabeza.', ok:false, r:'Una pata por cabeza sería un estanque de garzas a la pata coja, mi señor. Una grulla tiene dos patas: ocho grullas, 8 × 2 = <b>16</b>. Y como se ven 26, faltan diez. Ahí empieza la cuenta.'},
+     {t:'Dieciséis: ocho grullas con dos patas cada una.', ok:true, r:'<b>Dieciséis</b>, mi señor: 8 × 2. Es la suposición de la escuela, y no es un capricho: es el reparto más bajo posible, el de menos patas. Se ven 26, así que faltan diez, y las diez las tienen que poner las tortugas.'},
+     {t:'Treinta y dos: ocho por cuatro.', ok:false, r:'Treinta y dos sería si todas fueran tortugas, mi señor, que también se puede suponer y sale igual de bien, pero al revés: sobrarían seis. Con grullas: 8 × 2 = <b>16</b>, y faltan diez.'}
+   ]},
+  /* 3 · el estanque: cada tortuga añade dos */
+  {sala:'estanque', pre(){ Object.assign(estanque, {cabezas:8, patas:26, tortugas:0}); },
+   t:'Se ven 26 y las grullas solas dan 16: <b>faltan diez patas</b>. ¿Cuántas tortugas hacen falta para ponerlas?',
+   ops:[
+     {t:'Diez: una tortuga por pata que falta.', ok:false, r:'Diez tortugas serían diez cabezas, mi señor, y solo hay ocho. Cuando una grulla se convierte en tortuga no se añaden cuatro patas: se añaden <b>dos</b>, porque las dos de la grulla ya estaban. Diez patas entre dos: <b>cinco</b> tortugas.'},
+     {t:'Cinco: cada tortuga en vez de grulla añade dos patas.', ok:true, r:'<b>Cinco</b>, mi señor. Cada grulla que se vuelve tortuga añade dos patas, no cuatro, porque dos ya las tenía. Diez entre dos, cinco tortugas; y las otras tres cabezas, grullas. Es el <i>tsurukamezan</i>, la cuenta de la grulla y la tortuga, y en la escuela se aprende antes que las letras.'},
+     {t:'Dos y media: diez entre cuatro.', ok:false, r:'Diez entre cuatro sería si cada tortuga trajera cuatro patas nuevas, mi señor, pero trae dos: las otras dos ya las tenía como grulla. Diez entre dos, <b>cinco</b>. Y media tortuga no se ha visto nunca en este estanque.'}
+   ]},
+  /* 4 · la tablilla: plantear */
+  {sala:'tablilla', pre(){ Object.assign(tablilla, {prob:'grullas', px:0, py:0}); },
+   t:'Escríbemelo en la tablilla con letras, que lo quiero colgar en el templo. <b>¿Cuál de estas tres tablillas dice lo del estanque?</b>',
+   ops:[
+     {t:'g + t = 8 y 2g + 4t = 26', ok:true, r:'Ésa, mi señor. La <b>g</b> son las grullas y la <b>t</b> las tortugas: cabezas, una por animal, g + t = 8; patas, dos por grulla y cuatro por tortuga, 2g + 4t = 26. Dos cuentas, dos ecuaciones, las mismas dos letras. Un sistema.'},
+     {t:'g + t = 26 y 2g + 4t = 8', ok:false, r:'Esa tablilla dice que hay veintiséis cabezas y ocho patas, mi señor: un estanque de animales sin patas. Las cabezas son 8, una por animal: g + t = 8. Las patas son 26, dos por grulla y cuatro por tortuga: 2g + 4t = 26.'},
+     {t:'g + t = 8 y g + t = 26', ok:false, r:'Ésa dice la misma cuenta dos veces con dos resultados distintos, mi señor, y eso no lo cumple nadie. La segunda ecuación es la de las patas, y las patas se cuentan de dos en dos y de cuatro en cuatro: 2g + 4t = 26.'}
+   ]},
+  /* 5 · la tablilla: comprobar */
+  {sala:'tablilla', pre(){ Object.assign(tablilla, {prob:'grullas', px:4, py:4}); },
+   t:'Prueba en la tablilla la pareja <b>tres grullas y cinco tortugas</b>, a ver si cumple las dos.',
+   ok: () => tablilla.prob === 'grullas' && tablilla.px === 3 && tablilla.py === 5,
+   bien:'Cumple las dos, mi señor: 3 + 5 = 8 ✓ y 2·3 + 4·5 = 6 + 20 = 26 ✓. Es la solución. Y <b>comprobar es esto</b>: sustituir la pareja en las dos ecuaciones y mirar que salgan las dos. Con una no basta.',
+   mal(){ if(tablilla.prob !== 'grullas') return 'La tablilla era la de las grullas, mi señor.'; return 'Tenéis g = ' + tablilla.px + ' y t = ' + tablilla.py + '. Pedía tres grullas y cinco tortugas.'; }},
+  /* 6 · la tablilla: cumplir una no basta */
+  {sala:'tablilla', pre(){ Object.assign(tablilla, {prob:'grullas', px:4, py:4}); },
+   t:'¿Y <b>cuatro y cuatro</b>? Es lo más justo, y suma ocho.',
+   ops:[
+     {t:'Sí: 4 + 4 = 8, cumple.', ok:false, r:'Cumple la primera, mi señor, y sólo la primera: 2·4 + 4·4 = 24, y se ven 26. Cumplir una ecuación es fácil, lo hacen nueve parejas. La solución tiene que cumplir <b>las dos</b>. Cuatro y cuatro no es solución.'},
+     {t:'No: cumple la de las cabezas y no la de las patas.', ok:true, r:'Eso es, mi señor. 4 + 4 = 8 ✓, pero 2·4 + 4·4 = 24 ✗, y se ven 26. Una pareja que cumple una sola ecuación no es solución del sistema: le falta la otra. Por eso hacen falta dos cuentas para saber dos cosas.'},
+     {t:'Sí: da 24 patas, que casi es 26.', ok:false, r:'En este estanque no hay casi, mi señor: 24 no es 26, y la tortuga que falta se nota. Cuatro y cuatro cumple la de las cabezas y no la de las patas: <b>no es solución</b>.'}
+   ]},
+  /* 7 · el ábaco: reducir */
+  {sala:'abaco', pre(){ Object.assign(abaco, {prob:'grullas', k1:1, k2:1, op:'sumar'}); },
+   t:'Al ábaco. <b>Multiplica la fila de las cabezas por dos y réstala de la de las patas.</b> Quiero ver qué queda.',
+   ok: () => abaco.prob === 'grullas' && abaco.k1 === 2 && abaco.k2 === 1 && abaco.op === 'restar',
+   bien:'Queda <b>2t = 10</b>, mi señor: la columna de las grullas se ha ido, porque había dos cuentas de g arriba y dos abajo, y dos menos dos es cero. Así que t = 5, y volviendo a la fila de las cabezas, g = 3. Y fijaos: dieciséis patas si todas fueran grullas, faltan diez, cada tortuga añade dos. Es la cuenta de la escuela. <b>Reducir era eso</b>, y nadie lo llamaba así.',
+   mal(){ if(abaco.prob !== 'grullas') return 'El ábaco era el de las grullas, mi señor.'; if(abaco.k1 !== 2) return 'La primera fila va por ' + abaco.k1 + ', mi señor. Pedía por dos, para que tenga tantas cuentas de g como la segunda.'; if(abaco.k2 !== 1) return 'La segunda fila tal cual, mi señor, por uno.'; return 'Sumando no se va nada, mi señor: las dos filas tienen las cuentas de g del mismo lado. Restad.'; }},
+  /* 8 · el ábaco: sumar cuando los signos son contrarios */
+  {sala:'abaco', pre(){ Object.assign(abaco, {prob:'monedas', k1:1, k2:1, op:'restar'}); },
+   t:'Las monedas de la bolsa: doce, y las de un mon son cuatro más que las de cuatro. <b>Suma las dos filas tal cual</b> y dime qué queda.',
+   ok: () => abaco.prob === 'monedas' && abaco.k1 === 1 && abaco.k2 === 1 && abaco.op === 'sumar',
+   bien:'Queda <b>2u = 16</b>, mi señor: la c tenía una cuenta llena arriba y una hueca abajo, y una menos una es cero. u = 8, y c = 4. Cuando una incógnita lleva signos contrarios en las dos filas se suman; cuando lleva el mismo, se restan. Ocho monedas de un mon y cuatro de cuatro: 24 mon en la bolsa, por si os interesa.',
+   mal(){ if(abaco.prob !== 'monedas') return 'El ábaco era el de las monedas, mi señor.'; if(abaco.k1 !== 1 || abaco.k2 !== 1) return 'Tal cual, mi señor: las dos filas por uno.'; return 'Restando no se va la c, mi señor: una llena menos una hueca son dos. Aquí los signos son contrarios, y con signos contrarios se suma.'; }},
+  /* 9 · el ábaco: por qué se puede */
+  {sala:'abaco', pre(){ Object.assign(abaco, {prob:'grullas', k1:2, k2:1, op:'restar'}); },
+   t:'¿Por qué se puede multiplicar toda una fila por dos? A mí me parece hacer trampa.',
+   ops:[
+     {t:'Porque se hace en los dos lados: si dos cosas son iguales, sus dobles también lo son.', ok:true, r:'Eso es, mi señor. g + t = 8 dice que dos cosas son iguales; 2g + 2t = 16 dice que sus dobles lo son, y es la misma verdad. Cualquier pareja que cumpla una cumple la otra. Lo que no se puede es doblar un lado solo: eso sí sería trampa.'},
+     {t:'Porque el dos es pequeño y no cambia mucho.', ok:false, r:'Cambia el doble, mi señor, que no es poco. Se puede porque se dobla <b>los dos lados</b>: si dos cosas son iguales, sus dobles son iguales. Por tres, por cien, igual. Lo que no se puede es doblar un lado solo.'},
+     {t:'Porque luego se divide y se deshace.', ok:false, r:'No hace falta deshacerlo, mi señor: la fila doblada dice lo mismo que la fila sin doblar, porque se dobla en los dos lados de la igualdad. Cualquier pareja que cumpla una cumple la otra.'}
+   ]},
+  /* 10 · la sustitución */
+  {sala:'sust', pre(){ Object.assign(sust, {prob:'grullas', de:'y', en:2}); },
+   t:'Otro camino, que dicen que hay tres. <b>Despeja las grullas en la primera</b> y pon lo que valen en la segunda.',
+   ok: () => sust.prob === 'grullas' && sust.de === 'x' && sust.en === 1,
+   bien:'<b>g = 8 − t</b>, mi señor, y en la segunda: 2·(8 − t) + 4t = 26, o sea 16 + 2t = 26, 2t = 10, t = 5. Y g = 8 − 5 = 3. La misma pareja que en el ábaco, por otro camino: <b>sustituir es poner en su lugar</b>. Y se despeja la g porque lleva un uno delante y sale sin dividir.',
+   mal(){ if(sust.prob !== 'grullas') return 'El problema era el de las grullas, mi señor.'; if(sust.de !== 'x') return 'Estáis despejando la t, mi señor. Pedía las grullas, la g.'; return 'La g de la segunda, mi señor, sale con una división. Pedía despejarla en la primera, donde lleva un uno.'; }},
+  /* 11 · la igualación */
+  {sala:'igual', pre(){ Object.assign(igual, {prob:'grullas', de:'y'}); },
+   t:'Y el tercero. <b>Despeja las grullas en las dos ecuaciones</b> e iguálalas.',
+   ok: () => igual.prob === 'grullas' && igual.de === 'x',
+   bien:'En la primera <b>g = 8 − t</b>; en la segunda g = (26 − 4t)/2, que es <b>13 − 2t</b>. Si las dos son g, son iguales entre sí: 8 − t = 13 − 2t, o sea t = 5, y g = 3. <b>Tres caminos, una pareja</b>, mi señor. Y no es casualidad.',
+   mal(){ if(igual.prob !== 'grullas') return 'El problema era el de las grullas, mi señor.'; return 'Estáis despejando la t, mi señor. Pedía las grullas, la g, en las dos.'; }},
+  /* 12 · los tres caminos */
+  {sala:'igual', pre(){ Object.assign(igual, {prob:'grullas', de:'x'}); },
+   t:'Tres caminos. ¿Cuál de ellos da <b>otra pareja</b>?',
+   ops:[
+     {t:'El ábaco, que va con cuentas y redondea.', ok:false, r:'El ábaco no redondea nada, mi señor: multiplica y resta, y las dos cosas guardan la solución. <b>Ninguno</b> da otra pareja: la solución es del sistema, no del camino. Si un camino diera otra, el camino estaría mal.'},
+     {t:'Ninguno: la solución es del sistema, no del camino.', ok:true, r:'Eso es, mi señor. Ninguno de los pasos cambia el conjunto de soluciones: despejar es reescribir, sustituir es poner lo que vale, multiplicar y sumar filas guarda la solución común. Tres caminos, una pareja. Y si alguna vez salen dos distintas, es que uno de los dos se ha equivocado.'},
+     {t:'La igualación, que tiene una división.', ok:false, r:'La división de la igualación se quita multiplicando en cruz, mi señor, y no cambia nada. <b>Ninguno</b> da otra pareja: la solución es del sistema. Los caminos solo la encuentran.'}
+   ]},
+  /* 13 · las sendas: la piedra común */
+  {sala:'sendas', pre(){ Object.assign(sendas, {prob:'grullas', d:2, e:4, f:26, marca:null}); },
+   t:'Al jardín. Dibuja las dos sendas del estanque y <b>toca la piedra donde se cruzan</b>.',
+   ok: () => sendas.prob === 'grullas' && sendas.d === 2 && sendas.e === 4 && sendas.f === 26 && !!sendas.marca && sendas.marca[0] === 3 && sendas.marca[1] === 5,
+   bien:'La piedra <b>(3, 5)</b>, mi señor: tres grullas y cinco tortugas, otra vez. La senda azul son todas las parejas con ocho cabezas, y son nueve piedras; la roja, todas las que dan veintiséis patas. Están en las dos solo en ésa. Un sistema es eso: <b>dos sendas y la piedra común</b>.',
+   mal(){ if(sendas.prob !== 'grullas' || sendas.d !== 2 || sendas.e !== 4 || sendas.f !== 26) return 'Las sendas del estanque, mi señor: g + t = 8 y 2g + 4t = 26, tal cual.'; if(!sendas.marca) return 'Tocad la piedra, mi señor: la que está en las dos sendas.'; return 'Esa piedra, (' + sendas.marca[0] + ', ' + sendas.marca[1] + '), no está en las dos sendas, mi señor. La que buscáis lleva un aro dorado.'; }},
+  /* 14 · las sendas: paralelas */
+  {sala:'sendas', pre(){ Object.assign(sendas, {prob:'grullas', d:2, e:4, f:26, marca:null}); },
+   t:'Cambia la segunda senda hasta que <b>no toque a la primera en ninguna piedra</b>. Quiero ver un problema sin solución.',
+   ok: () => sendas.prob === 'grullas' && casoSendas(sistemaSendas()) === 'paralelas',
+   bien(){ const P = sistemaSendas(); return colorea(ec2(P), P) + ' va paralela a g + t = 8, mi señor: las dos suben igual y a distinta altura, y no se tocan nunca. No hay pareja que cumpla las dos. El sistema se llama <b>incompatible</b>. Es como pedir que la misma cuenta dé dos resultados distintos: nadie puede cumplirlo, y no es culpa del que cuenta.'; },
+   mal(){ const c = casoSendas(sistemaSendas()); if(sendas.prob !== 'grullas') return 'Con las sendas del estanque, mi señor.'; if(c === 'misma') return 'Ésa es la misma senda dos veces, mi señor: se tocan en todas las piedras. Cambiad el número de la derecha.'; return 'Todavía se cruzan, mi señor. Para que vayan paralelas, la segunda tiene que subir igual que la primera: las mismas cuentas de g que de t, y otro número a la derecha.'; }},
+  /* 15 · las sendas: infinitas */
+  {sala:'sendas', pre(){ Object.assign(sendas, {prob:'grullas', d:2, e:2, f:16, marca:null}); },
+   t:'Última. Dicen que hay sistemas con <b>infinitas soluciones</b>. ¿Cómo son sus sendas?',
+   ops:[
+     {t:'Se cruzan muchas veces.', ok:false, r:'Dos rectas se cruzan una vez o ninguna, mi señor; muchas veces, no pueden. Con infinitas soluciones las dos ecuaciones dibujan <b>la misma senda</b>: la segunda es la primera multiplicada, y todas las piedras valen. Compatible indeterminado.'},
+     {t:'La misma senda, dibujada dos veces.', ok:true, r:'Eso es, mi señor. 2g + 2t = 16 es g + t = 8 doblada: dice lo mismo, y todas sus piedras cumplen las dos. Infinitas soluciones, <b>compatible indeterminado</b>. Y con esto están los tres casos: se cruzan, una; paralelas, ninguna; la misma, todas. Ya sabéis lo que hay que saber de un estanque.'},
+     {t:'Paralelas, que son infinitas de largas.', ok:false, r:'Las paralelas son largas, mi señor, pero no se tocan, y las soluciones son las piedras que están en las dos: ninguna. Con infinitas soluciones las dos sendas son <b>la misma</b>: la segunda es la primera multiplicada.'}
+   ]}
+];
+
+/* ── LOS GRADOS: los de una escuela de wasan, que se daban por licencias,
+   hasta el título de Listaseki ── */
+const RANGOS = [
+  {n:'Discípulo',                s:'deshi · el estanque',                 hasta:3,  fig:'hoja'},
+  {n:'Shoden',                   s:'primera enseñanza · la tablilla',     hasta:6,  fig:'ola'},
+  {n:'Chūden',                   s:'enseñanza media · el ábaco',          hasta:9,  fig:'grulla'},
+  {n:'Okuden',                   s:'enseñanza profunda · los caminos',    hasta:12, fig:'tortuga'},
+  {n:'Kaiden',                   s:'transmisión completa · las sendas',   hasta:15, fig:'aoi'},
+  {n:'El que echa las cuentas',  s:'las quince cuentas',                  hasta:99, fig:'abaco', borde:'var(--kin)'}
+];
+function rangoDe(n){ return RANGOS.find(r => n < r.hasta) || RANGOS[RANGOS.length - 1]; }
+function pintaRango(){
+  const n = hechos.size, r = rangoDe(n), i = RANGOS.indexOf(r);
+  const desde = i ? RANGOS[i - 1].hasta : 0, tramo = Math.min(r.hasta, ENCARGOS.length) - desde;
+  $('rangoNom').textContent = r.n;
+  $('rangoSig').textContent = r.s;
+  $('rangoCuenta').textContent = n >= ENCARGOS.length ? 'estanque cerrado · ' + n + ' de ' + ENCARGOS.length
+    : (n - desde) + ' de ' + tramo + ' para ' + (RANGOS[i + 1] ? RANGOS[i + 1].n.toLowerCase() : '');
+  $('rangoBarra').style.width = (n >= ENCARGOS.length ? 100 : Math.round((n - desde) / tramo * 100)) + '%';
+  $('tablillasT').textContent = n;
+  const e = $('rangoKamon'); e.innerHTML = '<svg viewBox="0 0 40 40" aria-hidden="true"></svg>';
+  kamon(e.firstChild, 0, 0, 40, r.fig, r.borde ? {borde:r.borde} : {});
+}
+
+/* ── EL MOTOR DEL ENCARGO ─────────────────────────────────────────────── */
+let enc = 0, elegida = null;
+const hechos = new Set();
+const dichos = {};
+const huevos = new Set();
+const HUEVOS = ['quelona', 'orizuru', 'faisanes', 'escuela', 'viento', 'seki', 'piedra', 'tablilla'];
+const HUEVO_DICE = {
+  quelona:'la tortuga que vino nadando', orizuru:'la grulla desdoblada', faisanes:'faisanes y conejos', escuela:'la cuenta de la escuela era reducir',
+  viento:'el viento que devolvió a Jefén', seki:'la cuenta cruzada de Seki', piedra:'la piedra de las dos sendas', tablilla:'la tablilla colgada'
+};
+let ultimoRango = 'Discípulo';
+
+const GUARDADO = 'estanque.turno.v1';
+const CADUCA = 4*60*60*1000;
+let t0 = Date.now();
+function guardaTurno(){
+  try{
+    localStorage.setItem(GUARDADO, JSON.stringify({
+      v:1, ts:Date.now(), t0, enc, hechos:[...hechos], huevos:[...huevos], nombre:$('selloNombre').value || '',
+      taller:{ac:taller.ac, racha:taller.racha, mejor:taller.mejor}, aj:AJ
+    }));
+  }catch(e){}
+}
+function leeTurno(){
+  try{
+    const d = JSON.parse(localStorage.getItem(GUARDADO) || 'null');
+    if(!d || d.v !== 1 || !Array.isArray(d.hechos)) return null;
+    if(!(d.enc >= 0 && d.enc < ENCARGOS.length)) return null;
+    if(Date.now() - d.ts > CADUCA){ borraTurno(); return null; }
+    return d;
+  }catch(e){ return null; }
+}
+function borraTurno(){ try{ localStorage.removeItem(GUARDADO); }catch(e){} }
+const dicho = x => typeof x === 'function' ? x() : x;
+
+function pintaOpciones(){
+  const e = ENCARGOS[enc], caja = $('ops');
+  caja.innerHTML = ''; caja.hidden = !e.ops;
+  if(!e.ops) return;
+  e.ops.forEach((o, i) => {
+    const b = document.createElement('button');
+    b.className = 'op'; b.textContent = o.t;
+    b.setAttribute('aria-pressed', String(elegida === i));
+    b.addEventListener('click', () => { if(hechos.has(enc)) return; elegida = i; pintaOpciones(); });
+    caja.appendChild(b);
+  });
+}
+const CIERRE = '<b>Estanque cerrado: quince cuentas, y el ábaco es vuestro.</b> Todo lo de este estanque eran dos cuentas que tenían que salir a la vez. Un sistema son dos ecuaciones con las mismas incógnitas, '
+  + 'y la solución es la pareja que cumple las dos: se comprueba sustituyendo, y con una sola no basta. Para encontrarla hay tres caminos, y los tres llegan a la misma piedra: reducir, que es la cuenta de la escuela con su nombre puesto; '
+  + 'sustituir, que es poner en su lugar; igualar, que es poner una forma frente a la otra. Y en el jardín se ve lo que puede pasar: dos sendas que se cruzan, una solución; paralelas, ninguna; la misma, todas. '
+  + 'La grulla mil años, la tortuga diez mil, la cuenta bien hecha para siempre.';
+function pintaEncargo(){
+  const e = ENCARGOS[enc], ultimo = enc === ENCARGOS.length - 1, hecho = hechos.has(enc);
+  if(e.pre) e.pre();
+  muestraSala(e.sala);
+  elegida = hecho && e.ops ? e.ops.findIndex(o => o.ok) : null;
+  pintaOpciones();
+  $('encTxt').innerHTML = (ultimo && hecho) ? CIERRE : e.t;
+  $('cual').textContent = (ultimo && hecho) ? 'estanque cerrado' : 'encargo ' + (enc + 1) + ' de ' + ENCARGOS.length;
+  $('atras').disabled = enc === 0;
+  $('comprobar').textContent = !hecho ? 'Comprobar' : (ultimo ? 'Empezar de nuevo' : 'Siguiente encargo →');
+  const inf = $('informe');
+  inf.hidden = !hecho;
+  if(hecho){ inf.className = 'panel informe encargo'; $('infTxt').innerHTML = dichos[enc] || (e.ops ? dicho(e.ops.find(o => o.ok).r) : dicho(e.bien)); }
+  pintaIndice(); pintaRango();
+}
+function revisa(){
+  const e = ENCARGOS[enc];
+  if(!$('pSendas').hidden && sendas.marca){ const s = resuelve(sistemaSendas()); if(s.det && sendas.marca[0] === s.x && sendas.marca[1] === s.y) huevo('piedra'); }
+  if(!e || e.ops || !hechos.has(enc)) return;
+  $('informe').hidden = false;
+}
+
+/* ═══ LOS ASOMOS ══════════════════════════════════════════════════════
+   Jefeyasu asoma por encima del informe (bien, la media luna del kabuto
+   brilla; mal, el casco se le cala hasta las gafas). Quelona en el agua,
+   tras un minuto quieto. Jefén Giskan por el lado del mar, una vez.
+   Listaseki con el ábaco en alto al ascender. Orizuru abre las alas con
+   cada cuenta que sale, y se despliega si la tocan.                     */
+const dentroDe = svg => svg.replace(/^[\s\S]*?<svg[^>]*>/, '').replace(/<\/svg>\s*$/, '');
+const JEFEYASU_BIEN = '<svg viewBox="0 -10 46 58" aria-hidden="true">' + dentroDe(CARA_JEFEYASU)
+  + '<path d="M36 -2 l1.4 -4 l1.4 4 l4 1.4 l-4 1.4 l-1.4 4 l-1.4 -4 l-4 -1.4 Z" fill="#E0B24A"/><path d="M6 6 l1 -3 l1 3 l3 1 l-3 1 l-1 3 l-1 -3 l-3 -1 Z" fill="#E0B24A"/><path d="M23 -8 l.8 -2.4 l.8 2.4 l2.4 .8 l-2.4 .8 l-.8 2.4 l-.8 -2.4 l-2.4 -.8 Z" fill="#E0B24A"/></svg>';
+const JEFEYASU_MAL = '<svg viewBox="0 -10 46 58" aria-hidden="true">' + dentroDe(CARA_JEFEYASU)
+  + '<g transform="translate(0 9) rotate(-5 23 14)"><path d="M12.6 12.4 Q23 3.6 33.4 12.4 L33.4 16.6 Q23 10.6 12.6 16.6 Z" fill="#2E3440" stroke="#241C36" stroke-width="1.3" stroke-linejoin="round"/><path d="M11.4 13.4 Q9.6 16.6 10.6 20 L14.4 18.6 Q13.2 15.6 14 13.2 Z" fill="#2E3440" stroke="#241C36" stroke-width="1.2"/><path d="M34.6 13.4 Q36.4 16.6 35.4 20 L31.6 18.6 Q32.8 15.6 32 13.2 Z" fill="#2E3440" stroke="#241C36" stroke-width="1.2"/><path d="M17.6 6.4 Q23 1 28.4 6.4 Q23 4.2 17.6 6.4 Z" fill="#E0B24A" stroke="#241C36" stroke-width="1.2"/></g></svg>';
+const AGUA = '<path d="M-2 40 q6 -5 12 0 t12 0 t12 0 t12 0 t12 0 V52 H-2 Z" fill="#7FB3C9" fill-opacity=".85"/><path d="M-2 40 q6 -5 12 0 t12 0 t12 0 t12 0 t12 0" fill="none" stroke="#3E5F86" stroke-width="1.2"/>';
+const QUELONA_AGUA = '<svg viewBox="0 0 46 52" aria-hidden="true">' + dentroDe(CARA_QUELONA) + AGUA + '</svg>';
+const JEFEN_MAR = '<svg viewBox="0 0 46 52" aria-hidden="true">' + dentroDe(CARA_JEFEN) + AGUA + '</svg>';
+const LISTASEKI_ALTO = '<svg viewBox="0 -12 46 60" aria-hidden="true">' + dentroDe(CARA_LISTASEKI)
+  + '<path d="M12 30 Q4 22 8 6" fill="none" stroke="#241C36" stroke-width="5" stroke-linecap="round"/><path d="M12 30 Q4 22 8 6" fill="none" stroke="#5FA0BE" stroke-width="3.2" stroke-linecap="round"/>'
+  + '<g transform="translate(0 -11)"><rect x="0" y="0" width="22" height="13" rx="1.6" fill="#C08A5E" stroke="#241C36" stroke-width="1.2"/><path d="M0 4.4 H22" stroke="#241C36" stroke-width="1.1"/><g stroke="#241C36" stroke-width=".7" opacity=".55"><path d="M4.4 0 V13"/><path d="M8.8 0 V13"/><path d="M13.2 0 V13"/><path d="M17.6 0 V13"/></g>'
+  + '<g fill="#2E3440"><ellipse cx="4.4" cy="2.4" rx="1.5" ry="1.1"/><ellipse cx="13.2" cy="2.4" rx="1.5" ry="1.1"/><ellipse cx="4.4" cy="10.6" rx="1.5" ry="1.1"/><ellipse cx="8.8" cy="7.6" rx="1.5" ry="1.1"/><ellipse cx="17.6" cy="10.6" rx="1.5" ry="1.1"/><ellipse cx="17.6" cy="7.6" rx="1.5" ry="1.1"/></g></g></svg>';
+$('asomoLado').innerHTML = QUELONA_AGUA;
+$('asomoEntero').innerHTML = LISTASEKI_ALTO;
+
+const asomoReloj = {};
+function asoma(id, clase, contenido, ms){
+  const a = $(id); clearTimeout(asomoReloj[id]);
+  if(contenido) a.innerHTML = contenido;
+  const base = a.className.replace(/\s*\b(mira|falla)\b/g, '');
+  a.className = base; void a.offsetWidth;
+  a.className = base + ' ' + clase;
+  asomoReloj[id] = setTimeout(() => { a.className = base; }, ms);
+}
+function asomate(bien){ asoma('asomoArriba', bien ? 'mira' : 'mira falla', bien ? JEFEYASU_BIEN : JEFEYASU_MAL, 2400); }
+function asciende(){ asoma('asomoEntero', 'mira', null, 2800); }
+/* ORIZURU abre las alas cuando la cuenta sale, y la gota del suikinkutsu se abre en el informe */
+let orizuruReloj = null;
+function vuela(){
+  const o = $('orizuru'); clearTimeout(orizuruReloj);
+  o.innerHTML = ORIZURU_ALAS; o.classList.add('vuela');
+  orizuruReloj = setTimeout(() => { o.innerHTML = CARA_ORIZURU; o.classList.remove('vuela'); }, 1500);
+  const inf = $('informe');
+  for(let i = 0; i < 3; i++){ const s = document.createElement('i'); s.className = 'gota'; s.style.left = (52 + Math.random() * 30) + 'px'; s.style.top = (20 + Math.random() * 16) + 'px'; s.style.animationDelay = (i * .18) + 's'; inf.appendChild(s); setTimeout(() => s.remove(), 1400); }
+  const c = $('caraListaseki'); c.classList.add('brilla'); setTimeout(() => c.classList.remove('brilla'), 1000);
+}
+/* la lluvia de pétalos, al llegar a kaiden y al cerrar */
+function lluvia(){
+  const p = $('pEncargo'); $('tablillas').classList.add('brilla'); setTimeout(() => $('tablillas').classList.remove('brilla'), 2000);
+  for(let i = 0; i < 36; i++){
+    const g = document.createElement('i'); g.className = 'petalo';
+    g.style.left = (Math.random() * 100) + '%'; g.style.top = '0'; g.style.animationDuration = (1.8 + Math.random() * 1.6) + 's'; g.style.animationDelay = (Math.random() * 1.1) + 's';
+    p.appendChild(g); setTimeout(() => g.remove(), 4200);
+  }
+  Ruido.grulla();
+}
+/* el agua: Quelona, tras un minuto quieto */
+const AGUA_DICE = [
+  'Cuatro patas. Apúntame.',
+  'He venido nadando desde Grecia. Me dijeron que aquí las tortugas cuentan.',
+  '¿Va bien la cuenta? Yo soy una cabeza y cuatro patas, por si sirve.',
+  'Diez mil años, dicen aquí. En el taller no me lo creían.',
+  'Exequias os manda recuerdos. Y una vasija, pero se me ha hundido.'
+];
+let quieto = null, aguaReloj = null;
+function aguaFuera(){ clearTimeout(aguaReloj); $('asomoLado').classList.remove('mira'); $('globoLado').classList.remove('mira'); }
+function aguaAsoma(){
+  if(taller.enTaller || $('pEncargo').hidden || !$('tourCapa').hidden || !$('mAjustes').hidden || !$('mSello').hidden || document.hidden) return;
+  $('asomoLado').innerHTML = QUELONA_AGUA;
+  $('globoLado').textContent = AGUA_DICE[Math.floor(Math.random() * AGUA_DICE.length)];
+  $('asomoLado').classList.add('mira'); $('globoLado').classList.add('mira');
+  huevo('quelona');
+  aguaReloj = setTimeout(aguaFuera, 6000);
+}
+function armaQuieto(){ clearTimeout(quieto); aguaFuera(); quieto = setTimeout(aguaAsoma, 60000); }
+['pointerdown', 'keydown', 'scroll'].forEach(ev => addEventListener(ev, armaQuieto, {passive:true}));
+/* el mar: Jefén Giskan, una sola vez, cuando las sendas salen paralelas */
+function vientoAsoma(){
+  if(huevos.has('viento')) return;
+  huevo('viento'); clearTimeout(quieto); clearTimeout(aguaReloj);
+  $('asomoLado').innerHTML = JEFEN_MAR;
+  $('globoLado').textContent = 'Dos veces vine por mar y dos veces me devolvió el viento. Éstas tampoco se tocan.';
+  $('asomoLado').classList.add('mira'); $('globoLado').classList.add('mira');
+  aguaReloj = setTimeout(aguaFuera, 7000);
+}
+/* ORIZURU se despliega al tocarla: el cuadrado con sus pliegues */
+$('orizuru').addEventListener('click', () => {
+  const o = $('orizuru'); clearTimeout(orizuruReloj); Ruido.despierta(); Ruido.grulla();
+  o.innerHTML = ORIZURU_DESDOBLADA; o.classList.add('tiembla');
+  if(!huevos.has('orizuru')) $('infTxt').innerHTML += '<span class="murmullo">Orizuru, desdoblada: «Un cuadrado y veintitantos pliegues. No me gusta que me vean así. Dobladme otra vez, que sin cuello no cuento ni como cabeza».</span>';
+  huevo('orizuru');
+  orizuruReloj = setTimeout(() => { o.innerHTML = CARA_ORIZURU; o.classList.remove('tiembla'); }, 2600);
+});
+/* LISTASEKI: tres toques al ábaco abren la sala de Seki */
+{ let toques = 0, reloj = null;
+  $('caraListaseki').addEventListener('click', () => { Ruido.despierta(); Ruido.abaco(3); toques++; clearTimeout(reloj); reloj = setTimeout(() => { toques = 0; }, 1800);
+    if(toques >= 3){ toques = 0; abreSeki('el ábaco de Listaseki, tocado tres veces'); } }); }
+function huevo(nombre){
+  if(!HUEVO_DICE[nombre] || huevos.has(nombre)) return;
+  huevos.add(nombre); guardaTurno();
+}
+
+$('comprobar').addEventListener('click', () => {
+  const e = ENCARGOS[enc], inf = $('informe');
+  Ruido.despierta();
+  if(hechos.has(enc)){
+    if(enc < ENCARGOS.length - 1){ enc++; pintaEncargo(); }
+    else { hechos.clear(); enc = 0; ultimoRango = 'Discípulo'; pintaEncargo(); }
+    guardaTurno(); return;
+  }
+  let bien, dice;
+  if(e.ops){
+    if(elegida === null){ bien = false; dice = 'Elegid una, mi señor. «Ninguna» no es una respuesta que se pueda colgar.'; }
+    else { const o = e.ops[elegida]; bien = o.ok; dice = dicho(o.r);
+           if(!bien){ document.querySelectorAll('.op')[elegida].classList.add('fallada'); } }
+  }else{ bien = e.ok(); dice = bien ? dicho(e.bien) : dicho(e.mal); }
+  inf.hidden = false;
+  inf.className = 'panel informe encargo' + (bien ? '' : ' mal');
+  $('infTxt').innerHTML = dice;
+  asomate(bien);
+  if(bien){
+    hechos.add(enc); dichos[enc] = dice;
+    const r = rangoDe(hechos.size).n, sube = r !== ultimoRango;
+    if(sube){ ultimoRango = r; Ruido.asciende(); asciende(); if(hechos.size === 12 || hechos.size >= 15) setTimeout(lluvia, 300); } else Ruido.bien();
+    vuela();
+    pintaEncargo(); inf.hidden = false;
+    $('infTxt').innerHTML = dice + (sube ? '<br><b>' + (hechos.size >= ENCARGOS.length ? 'Listaseki os pone el ábaco en las manos: el que echa las cuentas.' : 'Grado ' + r.toLowerCase() + '.') + '</b>' : '');
+    if(hechos.size >= ENCARGOS.length) huevo('tablilla');
+    guardaTurno();
+  } else Ruido.mal();
+});
+$('atras').addEventListener('click', () => { if(enc > 0){ enc--; pintaEncargo(); guardaTurno(); } });
+
+/* ── EL ÍNDICE DE SALAS, EL GLOSARIO, LAS DEUDAS Y SEKI ───────────────── */
+function pintaIndice(){
+  const s = $('ixSalas');
+  if(!s.dataset.puesto){
+    s.dataset.puesto = '1';
+    Object.keys(SALAS).forEach(k => {
+      const b = document.createElement('button'); b.className = 'b'; b.textContent = LEMAS[k][0];
+      b.addEventListener('click', () => { muestraSala(k); cierraPaneles(); $(SALAS[k]).scrollIntoView({behavior:'smooth', block:'start'}); });
+      s.appendChild(b);
+    });
+  }
+  const l = $('ixLista'); l.innerHTML = '';
+  ENCARGOS.forEach((e, i) => {
+    const b = document.createElement('button');
+    b.className = (hechos.has(i) ? 'hecho ' : '') + (i === enc ? 'actual' : '');
+    b.innerHTML = '<b>' + String(i + 1).padStart(2, '0') + '</b>' + LEMAS[e.sala][0] + ' · ' + e.t.replace(/<[^>]*>/g, '').slice(0, 52) + '…';
+    b.addEventListener('click', () => { enc = i; pintaEncargo(); cierraPaneles(); guardaTurno(); scrollTo({top:0, behavior:'smooth'}); });
+    l.appendChild(b);
+  });
+}
+const PANELES = {bIndice:'pIndice', bGlosario:'pGlosario', bDeudas:'pDeudas'};
+function cierraPaneles(){
+  Object.entries(PANELES).forEach(([b, p]) => { $(p).hidden = true; $(b).setAttribute('aria-pressed', 'false'); });
+  $('pSeki').hidden = true;
+}
+Object.entries(PANELES).forEach(([b, p]) => $(b).addEventListener('click', () => {
+  const abre = $(p).hidden; cierraPaneles();
+  if(abre){ $(p).hidden = false; $(b).setAttribute('aria-pressed', 'true'); if(p === 'pIndice') pintaIndice();
+            $(p).scrollIntoView({behavior:'smooth', block:'start'}); }
+}));
+$('ixCerrar').addEventListener('click', () => { cierraPaneles(); pintaEncargo(); scrollTo({top:0, behavior:'smooth'}); });
+$('ixTodo').addEventListener('click', () => { ENCARGOS.forEach((_, i) => hechos.add(i)); enc = ENCARGOS.length - 1; ultimoRango = rangoDe(hechos.size).n; pintaEncargo(); guardaTurno(); });
+{
+  let armado = false, reloj = 0;
+  const desarma = () => { armado = false; clearTimeout(reloj); $('ixCero').classList.remove('armado'); $('ixCero').textContent = 'Empezar de cero'; };
+  $('ixCero').addEventListener('click', () => {
+    if(!armado){ armado = true; $('ixCero').classList.add('armado'); $('ixCero').textContent = 'Pulsa otra vez para borrarlo';
+      clearTimeout(reloj); reloj = setTimeout(desarma, 5000); return; }
+    desarma(); borraTurno(); hechos.clear(); huevos.clear(); enc = 0; taller.ac = 0; taller.racha = 0; taller.mejor = 0; ultimoRango = 'Discípulo'; t0 = Date.now();
+    pintaEncargo();
+  });
+}
+
+const GLOSARIO = [
+  ['incógnita', 'lo que no se sabe', 'Lo que se busca, escrito con una letra: g las grullas, t las tortugas. En un sistema hay dos, y se buscan las dos a la vez.'],
+  ['ecuación', 'una cuenta que tiene que salir', 'Una igualdad con incógnitas: g + t = 8 dice que las cabezas son ocho. Con dos incógnitas la cumplen muchas parejas.'],
+  ['sistema', 'dos ecuaciones a la vez', 'Dos ecuaciones con las mismas incógnitas que tienen que cumplirse las dos. Las cabezas y las patas del mismo estanque.'],
+  ['solución', 'la pareja', 'Los dos números que cumplen las dos ecuaciones. g = 3, t = 5. No es un número: es una pareja, y se escribe (3, 5).'],
+  ['comprobar', 'sustituir en las dos', 'Poner la pareja en cada ecuación y mirar que salga. Si cumple una y no la otra, no es solución.'],
+  ['despejar', 'dejar sola una letra', 'Reescribir la ecuación con una incógnita a un lado y todo lo demás al otro: de g + t = 8, g = 8 − t.'],
+  ['sustituir', 'poner en su lugar', 'Cambiar una incógnita por lo que vale, entre paréntesis: donde dice g, escribir (8 − t). Queda una ecuación con una letra.'],
+  ['igualar', 'una forma frente a otra', 'Despejar la misma incógnita en las dos ecuaciones y poner las dos expresiones iguales: 8 − t = 13 − 2t.'],
+  ['reducir', 'quitar una incógnita', 'Multiplicar una ecuación entera y sumarla o restarla a la otra, para que una columna se quede a cero. La cuenta de la escuela, con su nombre.'],
+  ['compatible determinado', 'una solución', 'El sistema tiene una pareja y solo una: las dos sendas se cruzan en una piedra.'],
+  ['compatible indeterminado', 'infinitas', 'Las dos ecuaciones dicen lo mismo: la misma senda dos veces, y todas sus piedras valen.'],
+  ['incompatible', 'ninguna', 'No hay pareja que cumpla las dos: sendas paralelas, que no se tocan.'],
+  ['senda', 'recta', 'Las parejas que cumplen una ecuación de primer grado con dos incógnitas, dibujadas en el jardín, están en línea: es una recta. Aquí se llama senda hasta la lectura.'],
+  ['tsurukamezan', '鶴亀算 · grulla y tortuga', 'El problema de las cabezas y las patas, que se lleva siglos contando en las escuelas japonesas. Viene de China, donde eran faisanes y conejos.'],
+  ['sangaku', '算額 · tablilla', 'Tablillas de madera con problemas de matemáticas que se colgaban en los templos, desde el siglo XVII, como ofrenda y como reto. La tablilla de esta app es una.'],
+  ['wasan', '和算 · la matemática japonesa', 'La matemática que se hizo en Japón durante la época de Edo, con sus escuelas, sus grados y sus tablillas. Seki fue su maestro mayor.'],
+  ['soroban', '算盤 · el ábaco', 'El ábaco japonés: una cuenta arriba que vale cinco y cuatro abajo que valen uno. En esta app, las filas son ecuaciones.'],
+  ['mon', '文 · la moneda', 'La moneda pequeña de cobre de Edo, con un agujero cuadrado para ensartarla. Las de la bolsa.'],
+  ['kan', '貫 · el peso', 'Una medida de peso japonesa, unos tres kilos y tres cuartos. Los sacos de arroz y de té.'],
+  ['Seki Takakazu', '関孝和 · 1642–1708', 'El matemático de Edo del que sale Listaseki. Escribió en 1683 la cuenta cruzada que hoy se llama determinante, diez años antes que Leibniz.'],
+  ['kamon', '家紋 · el emblema', 'El emblema redondo de cada casa, en tinta. El de los grados de esta app. El de Jefeyasu son tres hojas, como el de los Tokugawa.'],
+  ['suikinkutsu', '水琴窟 · la gota', 'Una vasija enterrada en el jardín donde cae el agua gota a gota y suena como un arpa. Es el sonido del acierto.'],
+  ['Sunzi suanjing', '孫子算経 · el libro chino', 'Un libro de aritmética chino de entre los siglos III y V, con el problema de los faisanes y los conejos: treinta y cinco cabezas, noventa y cuatro patas.']
+];
+$('glosas').innerHTML = GLOSARIO.map(([p, s, d]) => '<div class="glosa" data-p="' + p + '"><div><b>' + p + '</b><i>' + s + '</i></div><p>' + d + '</p></div>').join('');
+
+/* SEKI: la sala oculta. La cuenta cruzada sobre el problema de la tablilla. */
+function pintaSeki(){
+  const g = $('svgSeki'); g.innerHTML = '';
+  const P = PROBLEMAS[tablilla.prob], sol = resuelve(P), D = det(P);
+  mincho(g, 12, 24, P.n + ' · la cuenta cruzada · ' + P.x + ' = ' + cifra(sol.x, 2) + ', ' + P.y + ' = ' + cifra(sol.y, 2));
+  ecSvg(g, 24, 64, ec1(P), P, {'font-size':17}); ecSvg(g, 24, 92, ec2(P), P, {'font-size':17});
+  /* el aspa: los cuatro números de las incógnitas */
+  const x0 = 250, y0 = 52, w = 46;
+  const num = (x, y, v, col) => { el(g, 'rect', {x:x - 18, y:y - 15, width:36, height:26, rx:5, fill:'var(--panel2)', stroke:col, 'stroke-width':1.2}); txt(g, x, y + 4, String(v), {'text-anchor':'middle', 'font-size':14, 'font-weight':700, fill:col}); };
+  num(x0, y0, P.a, 'var(--ai)'); num(x0 + w, y0, P.b, 'var(--matcha)'); num(x0, y0 + 40, P.d, 'var(--ai)'); num(x0 + w, y0 + 40, P.e, 'var(--matcha)');
+  el(g, 'path', {d:'M' + (x0 - 12) + ' ' + (y0 - 10) + ' L' + (x0 + w + 12) + ' ' + (y0 + 50), stroke:'var(--kin)', 'stroke-width':2});
+  el(g, 'path', {d:'M' + (x0 + w + 12) + ' ' + (y0 - 10) + ' L' + (x0 - 12) + ' ' + (y0 + 50), stroke:'var(--mal)', 'stroke-width':2, 'stroke-dasharray':'5 3'});
+  txt(g, x0 + w + 30, y0 + 4, 'a·e = ' + P.a * P.e, {'font-size':11.5, fill:'var(--kin)'});
+  txt(g, x0 + w + 30, y0 + 44, 'b·d = ' + P.b * P.d, {'font-size':11.5, fill:'var(--mal)'});
+  txt(g, x0 - 18, y0 + 80, 'a·e − b·d = ' + D + '   (el de abajo)', {'font-size':11.5, fill:'var(--tinta)'});
+  let y = 156;
+  txt(g, 24, y, 'x = (c·e − b·f) ÷ (a·e − b·d)', {'font-size':12}); txt(g, 300, y, '= (' + P.c + '·' + P.e + ' − ' + P.b + '·' + P.f + ') ÷ ' + D + ' = ' + cifra(sol.x, 2), {'font-size':12, fill:'var(--ai)'}); y += 22;
+  txt(g, 24, y, 'y = (a·f − c·d) ÷ (a·e − b·d)', {'font-size':12}); txt(g, 300, y, '= (' + P.a + '·' + P.f + ' − ' + P.c + '·' + P.d + ') ÷ ' + D + ' = ' + cifra(sol.y, 2), {'font-size':12, fill:'var(--matcha)'}); y += 30;
+  parrafo(g, 24, y, 'Arriba por abajo, menos abajo por arriba: el aspa. Si el de abajo sale cero, las sendas no se cruzan: son paralelas o la misma. Seki lo escribió con sus cuentas de bambú en 1683; en Europa lo encontró Leibniz en 1693 y lo publicó Cramer en 1750, y por eso se llama regla de Cramer y no de Seki.', 500, {'font-size':11.5, fill:'var(--tinta)'}, 15);
+}
+function abreSeki(por){
+  huevo('seki');
+  cierraPaneles(); entraTaller(false); $('mAjustes').hidden = true; $('mSello').hidden = true;
+  pintaSeki();
+  $('lecSeki').innerHTML = 'La cuenta va sobre el problema que esté puesto en la tablilla: cambiadlo allí y volved, que el aspa se hace sola. ';
+  const p = $('pSeki'); p.hidden = false;
+  p.querySelector('.aviso').textContent = 'Esta sala se ha abierto por ' + por + '. No sale en el índice.';
+  p.scrollIntoView({behavior:'smooth', block:'start'});
+}
+{
+  let tecleado = '';
+  addEventListener('keydown', e => {
+    if(/^(INPUT|TEXTAREA)$/.test(document.activeElement.tagName) || e.key.length !== 1) return;
+    tecleado = (tecleado + e.key.toLowerCase()).slice(-8);
+    if(/seki/.test(tecleado)){ tecleado = ''; abreSeki('el nombre de Seki, escrito'); }
+  });
+}
+
+/* ═══ EL TALLER DE PRÁCTICA ═══════════════════════════════════════════ */
+const numeroLibre = v => { const s = String(v).trim(); const n = parseFloat(s.includes(',') ? s.replace(/\./g, '').replace(',', '.') : s); return isNaN(n) ? null : n; };
+const casi = (v, sol, tol = 1e-9) => { const n = numeroLibre(v); return n !== null && Math.abs(n - sol) <= tol; };
+const solTxt = e => typeof e.sol === 'string' ? e.sol : (Number.isInteger(e.sol) ? cifra(e.sol, 0) : cifra(e.sol, 2));
+const palabra = v => String(v).trim().toLowerCase().replace(/^si$/, 'sí');
+const cuantas = v => { const s = palabra(v); if(/^(una|1|uno)$/.test(s)) return 'una'; if(/^(ninguna|0|cero|ningún|ninguno)$/.test(s)) return 'ninguna'; if(/^(infinitas|infinito|infinitos|∞|todas)$/.test(s)) return 'infinitas'; return s; };
+const sistemaLibre = () => { /* solución entera y pequeña, coeficientes chicos */
+  for(let i = 0; i < 50; i++){ const x0 = al(1, 9), y0 = al(1, 9), a = 1, b = elige([1, 2, 3]), d = elige([1, 2, 3, 4]), e = elige([-2, -1, 1, 2, 3, 4]);
+    if(a * e - b * d === 0) continue; return {a, b, c:a * x0 + b * y0, d, e, f:d * x0 + e * y0, x:'x', y:'y', x0, y0}; }
+  return {a:1, b:1, c:8, d:2, e:4, f:26, x:'x', y:'y', x0:3, y0:5};
+};
+const REDUCIBLES = [['grullas', 'x', 2], ['grullas', 'y', 4], ['sacos', 'x', 3], ['sacos', 'y', 2], ['farolillos', 'x', 5], ['farolillos', 'y', 2], ['monedas', 'x', 1]];
+const TIPOS = {
+  estanque: {n:'El estanque', sala:'estanque', gen(){
+    const c = al(4, 12), t = al(1, c - 1), p = 2 * c + 2 * t;
+    return {t:'En el estanque hay <b>' + c + ' cabezas</b> y <b>' + p + ' patas</b>. ¿Cuántas tortugas?', sol:t, ok:v => casi(v, t), exp:'Si las ' + c + ' fueran grullas habría ' + 2 * c + ' patas; faltan ' + (p - 2 * c) + ', y cada tortuga añade dos: ' + t + ' tortugas y ' + (c - t) + ' grullas.', pon(){ Object.assign(estanque, {cabezas:c, patas:p, tortugas:0}); }}; }},
+  pareja: {n:'¿Es solución?', sala:'tablilla', bool:true, gen(){
+    const k = elige(PROB_ORDEN), P = PROBLEMAS[k], s = resuelve(P); let px, py, es;
+    if(Math.random() < .45){ px = s.x; py = s.y; es = true; }
+    else if(Math.random() < .6){ py = Math.max(0, s.y + elige([-2, -1, 1, 2])); px = (P.c - P.b * py) / P.a; if(!Number.isInteger(px) || px < 0){ px = s.x + 1; py = s.y; } es = false; }
+    else { px = al(0, 9); py = al(0, 9); es = cumple1(P, px, py) && cumple2(P, px, py); }
+    return {t:'¿Es <span class="x">' + P.x + '</span> = ' + px + ', <span class="y">' + P.y + '</span> = ' + py + ' solución de ' + colorea(ec1(P), P) + ' y ' + colorea(ec2(P), P) + '?', sol:es ? 'sí' : 'no', ok:v => palabra(v) === (es ? 'sí' : 'no'),
+            exp:'Sustituyendo: ' + sustituida(P.a, P.b, px, py) + ' = ' + (P.a * px + P.b * py) + (cumple1(P, px, py) ? ' ✓' : ' ✗') + ' y ' + sustituida(P.d, P.e, px, py) + ' = ' + (P.d * px + P.e * py) + (cumple2(P, px, py) ? ' ✓' : ' ✗') + '. ' + (es ? 'Cumple las dos.' : 'Hay que cumplir las dos.'), pon(){ Object.assign(tablilla, {prob:k, px, py}); }}; }},
+  reducir: {n:'Reducir', sala:'abaco', gen(){
+    const [k, de, m] = elige(REDUCIBLES), P = PROBLEMAS[k], L = de === 'x' ? P.x : P.y;
+    return {t:'En ' + P.n + ', ' + colorea(ec1(P), P) + ' y ' + colorea(ec2(P), P) + ': para que se vaya la <b>' + L + '</b> restando la primera de la segunda, ¿por cuánto multiplicas la primera?', sol:m, ok:v => casi(v, m), exp:'La segunda lleva ' + m + ' de ' + L + ' y la primera ' + (de === 'x' ? P.a : P.b) + ': por ' + m + ', y al restar la columna se queda a cero.', pon(){ Object.assign(abaco, {prob:k, k1:m, k2:1, op:'restar'}); }}; }},
+  resolver: {n:'Resolver', sala:'estanque', gen(){
+    const S = sistemaLibre(), cual = elige(['x', 'y']), sol = cual === 'x' ? S.x0 : S.y0;
+    return {t:'Resuelve ' + colorea(ecTexto(S.a, S.b, S.c, 'x', 'y'), S) + ' y ' + colorea(ecTexto(S.d, S.e, S.f, 'x', 'y'), S) + '. ¿Cuánto vale <b>' + cual + '</b>?', sol, ok:v => casi(v, sol), exp:'La pareja es x = ' + S.x0 + ', y = ' + S.y0 + ': despejando x en la primera, x = ' + lin2(S.c, -S.b, 'y') + ', y sustituyendo sale y = ' + S.y0 + '.', pon:null}; }},
+  tipo: {n:'Qué sistema', sala:'sendas', gen(){
+    const caso = elige(['cruzan', 'cruzan', 'paralelas', 'misma']);
+    const seg = caso === 'cruzan' ? elige([[2, 4, 26], [1, 3, 18], [3, 1, 14], [1, -1, 2]]) : caso === 'paralelas' ? elige([[2, 2, 20], [3, 3, 30], [1, 1, 10]]) : elige([[2, 2, 16], [3, 3, 24], [4, 4, 32]]);
+    const P = Object.assign({}, PROBLEMAS.grullas, {d:seg[0], e:seg[1], f:seg[2]}), sol = caso === 'cruzan' ? 'una' : caso === 'paralelas' ? 'ninguna' : 'infinitas';
+    return {t:'¿Cuántas soluciones tiene ' + colorea(ec1(P), P) + ' y ' + colorea(ec2(P), P) + '? Di <b>una</b>, <b>ninguna</b> o <b>infinitas</b>.', sol, ok:v => cuantas(v) === sol, exp:caso === 'cruzan' ? 'Las sendas se cruzan: a·e − b·d = ' + det(P) + ', distinto de cero. Compatible determinado.' : caso === 'paralelas' ? 'La segunda sube igual que la primera y a otra altura: paralelas. Incompatible.' : 'La segunda es la primera multiplicada: la misma senda. Compatible indeterminado.', pon(){ Object.assign(sendas, {prob:'grullas', d:seg[0], e:seg[1], f:seg[2], marca:null}); }}; }},
+  sino: {n:'Sí o no', bool:true, gen(){
+    const q = elige([
+      {t:'Una pareja que cumple la primera ecuación <b>ya es solución</b> del sistema.', sol:'no', exp:'Tiene que cumplir las dos. Cuatro y cuatro cumple las cabezas y no las patas.', pon(){ Object.assign(tablilla, {prob:'grullas', px:4, py:4}); }, sala:'tablilla'},
+      {t:'La solución de un sistema es <b>una pareja</b> de números.', sol:'sí', exp:'Dos incógnitas, dos números: (3, 5). No es un número solo.', pon(){ Object.assign(tablilla, {prob:'grullas', px:3, py:5}); }, sala:'tablilla'},
+      {t:'Multiplicar una ecuación entera por tres <b>cambia</b> su solución.', sol:'no', exp:'Se multiplica en los dos lados: si dos cosas son iguales, sus triples también. Las mismas parejas la cumplen.', pon(){ Object.assign(abaco, {prob:'grullas', k1:3, k2:1, op:'restar'}); }, sala:'abaco'},
+      {t:'Suponer que todas son grullas es <b>reducir</b> con otro nombre.', sol:'sí', exp:'Es restar el doble de la ecuación de las cabezas a la de las patas: 2t = 10.', pon(){ Object.assign(abaco, {prob:'grullas', k1:2, k2:1, op:'restar'}); }, sala:'abaco'},
+      {t:'Sustitución e igualación dan <b>parejas distintas</b>.', sol:'no', exp:'Los tres caminos dan la misma pareja: la solución es del sistema, no del camino.', pon(){ Object.assign(igual, {prob:'grullas', de:'x'}); }, sala:'igual'},
+      {t:'Conviene despejar la incógnita que lleva <b>un uno delante</b>.', sol:'sí', exp:'Se despeja sin dividir: de g + t = 8, g = 8 − t, y sale limpio.', pon(){ Object.assign(sust, {prob:'grullas', de:'x', en:1}); }, sala:'sust'},
+      {t:'Dos sendas paralelas dan un sistema <b>sin solución</b>.', sol:'sí', exp:'No se tocan en ninguna piedra: incompatible.', pon(){ Object.assign(sendas, {prob:'grullas', d:2, e:2, f:20, marca:null}); }, sala:'sendas'},
+      {t:'Un sistema puede tener <b>exactamente dos</b> soluciones.', sol:'no', exp:'Dos rectas se cruzan en un punto, en ninguno o en todos: una, ninguna o infinitas. Dos, nunca.', pon(){ Object.assign(sendas, {prob:'grullas', d:2, e:4, f:26, marca:null}); }, sala:'sendas'},
+      {t:'Una ecuación con dos incógnitas tiene <b>infinitas</b> soluciones.', sol:'sí', exp:'Todas las piedras de su senda. Con ocho cabezas, nueve repartos; sin el tope, infinitos.', pon(){ Object.assign(sendas, {prob:'grullas', d:2, e:4, f:26, marca:null}); }, sala:'sendas'},
+      {t:'El problema de las grullas y las tortugas <b>nació en Japón</b>.', sol:'no', exp:'Viene de China, del Sunzi suanjing, con faisanes y conejos. En Japón se hicieron grullas y tortugas.', pon(){ Object.assign(estanque, {cabezas:35, patas:94, tortugas:0}); }, sala:'estanque'}
+    ]);
+    return {t:q.t, sol:q.sol, ok:v => palabra(v) === q.sol, exp:q.exp, pon:q.pon, sala:q.sala};
+  }}
+};
+
+const taller = {tipo:'estanque', ej:null, ac:0, racha:0, mejor:0, enTaller:false, corregido:false};
+function pintaTipos(){
+  const c = $('tipos'); c.innerHTML = '';
+  Object.keys(TIPOS).forEach(k => {
+    const b = document.createElement('button'); b.className = 'b'; b.textContent = TIPOS[k].n;
+    b.setAttribute('aria-pressed', String(taller.tipo === k));
+    b.addEventListener('click', () => { taller.tipo = k; pintaTipos(); nuevoEjercicio(); });
+    c.appendChild(b);
+  });
+  $('tAc').textContent = taller.ac; $('tRacha').textContent = taller.racha; $('tMejor').textContent = taller.mejor;
+}
+function nuevoEjercicio(){
+  const T = TIPOS[taller.tipo];
+  taller.ej = T.gen(); taller.corregido = false;
+  $('ejer').innerHTML = taller.ej.t;
+  $('verTaller').hidden = true; $('verlo').hidden = true;
+  $('filaSiNo').hidden = !T.bool; $('filaResp').hidden = !!T.bool;
+  if(!T.bool){ const r = $('resp'); r.value = ''; r.focus(); }
+}
+function corrige(dado){
+  const v = dado !== undefined ? dado : $('resp').value;
+  if(!String(v).trim() || taller.corregido) return;
+  const bien = taller.ej.ok(v);
+  const ver = $('verTaller'); ver.hidden = false;
+  ver.className = 'veredicto' + (bien ? ' bien' : '');
+  if(bien){ taller.ac++; taller.racha++; taller.mejor = Math.max(taller.mejor, taller.racha); ver.innerHTML = '<b>Bien.</b> ' + taller.ej.exp; Ruido.bien();
+            if(taller.racha === 8){ Ruido.grulla(); ver.innerHTML += ' <i>Ocho seguidos. Listaseki corre una cuenta del ábaco sin mirar: «Con diez mil sois tortuga».</i>'; } }
+  else { taller.racha = 0; ver.innerHTML = 'No. La respuesta era <b>' + solTxt(taller.ej) + '</b>. ' + taller.ej.exp; Ruido.mal(); }
+  taller.corregido = true; $('verlo').hidden = !taller.ej.pon; pintaTipos(); guardaTurno();
+}
+function verEnSala(){ const e = taller.ej; if(!e || !e.pon) return; e.pon(); const s = e.sala || TIPOS[taller.tipo].sala; muestraSala(s); $(SALAS[s]).scrollIntoView({behavior:'smooth', block:'start'}); }
+function entraTaller(dentro){
+  taller.enTaller = dentro; $('bTaller').setAttribute('aria-pressed', String(dentro));
+  $('pTaller').hidden = !dentro; $('pEncargo').hidden = dentro; $('informe').hidden = dentro || !hechos.has(enc);
+  cierraPaneles();
+  if(dentro){ pintaTipos(); nuevoEjercicio(); for(const k in SALAS) $(SALAS[k]).hidden = true; } else pintaEncargo();
+}
+$('bTaller').addEventListener('click', () => entraTaller(!taller.enTaller));
+$('corrige').addEventListener('click', () => corrige());
+$('bSi').addEventListener('click', () => corrige('sí'));
+$('bNo').addEventListener('click', () => corrige('no'));
+$('resp').addEventListener('keydown', e => { if(e.key === 'Enter'){ taller.corregido ? nuevoEjercicio() : corrige(); } });
+$('otro').addEventListener('click', nuevoEjercicio);
+$('verlo').addEventListener('click', verEnSala);
+$('hojaDiez').addEventListener('click', () => {
+  const claves = Object.keys(TIPOS); const lista = [];
+  for(let i = 0; i < 10; i++) lista.push(TIPOS[claves[i % claves.length]].gen());
+  const limpia = h => h.replace(/<[^>]+>/g, '');
+  $('hoja').innerHTML = '<h2>El estanque de Jefeyasu · hoja de práctica</h2>'
+    + '<div class="cab">Sistemas de ecuaciones · Nombre: ____________________ · Fecha: __________</div>'
+    + '<ol>' + lista.map(e => '<li>' + limpia(e.t) + '</li>').join('') + '</ol>'
+    + '<div class="clave"><h2>Clave del profesor</h2><ol>' + lista.map(e => '<li><b>' + solTxt(e) + '</b> — ' + limpia(e.exp) + '</li>').join('') + '</ol></div>';
+  document.body.classList.add('imprimiendo');
+  const fuera = () => { document.body.classList.remove('imprimiendo'); removeEventListener('afterprint', fuera); };
+  addEventListener('afterprint', fuera);
+  setTimeout(() => { print(); setTimeout(fuera, 800); }, 60);
+});
+
+/* ═══ LOS AJUSTES Y LA TABLILLA ═══════════════════════════════════════ */
+$('bAjustes').addEventListener('click', () => { pintaAjustes(); $('mAjustes').hidden = false; });
+$('ajCerrar').addEventListener('click', () => { $('mAjustes').hidden = true; });
+$('mAjustes').addEventListener('click', e => { if(e.target.id === 'mAjustes') $('mAjustes').hidden = true; });
+
+function textoSello(){
+  const n = hechos.size, r = rangoDe(n), min = Math.max(1, Math.round((Date.now() - t0) / 60000));
+  const f = new Date(), fecha = f.toLocaleDateString('es-ES') + ' ' + f.toLocaleTimeString('es-ES', {hour:'2-digit', minute:'2-digit'});
+  const estado = {v:1, h:[...hechos], t:[taller.ac, taller.racha, taller.mejor], e:[...huevos], min};
+  const sello = 'EJY1.' + btoa(unescape(encodeURIComponent(JSON.stringify(estado)))).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
+  const nombre = $('selloNombre').value.trim() || '(sin nombre)';
+  return 'EL ESTANQUE DE JEFEYASU · tablilla\n'
+    + 'Cuelga esta tablilla ' + nombre + '\n'
+    + 'Fecha: ' + fecha + '\n'
+    + 'Grado: ' + r.n + ' · ' + r.s + '\n'
+    + 'Cuentas: ' + n + ' de ' + ENCARGOS.length + (n ? ' · ' + [...hechos].sort((a, b) => a - b).map(i => i + 1).join(' ') : '') + '\n'
+    + 'Taller: ' + taller.ac + ' aciertos · racha ' + taller.racha + ' · mejor ' + taller.mejor + '\n'
+    + 'Hallazgos: ' + huevos.size + ' de ' + HUEVOS.length + (huevos.size ? ' · ' + [...huevos].map(h => HUEVO_DICE[h]).join(' · ') : '') + '\n'
+    + 'Tiempo en el estanque: ' + min + ' min\n'
+    + 'Sello: ' + sello;
+}
+function pintaSello(){ $('selloTexto').innerHTML = textoSello().replace(/</g, '&lt;').replace(/(Sello: .*)/, '<span class="sello">$1</span>'); }
+$('bSello').addEventListener('click', () => { pintaSello(); $('mSello').hidden = false; $('selloAviso').textContent = ''; });
+$('selloCerrar').addEventListener('click', () => { $('mSello').hidden = true; });
+$('mSello').addEventListener('click', e => { if(e.target.id === 'mSello') $('mSello').hidden = true; });
+$('selloNombre').addEventListener('input', () => { pintaSello(); guardaTurno(); });
+$('selloCopiar').addEventListener('click', async () => {
+  const t = textoSello();
+  try{
+    if(navigator.clipboard && navigator.clipboard.writeText){ await navigator.clipboard.writeText(t); $('selloAviso').textContent = 'copiado'; return; }
+  }catch(e){}
+  const r = document.createRange(); r.selectNodeContents($('selloTexto'));
+  const s = getSelection(); s.removeAllRanges(); s.addRange(r);
+  $('selloAviso').textContent = 'seleccionado: copie con el sistema';
+});
+
+/* ═══ LA GUÍA VISUAL ═════════════════════════════════════════════════ */
+const PASOS = [
+  {id:'franja',   t:'Tu grado', d:'Empiezas de discípulo. Cada tres cuentas subes un grado, como en las escuelas de wasan: shoden, chūden, okuden, kaiden. Con las quince, el que echa las cuentas: el título de Listaseki.'},
+  {id:'tablillas',t:'Las tablillas', d:'Una por cuenta hecha, colgadas en la pared del templo como las sangaku. Con las quince, la tuya.'},
+  {id:'pEncargo', t:'El encargo', d:'Jefeyasu pide, en cabezas, patas, monedas y sacos. Se hace en la sala de abajo y se pulsa Comprobar. Contesta Listaseki, con el ábaco. Orizuru mira desde el borde.'},
+  {sel:'.fila',   t:'Los mandos', d:'Lo que se puede tocar: las cabezas y las patas, el problema y la pareja, las filas del ábaco, qué se despeja, la segunda senda.'},
+  {sel:'.escena', t:'La escena', d:'El estanque, la tablilla, el soroban, los sellos que bajan, las sendas del jardín. Cada incógnita lleva su color: azul la primera, verde la segunda.'},
+  {sel:'.lectura',t:'La lectura', d:'La definición primero, y luego la cuenta hecha dos veces: como en la escuela y como se escribe con letras.'},
+  {id:'barra',    t:'La barra', d:'Taller para practicar libre, Salas para abrir cualquiera suelta, Glosario con las palabras del estanque, Deudas con lo que se demuestra y lo que se dice, La tablilla para llevarse la sesión y Ajustes para el tema.'}
+];
+let paso = 0;
+function elDe(p){
+  if(p.id) return $(p.id);
+  const sala = document.querySelector(Object.values(SALAS).map(s => '#' + s + ':not([hidden])').join(', '));
+  return sala ? sala.querySelector(p.sel) : null;
+}
+function pintaPaso(){
+  const p = PASOS[paso], e = elDe(p);
+  if(!e){ paso++; if(paso >= PASOS.length){ cierraGuia(); return; } pintaPaso(); return; }
+  e.scrollIntoView({behavior:'smooth', block:'center'});
+  setTimeout(() => {
+    const r = e.getBoundingClientRect(), f = $('tourFoco');
+    f.style.top = (r.top - 6) + 'px'; f.style.left = (r.left - 6) + 'px'; f.style.width = (r.width + 12) + 'px'; f.style.height = (r.height + 12) + 'px';
+    const g = $('tourGlobo'); $('tourTit').textContent = p.t; $('tourTxt').textContent = p.d;
+    $('tourNum').textContent = (paso + 1) + ' de ' + PASOS.length;
+    $('tourSig').textContent = paso === PASOS.length - 1 ? 'Terminar' : 'Siguiente';
+    const abajo = r.bottom + 12, alto = g.offsetHeight || 140;
+    g.style.top = (abajo + alto < innerHeight - 8 ? abajo : Math.max(8, r.top - alto - 12)) + 'px';
+    g.style.left = Math.min(Math.max(12, r.left), innerWidth - (g.offsetWidth || 320) - 12) + 'px';
+    g.focus();
+  }, 320);
+}
+function abreGuia(){ entraTaller(false); cierraPaneles(); paso = 0; $('tourCapa').hidden = false; pintaPaso(); }
+function cierraGuia(){ $('tourCapa').hidden = true; }
+$('bGuia').addEventListener('click', abreGuia);
+$('tourSig').addEventListener('click', e => { e.stopPropagation(); paso++; if(paso >= PASOS.length) cierraGuia(); else pintaPaso(); });
+$('tourSalir').addEventListener('click', e => { e.stopPropagation(); cierraGuia(); });
+$('tourCapa').addEventListener('click', e => { if(e.target.id === 'tourCapa') cierraGuia(); });
+addEventListener('keydown', e => { if(e.key === 'Escape'){ cierraGuia(); $('mAjustes').hidden = true; $('mSello').hidden = true; } });
+
+/* ═══ EL ARRANQUE: el estanque al amanecer ═══════════════════════════ */
+{
+  const g = $('bootEstanque'), rapido = matchMedia('(prefers-reduced-motion: reduce)').matches, ys = 96;
+  el(g, 'rect', {x:0, y:ys, width:240, height:104, rx:10, fill:'#3E5F86', 'fill-opacity':.85, class:'agua'});
+  for(let i = 0; i < 6; i++) el(g, 'path', {d:'M' + (i * 44 - 4) + ' ' + ys + ' q11 -6 22 0 q11 6 22 0', fill:'none', stroke:'#7FB3C9', 'stroke-width':1});
+  const tipos = ['g', 't', 'g', 't', 't', 'g', 't', 't'];
+  tipos.forEach((tp, i) => {
+    const x = 18 + i * 29, gg = el(g, 'g', {class:'cabeza', style:'animation-delay:' + (rapido ? 0 : (.25 + i * .14).toFixed(2)) + 's'});
+    if(tp === 'g'){ el(gg, 'path', {d:'M' + (x - 9) + ' ' + (ys - 4) + ' q9 -12 20 -3 q-4 8 -20 3 z', fill:'#F1E8D6', stroke:'#241F1E', 'stroke-width':1});
+      el(gg, 'path', {d:'M' + (x - 5) + ' ' + (ys - 9) + ' q-3 -11 3 -20', fill:'none', stroke:'#F1E8D6', 'stroke-width':2.4, 'stroke-linecap':'round'});
+      el(gg, 'circle', {cx:x - 1, cy:ys - 30, r:3.2, fill:'#F1E8D6', stroke:'#241F1E', 'stroke-width':.9}); el(gg, 'circle', {cx:x - 1.3, cy:ys - 32.6, r:1.1, fill:'#E0473B'}); }
+    else { el(gg, 'path', {d:'M' + (x - 10) + ' ' + (ys - 3) + ' q10 -16 20 0 z', fill:'#A6B86F', stroke:'#241F1E', 'stroke-width':1}); el(gg, 'circle', {cx:x + 12, cy:ys - 6, r:3.2, fill:'#A6B86F', stroke:'#241F1E', 'stroke-width':.9}); }
+    const patas = tp === 'g' ? [x - 3, x + 3] : [x - 7, x - 2.5, x + 2.5, x + 7];
+    patas.forEach((px, j) => el(g, 'path', {d:'M' + px + ' ' + ys + ' v' + (tp === 'g' ? 30 : 18), stroke:'#F1E8D6', 'stroke-width':tp === 'g' ? 1.6 : 2.2, 'stroke-linecap':'round', 'stroke-opacity':.9, class:'pata', style:'animation-delay:' + (rapido ? 0 : (1.5 + (i * 4 + j) * .035).toFixed(2)) + 's'}));
+  });
+  el(g, 'text', {x:120, y:36, 'text-anchor':'middle', 'font-family':"'Shippori Mincho',serif", 'font-size':15, 'font-weight':700, fill:'#F1E8D6', class:'cabeza', style:'animation-delay:' + (rapido ? 0 : 1.35) + 's'}, '8 cabezas');
+  el(g, 'text', {x:120, y:184, 'text-anchor':'middle', 'font-family':"'Shippori Mincho',serif", 'font-size':15, 'font-weight':700, fill:'#F1E8D6', class:'pata', style:'animation-delay:' + (rapido ? 0 : 2.5) + 's'}, '26 patas');
+  const lineas = ['estanque', 'tablilla', 'ábaco', 'sustitución', 'igualación', 'sendas'];
+  $('bootLista').innerHTML = lineas.map((l, i) => '<span style="animation-delay:' + (rapido ? 0 : .3 + i * .35) + 's">' + l + '</span>').join('');
+  const fuera = () => { const b = $('boot'); if(!b || b.classList.contains('fuera')) return; b.classList.add('fuera'); setTimeout(() => b.remove(), 600); };
+  $('boot').addEventListener('click', fuera);
+  setTimeout(fuera, rapido ? 300 : 3300);
+}
+
+/* ═══ EL AUTODIAGNÓSTICO ═════════════════════════════════════════════ */
+$('ixDiag').addEventListener('click', () => {
+  const d = $('diag'); d.hidden = false; const li = [];
+  const di = (t, ok) => li.push('<div class="' + (ok ? 'ok' : 'ko') + '">' + (ok ? '✓ ' : '✗ ') + t + '</div>');
+  // 1 · los sistemas
+  const esperado = {grullas:[3, 5], monedas:[8, 4], sacos:[2, 3], farolillos:[4, 5], edades:[8, 4]};
+  di('los cinco problemas tienen la solución que dicen: grullas (3, 5), monedas (8, 4), sacos (2, 3), farolillos (4, 5), edades (8, 4)', PROB_ORDEN.every(k => { const s = resuelve(PROBLEMAS[k]); return s.x === esperado[k][0] && s.y === esperado[k][1]; }));
+  di('cada solución cumple las dos ecuaciones al sustituir', PROB_ORDEN.every(k => { const P = PROBLEMAS[k], s = resuelve(P); return cumple1(P, s.x, s.y) && cumple2(P, s.x, s.y); }));
+  di('las ecuaciones se escriben limpias: u − c = 4, p − 2h = 0, 2g + 4t = 26', ecTexto(1, -1, 4, 'u', 'c') === 'u − c = 4' && ecTexto(1, -2, 0, 'p', 'h') === 'p − 2h = 0' && ecTexto(2, 4, 26, 'g', 't') === '2g + 4t = 26');
+  // 2 · el estanque
+  di('ocho cabezas y veintiséis patas dan cinco tortugas; treinta y cinco y noventa y cuatro, doce conejos', tortugasDe(8, 26) === 5 && tortugasDe(35, 94) === 12);
+  di('con cualquier estanque posible (2 a 40 cabezas, patas pares entre todas grullas y todas tortugas) las tortugas salen enteras y caben', (() => { for(let c = 2; c <= 40; c++) for(let p = 2 * c; p <= 4 * c; p += 2){ const t = tortugasDe(c, p); if(!Number.isInteger(t) || t < 0 || t > c) return false; } return true; })());
+  // 3 · el ábaco
+  { const g = {...abaco}; Object.assign(abaco, {prob:'grullas', k1:2, k2:1, op:'restar'}); const r1 = filaReducida(); Object.assign(abaco, {prob:'monedas', k1:1, k2:1, op:'sumar'}); const r2 = filaReducida(); Object.assign(abaco, g);
+    di('reducir las grullas por dos y restar da 2t = 10; sumar las monedas da 2u = 16', r1.A === 0 && r1.B === 2 && r1.C === 10 && r2.A === 2 && r2.B === 0 && r2.C === 16); }
+  // 4 · despejar, sustituir, igualar
+  di('despejar escribe limpio: g = 8 − t, g = 13 − 2t, t = (12 − 3a)/2, h = p/2', despeja(PROBLEMAS.grullas, 'x', 1).txt === '8 − t' && despeja(PROBLEMAS.grullas, 'x', 2).txt === '13 − 2t' && despeja(PROBLEMAS.sacos, 'y', 2).txt === '(12 − 3a)/2' && despeja(PROBLEMAS.edades, 'y', 1).txt === 'p/2');
+  di('la sustitución llega a la solución por los veinte caminos (cinco problemas, dos incógnitas, dos ecuaciones)', PROB_ORDEN.every(k => ['x', 'y'].every(de => [1, 2].every(en => { const P = PROBLEMAS[k], s = resuelve(P), ps = pasosSust(P, de, en); return Math.abs(ps.val - (de === 'x' ? s.y : s.x)) < 1e-9 && Math.abs(ps.deVal - (de === 'x' ? s.x : s.y)) < 1e-9; }))));
+  di('la igualación llega a la solución por los diez caminos', PROB_ORDEN.every(k => ['x', 'y'].every(de => { const P = PROBLEMAS[k], s = resuelve(P), ps = pasosIgual(P, de); return Math.abs(ps.val - (de === 'x' ? s.y : s.x)) < 1e-9 && Math.abs(ps.deVal - (de === 'x' ? s.x : s.y)) < 1e-9; })));
+  di('la sustitución de las grullas pasa por 2·(8 − t) + 4t = 26 y 16 + 2t = 26', (() => { const l = pasosSust(PROBLEMAS.grullas, 'x', 1).l.map(p => p.t); return l[1] === '2·(8 − t) + 4t = 26' && l[2] === '16 + 2t = 26'; })());
+  // 5 · las sendas
+  di('las sendas distinguen los tres casos: se cruzan, la misma (2g + 2t = 16), paralelas (2g + 2t = 20)', casoSendas(PROBLEMAS.grullas) === 'cruzan' && casoSendas(Object.assign({}, PROBLEMAS.grullas, {d:2, e:2, f:16})) === 'misma' && casoSendas(Object.assign({}, PROBLEMAS.grullas, {d:2, e:2, f:20})) === 'paralelas' && casoSendas(Object.assign({}, PROBLEMAS.grullas, {d:1, e:1, f:10})) === 'paralelas');
+  di('la cuenta cruzada de Seki da lo mismo que las sendas en los cinco problemas', PROB_ORDEN.every(k => { const P = PROBLEMAS[k], s = resuelve(P); return s.det === det(P) && s.det !== 0; }));
+  // 6 · el kit
+  di('el kamon dibuja sus seis figuras', ['hoja', 'ola', 'grulla', 'tortuga', 'aoi', 'abaco'].every(f => { const s = document.createElementNS(NS, 'svg'); kamon(s, 0, 0, 40, f); return s.querySelectorAll('*').length > 2; }));
+  di('las cifras se escriben a la española, y las negativas con su signo: 1.024 · 7,5 · −3', cifra(1024, 0) === '1.024' && cifra(7.5, 1) === '7,5' && cifra(-3, 0) === '−3');
+  // 7 · los generadores
+  let ok6 = true, n6 = 0; for(const k in TIPOS) for(let i = 0; i < 80; i++){ const e = TIPOS[k].gen(); n6++;
+    const sol = typeof e.sol === 'string' ? e.sol : String(e.sol).replace('.', ',');
+    if(!e.ok(sol) || e.ok('999999999') || e.ok('') || !e.t || !e.exp) ok6 = false; }
+  di('los ' + Object.keys(TIPOS).length + ' generadores del taller aceptan su solución y rechazan basura (' + n6 + ' pruebas)', ok6);
+  { let ok7 = true; const g = [{...estanque}, {...tablilla}, {...abaco}, {...sust}, {...igual}, {...sendas}];
+    for(let i = 0; i < 40; i++) for(const k in TIPOS){ const e = TIPOS[k].gen(); if(e.pon) e.pon(); acotaPatas();
+      if(estanque.cabezas < 2 || estanque.cabezas > 40 || estanque.patas < 2 * estanque.cabezas || estanque.patas > 4 * estanque.cabezas || !PROBLEMAS[tablilla.prob] || tablilla.px < 0 || tablilla.py < 0 || !PROBLEMAS[abaco.prob] || abaco.k1 < 1 || abaco.k1 > 5 || !PROBLEMAS[sust.prob] || !PROBLEMAS[igual.prob] || !PROBLEMAS[sendas.prob]) ok7 = false; }
+    Object.assign(estanque, g[0]); Object.assign(tablilla, g[1]); Object.assign(abaco, g[2]); Object.assign(sust, g[3]); Object.assign(igual, g[4]); Object.assign(sendas, g[5]);
+    di('«verlo en la sala» deja los mandos en valores que existen (240 pruebas)', ok7); }
+  di('«una», «ninguna» e «infinitas» se entienden también como 1, 0 y ∞', cuantas('1') === 'una' && cuantas('cero') === 'ninguna' && cuantas('∞') === 'infinitas' && cuantas('Infinitas') === 'infinitas');
+  // 8 · los encargos
+  di('los ' + ENCARGOS.length + ' encargos apuntan a una sala que existe', ENCARGOS.every(e => SALAS[e.sala]));
+  di('cada encargo de opciones tiene UNA correcta, y todas explican', ENCARGOS.filter(e => e.ops).every(e => e.ops.filter(o => o.ok).length === 1 && e.ops.every(o => o.r && dicho(o.r).length > 20)));
+  di('cada encargo de manipulativo trae pre, bien y mal', ENCARGOS.filter(e => !e.ops).every(e => e.pre && e.bien && e.mal));
+  let ok8 = true; ENCARGOS.forEach(e => { if(e.ops) return; e.pre(); if(e.ok()) ok8 = false; });
+  di('ningún encargo de manipulativo está resuelto nada más abrirlo', ok8);
+  di('las ' + Object.keys(SALAS).length + ' salas tienen rótulo y pintor', Object.keys(SALAS).every(k => LEMAS[k] && PINTA[k]));
+  di('los grados cubren las ' + ENCARGOS.length + ' cuentas y acaban en el título de Listaseki', rangoDe(0).n === 'Discípulo' && rangoDe(ENCARGOS.length).n === 'El que echa las cuentas' && rangoDe(7).n === 'Chūden' && rangoDe(12).n === 'Kaiden');
+  di('los ' + HUEVOS.length + ' hallazgos tienen su frase', HUEVOS.every(h => HUEVO_DICE[h]));
+  d.innerHTML = li.join('');
+  pintaEncargo();
+});
+
+/* ── EL VESTIDO DE LAS SALAS y LA APERTURA ────────────────────────────── */
+Object.keys(SALAS).forEach(k => {
+  const pan = $(SALAS[k]), [nom, lema] = LEMAS[k];
+  const rot = document.createElement('div'); rot.className = 'salaRot';
+  rot.innerHTML = '<b>' + nom + '</b><span>' + lema + '</span>'; pan.insertBefore(rot, pan.firstChild);
+});
+{
+  const d = leeTurno();
+  if(d){
+    enc = d.enc; d.hechos.forEach(i => { if(i >= 0 && i < ENCARGOS.length) hechos.add(i); });
+    (d.huevos || []).forEach(h => { if(HUEVO_DICE[h]) huevos.add(h); });
+    const t = d.taller || {}; taller.ac = t.ac|0; taller.racha = t.racha|0; taller.mejor = t.mejor|0;
+    if(d.aj) Object.keys(AJ).forEach(k => { if(d.aj[k] !== undefined) AJ[k] = d.aj[k]; });
+    if(d.nombre) $('selloNombre').value = d.nombre;
+    t0 = d.t0 || Date.now();
+    ultimoRango = rangoDe(hechos.size).n;
+  }
+  aplicaAjustes();
+  pintaEncargo();
+  armaQuieto();
+  document.addEventListener('pointerdown', () => Ruido.despierta(), {once:true});
+}
+
+</script>
+</body></html>
