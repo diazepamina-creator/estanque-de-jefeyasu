@@ -90,24 +90,73 @@ body{margin:0;color:var(--tinta);background:var(--fondo);
 .olas{height:22px;margin:0 -14px;background:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='48' height='22'><g fill='none' stroke='%237FA3CC' stroke-width='1.3'><path d='M0 22 a24 24 0 0 1 48 0'/><path d='M6 22 a18 18 0 0 1 36 0'/><path d='M12 22 a12 12 0 0 1 24 0'/><path d='M18 22 a6 6 0 0 1 12 0'/><path d='M-24 11 a24 24 0 0 1 48 0'/><path d='M-18 11 a18 18 0 0 1 36 0'/><path d='M-12 11 a12 12 0 0 1 24 0'/><path d='M24 11 a24 24 0 0 1 48 0'/><path d='M30 11 a18 18 0 0 1 36 0'/><path d='M36 11 a12 12 0 0 1 24 0'/></g></svg>") repeat-x left top / 48px 22px}
 [data-tema="papel"] .olas{background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='48' height='22'><g fill='none' stroke='%232E4A6B' stroke-width='1.3'><path d='M0 22 a24 24 0 0 1 48 0'/><path d='M6 22 a18 18 0 0 1 36 0'/><path d='M12 22 a12 12 0 0 1 24 0'/><path d='M18 22 a6 6 0 0 1 12 0'/><path d='M-24 11 a24 24 0 0 1 48 0'/><path d='M-18 11 a18 18 0 0 1 36 0'/><path d='M-12 11 a12 12 0 0 1 24 0'/><path d='M24 11 a24 24 0 0 1 48 0'/><path d='M30 11 a18 18 0 0 1 36 0'/><path d='M36 11 a12 12 0 0 1 24 0'/></g></svg>")}
 
+/* ── LOS BLOQUES ────────────────────────────────────────────────────────
+   Como en la terminal J&L: cada cosa es una caja con su borde, y dentro de
+   una caja puede haber otra. El rótulo es un bloque —el sello, el título,
+   el reloj de la sesión y la regleta—, la franja es otro, y el encargo
+   otro con el diálogo metido dentro.                                    */
+.rotulo{padding:12px 13px 9px;margin-top:12px}
+.rotulo .cabeza{display:flex;align-items:center;gap:11px;flex-wrap:nowrap}
+.rotulo .cabeza > div{min-width:0}
+.sello35{font-family:'Space Mono',monospace;font-weight:700;font-size:14px;letter-spacing:.5px;
+  color:var(--acentoT);background:linear-gradient(180deg,var(--acento),var(--acentoO));
+  border-radius:8px;padding:8px 9px;box-shadow:0 0 14px rgba(224,106,80,.28);flex:0 0 auto}
+.reloj{font-family:'Space Mono',monospace;font-size:12px;letter-spacing:2px;color:var(--kin);
+  margin:4px 0 0;opacity:.85;font-variant-numeric:tabular-nums}
+.ver{font-family:'Shippori Mincho',serif;font-size:12px;letter-spacing:1px;
+  text-transform:uppercase;color:var(--tenue);opacity:.8}
 header .cabeza{display:flex;align-items:flex-end;gap:12px;flex-wrap:wrap;margin-top:14px}
-h1{font-family:'Shippori Mincho',serif;font-weight:700;font-size:33px;letter-spacing:.2px;margin:0;color:var(--acento);line-height:1.05}
+h1{font-family:'Shippori Mincho',serif;font-weight:700;font-size:27px;letter-spacing:.2px;margin:0;color:var(--acento);line-height:1.05}
 header .sub{font-family:'Space Mono',monospace;font-size:10.5px;letter-spacing:2px;text-transform:uppercase;color:var(--tenue);margin:4px 0 0}
-/* LAS TABLILLAS: una por cuenta hecha, colgadas en la pared del templo. */
-.tablillas{margin-left:auto;display:flex;align-items:center;gap:8px;font-family:'Space Mono',monospace;font-size:12px;letter-spacing:1px;color:var(--tenue);
-  border:1px solid var(--linea);border-radius:20px;padding:4px 12px;transition:border-color .3s, box-shadow .3s}
-.tablillas b{color:var(--acento);font-weight:400;font-variant-numeric:tabular-nums}
-.tablillas svg{width:22px;height:16px}
-.tablillas.brilla{border-color:var(--kin);box-shadow:0 0 18px var(--kin)}
-.barra{display:flex;gap:2px 14px;flex-wrap:wrap;margin:10px 0 0;font-family:'Shippori Mincho',serif;font-size:18px;letter-spacing:.3px}
-.barra a,.barra button{font:inherit;color:var(--tenue);background:none;border:0;padding:4px 0;cursor:pointer;text-decoration:none}
-.barra a:hover,.barra button:hover,.barra button[aria-pressed="true"]{color:var(--acento)}
-.barra a:focus-visible,.barra button:focus-visible{outline:2px solid var(--kin);outline-offset:2px}
+/* con el sello al lado, el subtítulo no cabe en una línea en un móvil
+   estrecho, y partido en dos queda peor que apretado */
+@media (max-width:470px){ header .sub{font-size:9.5px;letter-spacing:1.1px} }
+/* LAS TABLILLAS: una por cuenta hecha. Ya no cuelgan aparte en la
+   cabecera: van dentro de la franja, que es el sitio donde se mira cómo
+   se va. */
+.franja .tabl b{color:var(--kin);font-weight:400;font-variant-numeric:tabular-nums}
+.franja.brilla{border-color:var(--kin);box-shadow:0 0 18px var(--kin)}
+/* ── LA REGLETA ─────────────────────────────────────────────────────────
+   La barra de acciones de la casa, la misma en todas las aplicaciones.
+   SEIS ACCIONES Y NO MÁS, en este orden: Guía, Glosario, Taller, Ajustes,
+   Tablilla, Aula. Lo demás —volver a Materiales, el modo papel, el texto,
+   el movimiento, empezar de cero— vive DENTRO de Ajustes, que es donde se
+   busca; y las salas cuelgan de la franja, que se toca y se abre.
+
+   Sin cajas ni fondos: seis botones con borde son lo primero que ve el
+   alumno al abrir, y pesan más que la aplicación. En letra pequeña están
+   para quien los busca y callados para quien no.                        */
+.regleta{padding-top:9px;margin-top:8px;border-top:1px solid var(--linea)}
+.regleta .acciones{display:flex;width:100%;justify-content:space-between;gap:6px}
+.regleta .acciones button{font-family:'Shippori Mincho',serif;font-size:13.5px;letter-spacing:.8px;
+  color:var(--tenue);background:none;border:0;border-radius:0;padding:3px 0;min-height:0;
+  cursor:pointer;border-bottom:1px solid transparent;white-space:nowrap}
+.regleta .acciones button:hover,.regleta .acciones button:focus-visible{color:var(--tinta);border-bottom-color:var(--acento);outline:none}
+.regleta .acciones button[aria-pressed="true"]{color:var(--acento);border-bottom-color:var(--acento)}
+@media (max-width:440px){
+  .regleta .acciones{gap:4px}
+  .regleta .acciones button{font-size:12px;letter-spacing:0}
+}
 /* LA FRANJA DEL GRADO, con su kamon */
-.franja{margin:12px 0 0;padding:8px 12px;border:1px solid var(--linea);border-radius:10px;background:var(--panel);display:grid;grid-template-columns:40px 1fr;gap:6px 10px;align-items:center}
-.franja .kamon{grid-row:1/3;width:38px;height:38px}
+/* LA FRANJA es un botón: dice dónde estás y abre dónde puedes ir. Antes
+   había tres sitios diciendo lo mismo —las tablillas colgadas arriba, el
+   rango aquí y la barra—; ahora es uno. Y la barra de progreso va sola en
+   su fila, a todo lo ancho: compartiendo fila con el texto quedaba un
+   escalón, cada cosa centrada a su propia altura. */
+.franja{width:100%;text-align:left;font:inherit;color:inherit;cursor:pointer;
+  margin:11px 0 0;padding:8px 11px;border:1px solid var(--linea);border-radius:11px;background:var(--panel);
+  display:grid;grid-template-columns:40px 1fr;gap:4px 10px;align-items:center}
+.franja:hover{border-color:var(--acento)}
+.franja:focus-visible{outline:2px solid var(--kin);outline-offset:2px}
+.franja[aria-expanded="true"]{border-color:var(--acento)}
+.franja .ir{font-family:'Space Mono',monospace;font-size:10px;letter-spacing:1.4px;
+  text-transform:uppercase;color:var(--tenue)}
+.franja:hover .ir{color:var(--acento)}
+.franja .tabl{color:var(--kin)}
+.franja .barraR{display:block;grid-column:2}
+.franja .kamon{grid-row:1/4;width:38px;height:38px;align-self:center}
 .franja .kamon svg{width:100%;height:100%;display:block}
-.franja .linea1{display:flex;justify-content:space-between;align-items:baseline;gap:10px;flex-wrap:wrap}
+.franja .linea1{display:flex;justify-content:space-between;align-items:baseline;gap:10px;flex-wrap:wrap;grid-column:2}
 .franja .rango{font-family:'Shippori Mincho',serif;font-size:19px;font-weight:600;color:var(--acento);letter-spacing:.2px}
 .franja .rango small{font-family:'Space Mono',monospace;font-size:10px;letter-spacing:1.4px;text-transform:uppercase;color:var(--tenue);margin-left:8px;font-weight:400}
 .franja .cuenta{font-family:'Space Mono',monospace;font-size:10.5px;letter-spacing:1.2px;text-transform:uppercase;color:var(--tenue)}
@@ -145,8 +194,18 @@ button:focus-visible{outline:2px solid var(--kin);outline-offset:2px}
 .lectura .murmullo{display:block;margin-top:6px;font-family:'Shippori Mincho',serif;font-size:15px;color:var(--tenue)}
 
 /* EL ENCARGO Y EL INFORME */
-.encargo{padding-left:70px;min-height:82px}
-.cara{position:absolute;left:12px;top:11px;width:46px;height:48px}
+/* ── LOS DIÁLOGOS, CAJAS DENTRO DE CAJAS ────────────────────────────────
+   Lo de la terminal J&L: quien habla no flota sobre el panel, habla desde
+   una caja suya dentro del panel, con su retrato dentro. Encima, el rótulo
+   del bloque: qué es y por dónde va.                                    */
+.encargo{position:relative}
+.cabEnc{display:flex;justify-content:space-between;align-items:baseline;gap:10px;margin:-2px 0 9px;
+  font-family:'Space Mono',monospace;font-size:10px;letter-spacing:1.6px;text-transform:uppercase;color:var(--tenue)}
+.dialogo{display:grid;grid-template-columns:50px 1fr;gap:3px 11px;align-items:start;
+  background:var(--fondo);border:1px solid var(--linea);border-radius:10px;padding:10px 12px}
+.dialogo .cara{grid-row:1/3;width:50px;align-self:center}
+/* Orizuru no habla: se asoma por el borde del panel, fuera de la caja */
+.cara{position:relative;width:46px;height:48px}
 .cara svg{width:100%;height:100%;display:block}
 .cara.toca{cursor:pointer}
 /* Orizuru vive en el borde del informe, a la derecha, y se despliega al tocarla */
@@ -164,7 +223,7 @@ button:focus-visible{outline:2px solid var(--kin);outline-offset:2px}
   background:var(--panel);color:var(--tinta);cursor:pointer;line-height:1.4}
 .op[aria-pressed="true"]{border-color:var(--acento);background:var(--panel2)}
 .op.fallada{border-color:var(--mal);opacity:.65}
-.paso{font-family:'Space Mono',monospace;font-size:10.5px;letter-spacing:1.4px;text-transform:uppercase;color:var(--tenue);margin-left:auto}
+.paso{font-family:'Space Mono',monospace;font-size:10.5px;letter-spacing:1.4px;text-transform:uppercase;color:var(--tenue)}
 
 /* LOS ASOMOS, el sistema de la casa */
 .asomo{position:absolute;pointer-events:none;z-index:4;opacity:0;overflow:hidden;
@@ -240,11 +299,37 @@ body.imprimiendo > *:not(.hoja){display:none !important}
 @media print{ .hoja{display:block} }
 
 /* LOS MODALES */
-.modal{position:fixed;inset:0;background:rgba(0,0,0,.6);display:flex;align-items:center;justify-content:center;z-index:50;padding:14px}
-.modal .caja{background:linear-gradient(180deg,var(--panel),var(--panel2));border:1px solid var(--linea);border-radius:14px;padding:18px 18px 14px;
-  width:min(520px,100%);max-height:92vh;overflow:auto;box-shadow:0 20px 50px rgba(0,0,0,.6)}
+/* ── EL POP-UP ──────────────────────────────────────────────────────────
+   El de la terminal J&L, que es el que mejor se lee, y ahora el de toda la
+   casa. Lo que abre la regleta no empuja la página hacia abajo: se pone
+   encima, en un papel con su cabeza, su cuerpo y un PIE donde está la
+   salida. Abajo, siempre en el mismo sitio, «Volver al estanque».
+
+   Tres maneras de salir: el botón del pie, la tecla Escape y tocar fuera
+   del papel. El foco entra en la caja al abrirse y vuelve al botón que la
+   abrió al cerrarse, y el tabulador no se escapa mientras está puesta.  */
+.modal{position:fixed;inset:0;background:rgba(0,0,0,.74);
+  -webkit-backdrop-filter:blur(3px);backdrop-filter:blur(3px);
+  display:grid;place-items:center;padding:16px;z-index:60;overflow:auto}
+.modal .caja{position:relative;background:linear-gradient(180deg,var(--panel),var(--panel2));
+  border:1px solid var(--linea);border-radius:16px;padding:18px 20px 16px;
+  width:min(580px,100%);max-height:92vh;overflow:auto;box-shadow:0 24px 60px rgba(0,0,0,.6)}
 .modal h2{font-family:'Shippori Mincho',serif;font-weight:700;font-size:24px;color:var(--acento);margin:0 0 2px;letter-spacing:.2px}
 .modal .sub{font-family:'Space Mono',monospace;font-size:10.5px;letter-spacing:1.6px;text-transform:uppercase;color:var(--tenue);margin:0 0 14px}
+.caja > .cab{display:flex;align-items:center;gap:12px;border-bottom:1px dashed var(--linea);
+  padding-bottom:11px;margin-bottom:13px}
+.caja > .cab i{flex:0 0 13px;width:13px;height:13px;border-radius:50%;background:var(--acento)}
+.caja > .cab b{display:block;font-family:'Shippori Mincho',serif;font-weight:700;font-size:21px;
+  letter-spacing:.2px;color:var(--acento);line-height:1.15}
+.caja > .cab small{display:block;font-family:'Shippori Mincho',serif;font-size:14.5px;color:var(--tenue)}
+.caja .pie{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-top:15px;
+  border-top:1px dashed var(--linea);padding-top:13px}
+.caja .pie .etq{min-width:0}
+a.b{font-family:'Shippori Mincho',serif;font-size:16px;padding:7px 12px;border-radius:9px;
+  border:1px solid var(--linea);background:var(--panel);color:var(--tinta);
+  display:inline-flex;align-items:center;text-decoration:none;cursor:pointer}
+a.b:hover{border-color:var(--acento)}
+@media (max-width:440px){ .modal{padding:8px} .modal .caja{padding:15px 14px 13px} }
 .aj{display:grid;grid-template-columns:auto 1fr;gap:10px 14px;align-items:center}
 .aj .etq{min-width:0}
 .aj .ops2{display:flex;flex-wrap:wrap;gap:6px}
@@ -268,6 +353,25 @@ body.imprimiendo > *:not(.hoja){display:none !important}
 .tourGlobo button{font-family:'Shippori Mincho',serif;font-size:16px;padding:5px 12px;border-radius:8px;
   border:1px solid var(--linea);background:var(--panel);color:var(--tinta);cursor:pointer}
 .tourGlobo button.pri{background:var(--acento);border-color:var(--acento);color:var(--acentoT)}
+
+/* ── LA PUERTA ──────────────────────────────────────────────────────────
+   El estanque cerrado hasta que llegue su lección. Esto no guarda un
+   secreto —el código de este archivo se lee con dos clics—: guarda el
+   ritmo, para que nadie se gaste las seis salas la semana antes de que
+   toquen. La llave la dice el profesor, y se recuerda en este navegador
+   junto con las de las demás aplicaciones: se pide una vez.            */
+.modal.puerta{z-index:10000}
+.puerta .etq{display:block;font-family:'Space Mono',monospace;font-size:10.5px;
+  letter-spacing:1.5px;text-transform:uppercase;color:var(--tenue);margin:0 0 7px;min-width:0}
+.puerta input{width:100%;background:var(--fondo);border:1px solid var(--linea);
+  border-radius:9px;padding:11px 12px;color:var(--tinta);
+  font-family:'Space Mono',monospace;font-size:14px;letter-spacing:1px}
+.puerta input:focus{outline:none;border-color:var(--acento)}
+.puerta .pista{font-size:13.5px;color:var(--tenue);margin:11px 0 0;line-height:1.5}
+.puerta .avisoLl{font-family:'Space Mono',monospace;font-size:11.5px;letter-spacing:1px;
+  min-height:17px;margin:9px 0 0;color:var(--tenue)}
+.puerta .avisoLl.bien{color:var(--bien)}
+.puerta .avisoLl.mal{color:var(--mal)}
 
 /* EL ARRANQUE: el estanque al amanecer. Salen las cabezas, se aclara el agua y se cuentan las patas. */
 .boot{position:fixed;inset:0;z-index:9999;background:#1A1719;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;
@@ -301,7 +405,7 @@ footer.pie svg text{fill:currentColor;font-family:'Space Mono',monospace;font-si
   *{animation-duration:.001ms !important;transition-duration:.001ms !important}
   .asomo.arriba.mira,.asomo.arriba.mira.falla{transform:translateY(calc(-64% + 2px))}
 }
-@media (max-width:520px){ h1{font-size:27px} .encargo{padding-left:64px} .etq{min-width:70px} }
+@media (max-width:520px){ h1{font-size:24px} .etq{min-width:70px} }
 
 /* ── EL MODO AULA ───────────────────────────────────────────────────────
    Para la pizarra digital. Dos cosas, y ninguna más: todo un tercio más
@@ -324,11 +428,29 @@ footer.pie svg text{fill:currentColor;font-family:'Space Mono',monospace;font-si
   body[data-aula="si"] .colDer > .panel:first-child{margin-top:0}
   body[data-aula="si"] .colIzq > footer.pie{margin-top:18px}
 }
+/* en la pizarra la regleta no se estira de lado a lado: seis palabras
+   repartidas en metro y medio de pantalla se leen como seis cosas sueltas */
+body[data-aula="si"] .regleta .acciones{justify-content:flex-start;gap:46px;width:auto}
 .aulaRejilla,.colIzq,.colDer{display:contents}
-.barra button.aula[aria-pressed="true"]{color:var(--acento)}
+.regleta .acciones button.aula[aria-pressed="true"]{color:var(--acento)}
 </style>
 </head><body>
 
+<!-- ═══ LA PUERTA ═══ -->
+<div class="modal puerta" id="mPuerta" hidden>
+ <div class="caja" role="dialog" aria-modal="true" aria-labelledby="puTit">
+  <div class="cab"><i aria-hidden="true"></i><div><b id="puTit">La puerta del estanque</b><small>esta lección aún no toca: hace falta la llave</small></div></div>
+  <label class="etq" for="puLlave">La llave</label>
+  <input id="puLlave" type="text" autocomplete="off" autocapitalize="off"
+    autocorrect="off" spellcheck="false" placeholder="una palabra">
+  <p class="pista">La dice el profesor cuando toca esta lección. También vale
+  la tablilla del comité de reclamaciones, si la has terminado: pégala aquí
+  entera. Se pide una sola vez: este navegador se acuerda.</p>
+  <p class="avisoLl" id="puAviso" role="status"></p>
+  <div class="pie"><button class="b ok" id="puAbrir">Abrir</button>
+    <a class="b" href="https://diazepamina-creator.github.io/">Volver a la casa</a></div>
+ </div>
+</div>
 <div class="boot" id="boot" role="status" aria-live="polite">
   <div class="tit">El estanque de Jefeyasu</div>
   <div class="bootEscena" id="bootEscena">
@@ -340,60 +462,72 @@ footer.pie svg text{fill:currentColor;font-family:'Space Mono',monospace;font-si
 
 <header>
   <div class="olas" aria-hidden="true"></div>
+  <div class="panel rotulo">
   <div class="cabeza">
+    <span class="sello35" aria-hidden="true">(3, 5)</span>
     <div>
       <h1>El estanque de Jefeyasu</h1>
       <p class="sub">Sistemas de ecuaciones · el estanque</p>
+      <p class="reloj"><span id="reloj" aria-label="Tiempo en el estanque">0:00:00</span><span class="ver"> · prototipo v0.3</span></p>
     </div>
-    <div class="tablillas" id="tablillas" aria-label="Tablillas colgadas"><svg viewBox="0 0 44 32" aria-hidden="true"><path d="M22 2 V8" stroke="currentColor" stroke-width="2"/><rect x="8" y="8" width="28" height="20" rx="2" fill="none" stroke="currentColor" stroke-width="2"/><path d="M14 15 H30 M14 21 H26" stroke="currentColor" stroke-width="1.6"/></svg><span>tablillas</span><b id="tablillasT">0</b></div>
   </div>
-  <nav class="barra" id="barra">
-    <a href="https://diazepamina-creator.github.io/linea.html">← Materiales</a>
-    <button id="bGuia">Guía</button>
-    <button id="bTaller" aria-pressed="false">Taller</button>
-    <button id="bIndice" aria-pressed="false">Salas</button>
-    <button id="bGlosario" aria-pressed="false">Glosario</button>
-    <button id="bDeudas" aria-pressed="false">Deudas</button>
-    <span style="flex:1"></span>
-    <button id="bAula" class="aula" aria-pressed="false">Aula</button>
-    <button id="bSello">La tablilla</button>
-    <button id="bAjustes">Ajustes</button>
+  <nav class="regleta" id="barra" aria-label="Acciones">
+    <span class="acciones">
+      <button id="bGuia">Guía</button>
+      <button id="bGlosario" aria-pressed="false">Glosario</button>
+      <button id="bTaller" aria-pressed="false">Taller</button>
+      <button id="bAjustes" aria-pressed="false">Ajustes</button>
+      <button id="bSello" aria-pressed="false">Tablilla</button>
+      <button id="bAula" class="aula" aria-pressed="false">Aula</button>
+    </span>
   </nav>
-  <div class="franja" id="franja">
-    <div class="kamon" id="rangoKamon" aria-hidden="true"></div>
-    <div class="linea1">
-      <span class="rango"><span id="rangoNom">Discípulo</span><small id="rangoSig"></small></span>
-      <span class="cuenta" id="rangoCuenta"></span>
-    </div>
-    <div class="barraR"><i id="rangoBarra"></i></div>
   </div>
+  <!-- La franja es un botón: dice dónde estás y abre dónde puedes ir. -->
+  <button class="franja" id="franja" aria-expanded="false" aria-controls="mIndice"
+          aria-label="Tu rango y tus tablillas. Abre el índice de las salas">
+    <span class="kamon" id="rangoKamon" aria-hidden="true"></span>
+    <span class="linea1">
+      <span class="rango"><span id="rangoNom">Discípulo</span><small id="rangoSig"></small></span>
+      <span class="ir">las salas →</span>
+    </span>
+    <span class="linea1">
+      <span class="cuenta"><span class="tabl" id="tablillas"><b id="tablillasT">0</b> tablillas</span> · <span id="rangoCuenta"></span></span>
+    </span>
+    <span class="barraR"><i id="rangoBarra"></i></span>
+  </button>
 </header>
 
 <div class="panel encargo" id="pEncargo">
   <div class="asomo lado" id="asomoLado" aria-hidden="true"></div>
   <div class="globo" id="globoLado" aria-hidden="true"></div>
   <div class="asomo entero" id="asomoEntero" aria-hidden="true"></div>
-  <div class="cara" id="caraJefeyasu"></div>
-  <div class="quien">Jefeyasu, señor del estanque</div>
-  <p class="encTxt" id="encTxt"></p>
+  <div class="cabEnc"><span>el encargo</span><span id="cual"></span></div>
+  <div class="dialogo">
+    <div class="cara" id="caraJefeyasu"></div>
+    <div class="quien">Jefeyasu, señor del estanque</div>
+    <p class="encTxt" id="encTxt"></p>
+  </div>
   <div class="ops" id="ops" hidden></div>
   <div class="fila">
     <button class="b" id="atras" aria-label="Encargo anterior">◀</button>
     <button class="b ok" id="comprobar">Comprobar</button>
-    <span class="paso" id="cual"></span>
   </div>
 </div>
 <div class="panel informe encargo" id="informe" hidden>
   <div class="asomo arriba" id="asomoArriba" aria-hidden="true"></div>
-  <div class="cara toca" id="caraListaseki" title="Listaseki"></div>
   <div class="cara grulla toca" id="orizuru" title="Orizuru"></div>
-  <div class="quien">Listaseki, el que echa las cuentas</div>
-  <p class="encTxt" id="infTxt"></p>
+  <div class="cabEnc"><span>el ábaco</span></div>
+  <div class="dialogo">
+    <div class="cara toca" id="caraListaseki" title="Listaseki"></div>
+    <div class="quien">Listaseki, el que echa las cuentas</div>
+    <p class="encTxt" id="infTxt"></p>
+  </div>
 </div>
 
 <!-- ═══ EL TALLER ═══ -->
-<div class="panel taller" id="pTaller" hidden>
-  <div class="salaRot"><b>El taller</b><span>práctica libre, y a la sala si hace falta</span></div>
+<div class="modal" id="mTaller" hidden>
+ <div class="caja taller" role="dialog" aria-modal="true" aria-labelledby="tallerTit">
+  <div class="cab"><i aria-hidden="true"></i><div><b id="tallerTit">El taller</b><small>práctica libre, y a la sala si hace falta</small></div></div>
   <div class="tipos" id="tipos"></div>
   <div class="ejer" id="ejer"></div>
   <div class="fila" style="margin-top:6px" id="filaSiNo" hidden>
@@ -413,18 +547,26 @@ footer.pie svg text{fill:currentColor;font-family:'Space Mono',monospace;font-si
     <button class="b" id="hojaDiez">Imprimir una hoja de diez</button>
     <span class="etq" style="min-width:0">con la clave en hoja aparte</span>
   </div>
+  <div class="pie"><button class="b ok" data-cierra>Volver al estanque</button></div>
+ </div>
 </div>
 <div class="hoja" id="hoja"></div>
 
 <!-- ═══ EL GLOSARIO ═══ -->
-<div class="panel" id="pGlosario" hidden>
-  <div class="salaRot"><b>El glosario</b><span>las palabras del estanque y de las cuentas</span></div>
+<div class="modal" id="mGlosario" hidden>
+ <div class="caja" role="dialog" aria-modal="true" aria-labelledby="glTit">
+  <div class="cab"><i aria-hidden="true"></i><div><b id="glTit">El glosario</b><small>las palabras del estanque y de las cuentas</small></div></div>
   <div id="glosas"></div>
+  <div class="pie"><button class="b ok" data-cierra>Volver al estanque</button>
+    <button class="b" id="bDeudas">Las deudas</button>
+    <span class="etq">lo que no se demuestra en las salas</span></div>
+ </div>
 </div>
 
 <!-- ═══ LAS DEUDAS ═══ -->
-<div class="panel" id="pDeudas" hidden>
-  <div class="salaRot"><b>Las deudas</b><span>lo que se demuestra aquí, lo que se dice y lo que se demuestra en otro sitio</span></div>
+<div class="modal" id="mDeudas" hidden>
+ <div class="caja" role="dialog" aria-modal="true" aria-labelledby="deTit">
+  <div class="cab"><i aria-hidden="true"></i><div><b id="deTit">Las deudas</b><small>lo que se demuestra aquí, lo que se dice y lo que se demuestra en otro sitio</small></div></div>
   <p class="aviso" style="margin:0 0 10px">Tres cosas de este estanque no se demuestran en las salas. Una se demuestra aquí en cuatro líneas; las otras dos son
   verdad y se demuestran más adelante, y se dice dónde.</p>
   <details class="deuda">
@@ -450,11 +592,15 @@ footer.pie svg text{fill:currentColor;font-family:'Space Mono',monospace;font-si
     común. Si el sistema tiene una sola pareja, cualquier camino que no la pierda llega a ella. Se dice así y se enseña con
     el encargo doce, que lo pregunta.</p>
   </details>
+  <div class="pie"><button class="b ok" data-cierra>Volver al estanque</button>
+    <button class="b" id="deAlGlosario">Volver al glosario</button></div>
+ </div>
 </div>
 
 <!-- ═══ SEKI · oculta ═══ -->
-<div class="panel vetula" id="pSeki" hidden>
-  <div class="salaRot"><b>Seki</b><span>lo que no está en el índice</span></div>
+<div class="modal" id="mSeki" hidden>
+ <div class="caja vetula" role="dialog" aria-modal="true" aria-labelledby="sekiTit">
+  <div class="cab"><i aria-hidden="true"></i><div><b id="sekiTit">Seki</b><small>lo que no está en el índice</small></div></div>
   <p class="latin">Las cuentas en aspa: arriba por abajo, menos abajo por arriba.</p>
   <p class="trad">Lo que Seki Takakazu escribió en 1683, diez años antes que Leibniz y setenta antes que Cramer.</p>
   <p><b>Seki Takakazu</b>, del que sale Listaseki, fue el matemático del Japón de Edo: hijo de samurái, contable de un señor, y
@@ -464,14 +610,16 @@ footer.pie svg text{fill:currentColor;font-family:'Space Mono',monospace;font-si
   <div class="escena"><svg id="svgSeki" viewBox="0 0 540 290" role="img" aria-label="La cuenta cruzada de Seki sobre el sistema actual"></svg></div>
   <p class="lectura" id="lecSeki"></p>
   <p class="aviso">Esta sala se ha abierto porque alguien ha escrito el nombre de Seki, o ha tocado tres veces el ábaco de Listaseki. No sale en el índice.</p>
+  <div class="pie"><button class="b ok" data-cierra>Volver al estanque</button></div>
+ </div>
 </div>
 
 <!-- ═══ EL ÍNDICE ═══ -->
-<div class="panel" id="pIndice" hidden>
-  <div class="salaRot"><b>Índice</b><span>las salas, sueltas</span></div>
+<div class="modal" id="mIndice" hidden>
+ <div class="caja indice" role="dialog" aria-modal="true" aria-labelledby="ixTit">
+  <div class="cab"><i aria-hidden="true"></i><div><b id="ixTit">El índice del estanque</b><small>las seis salas sueltas y los quince encargos</small></div></div>
   <div class="fila"><span class="etq">salas</span><span id="ixSalas"></span></div>
   <div class="fila">
-    <button class="b" id="ixCerrar">Volver al encargo</button>
     <button class="b" id="ixTodo">Marcar todo hecho</button>
     <button class="b" id="ixCero">Empezar de cero</button>
   </div>
@@ -482,6 +630,8 @@ footer.pie svg text{fill:currentColor;font-family:'Space Mono',monospace;font-si
     <span class="etq" style="min-width:0">prueba cada cuenta contra sí misma</span>
   </div>
   <div id="diag" hidden></div>
+  <div class="pie"><button class="b ok" data-cierra>Volver al estanque</button></div>
+ </div>
 </div>
 
 <!-- ═══ SALA 1 · EL ESTANQUE ═══ -->
@@ -542,10 +692,9 @@ footer.pie svg text{fill:currentColor;font-family:'Space Mono',monospace;font-si
     <h2 id="ajTit">Ajustes</h2>
     <p class="sub">Para el aula y para cada aparato</p>
     <div class="aj" id="aj"></div>
-    <div class="fila" style="margin-top:14px">
-      <button class="b" id="ajCerrar">Cerrar</button>
-      <span class="etq" style="min-width:0">se guardan en este aparato</span>
-    </div>
+    <div class="pie"><button class="b ok" data-cierra>Volver al estanque</button>
+      <a class="b" href="https://diazepamina-creator.github.io/">← Volver a Materiales</a>
+      <span class="etq">se guardan en este aparato</span></div>
   </div>
 </div>
 <div class="modal" id="mSello" hidden>
@@ -554,11 +703,9 @@ footer.pie svg text{fill:currentColor;font-family:'Space Mono',monospace;font-si
     <p class="sub">Lo hecho en esta sesión, para colgar donde haga falta</p>
     <input class="nombre" id="selloNombre" placeholder="Nombre del discípulo" autocomplete="off" aria-label="Nombre">
     <div class="albaran" id="selloTexto"></div>
-    <div class="fila" style="margin-top:12px">
-      <button class="b ok" id="selloCopiar">Copiar</button>
-      <button class="b" id="selloCerrar">Cerrar</button>
-      <span class="etq" id="selloAviso" style="min-width:0"></span>
-    </div>
+    <div class="pie"><button class="b ok" data-cierra>Volver al estanque</button>
+      <button class="b" id="selloCopiar">Copiar</button>
+      <span class="etq" id="selloAviso"></span></div>
   </div>
 </div>
 <div class="tourCapa" id="tourCapa" hidden>
@@ -1512,6 +1659,19 @@ let ultimoRango = 'Discípulo';
 const GUARDADO = 'estanque.turno.v1';
 const CADUCA = 4*60*60*1000;
 let t0 = Date.now();
+
+/* EL RELOJ DE LA SESIÓN, en el rótulo: cuánto lleva abierto el estanque.
+   Es de la terminal, y en clase sirve para lo de siempre: saber cuánto se
+   ha ido en una cosa. */
+{
+  const dosCifras = n => String(n).padStart(2, '0');
+  const pinta = () => {
+    const seg = Math.max(0, Math.floor((Date.now() - t0) / 1000));
+    $('reloj').textContent = Math.floor(seg / 3600) + ':' + dosCifras(Math.floor(seg / 60) % 60) + ':' + dosCifras(seg % 60);
+  };
+  pinta(); setInterval(pinta, 1000);
+}
+
 function guardaTurno(){
   try{
     localStorage.setItem(GUARDADO, JSON.stringify({
@@ -1555,7 +1715,7 @@ function pintaEncargo(){
   elegida = hecho && e.ops ? e.ops.findIndex(o => o.ok) : null;
   pintaOpciones();
   $('encTxt').innerHTML = (ultimo && hecho) ? CIERRE : e.t;
-  $('cual').textContent = (ultimo && hecho) ? 'estanque cerrado' : 'encargo ' + (enc + 1) + ' de ' + ENCARGOS.length;
+  $('cual').textContent = (ultimo && hecho) ? 'estanque cerrado' : (enc + 1) + ' de ' + ENCARGOS.length;
   $('atras').disabled = enc === 0;
   $('comprobar').textContent = !hecho ? 'Comprobar' : (ultimo ? 'Empezar de nuevo' : 'Siguiente encargo →');
   const inf = $('informe');
@@ -1614,7 +1774,7 @@ function vuela(){
 }
 /* la lluvia de pétalos, al llegar a kaiden y al cerrar */
 function lluvia(){
-  const p = $('pEncargo'); $('tablillas').classList.add('brilla'); setTimeout(() => $('tablillas').classList.remove('brilla'), 2000);
+  const p = $('pEncargo'); $('franja').classList.add('brilla'); setTimeout(() => $('franja').classList.remove('brilla'), 2000);
   for(let i = 0; i < 36; i++){
     const g = document.createElement('i'); g.className = 'petalo';
     g.style.left = (Math.random() * 100) + '%'; g.style.top = '0'; g.style.animationDuration = (1.8 + Math.random() * 1.6) + 's'; g.style.animationDelay = (Math.random() * 1.1) + 's';
@@ -1719,17 +1879,60 @@ function pintaIndice(){
     l.appendChild(b);
   });
 }
-const PANELES = {bIndice:'pIndice', bGlosario:'pGlosario', bDeudas:'pDeudas'};
-function cierraPaneles(){
-  Object.entries(PANELES).forEach(([b, p]) => { $(p).hidden = true; $(b).setAttribute('aria-pressed', 'false'); });
-  $('pSeki').hidden = true;
+/* ── EL GESTOR DE LOS POP-UPS ───────────────────────────────────────────
+   Uno abierto como mucho, y siempre con las mismas tres salidas: el botón
+   del pie, Escape y tocar fuera del papel. Al abrirse, el foco entra en la
+   caja; al cerrarse, vuelve al botón que la abrió, que es donde estaba el
+   dedo. Los papeles que no cuelgan de la regleta —las deudas, que salen
+   del glosario, y Seki, que sale de los hallazgos— se abren con el mismo
+   gesto y vuelven por el mismo sitio.                                    */
+const MODALES = {franja:'mIndice', bGlosario:'mGlosario', bTaller:'mTaller',
+                 bAjustes:'mAjustes', bSello:'mSello', bDeudas:'mDeudas', sinBoton:'mSeki'};
+let modalAbierto = null;
+function cierraModal(){
+  if(!modalAbierto) return;
+  const boton = modalAbierto;
+  $(MODALES[boton]).hidden = true;
+  modalAbierto = null;
+  if($(boton)) $(boton).setAttribute(boton === 'franja' ? 'aria-expanded' : 'aria-pressed', 'false');
+  if(boton === 'bTaller') entraTaller(false);
+  if($(boton) && $(boton).focus) $(boton).focus();
 }
-Object.entries(PANELES).forEach(([b, p]) => $(b).addEventListener('click', () => {
-  const abre = $(p).hidden; cierraPaneles();
-  if(abre){ $(p).hidden = false; $(b).setAttribute('aria-pressed', 'true'); if(p === 'pIndice') pintaIndice();
-            $(p).scrollIntoView({behavior:'smooth', block:'start'}); }
-}));
-$('ixCerrar').addEventListener('click', () => { cierraPaneles(); pintaEncargo(); scrollTo({top:0, behavior:'smooth'}); });
+function abreModal(boton){
+  if(modalAbierto === boton){ cierraModal(); return; }
+  cierraModal();
+  modalAbierto = boton;
+  const m = $(MODALES[boton]);
+  m.hidden = false;
+  if($(boton)) $(boton).setAttribute(boton === 'franja' ? 'aria-expanded' : 'aria-pressed', 'true');
+  if(boton === 'franja') pintaIndice();
+  if(boton === 'bSello'){ pintaSello(); $('selloAviso').textContent = ''; }
+  if(boton === 'bAjustes') pintaAjustes();
+  if(boton === 'bTaller') entraTaller(true);
+  m.scrollTop = 0;
+  const primero = m.querySelector('button, input');
+  if(primero && primero.focus) primero.focus({preventScroll:true});
+}
+/* `cierraPaneles` se queda con el nombre de siempre: lo llaman la guía, los
+   hallazgos y el taller, y lo que hace ahora es cerrar el papel que haya. */
+function cierraPaneles(){ cierraModal(); }
+['franja', 'bGlosario', 'bTaller', 'bAjustes', 'bSello', 'bDeudas'].forEach(b =>
+  $(b).addEventListener('click', () => abreModal(b)));
+$('deAlGlosario').addEventListener('click', () => abreModal('bGlosario'));
+document.querySelectorAll('[data-cierra]').forEach(b => b.addEventListener('click', cierraModal));
+Object.values(MODALES).forEach(id => $(id).addEventListener('click', e => { if(e.target.id === id) cierraModal(); }));
+addEventListener('keydown', e => { if(e.key === 'Escape' && modalAbierto) cierraModal(); });
+/* el tabulador no se escapa del papel abierto */
+addEventListener('keydown', e => {
+  if(e.key !== 'Tab' || !modalAbierto) return;
+  const caja = $(MODALES[modalAbierto]).querySelector('.caja');
+  const f = [...caja.querySelectorAll('button, input, a, summary, [tabindex]:not([tabindex="-1"])')]
+    .filter(el => !el.disabled && el.offsetParent !== null);
+  if(!f.length) return;
+  const pri = f[0], ult = f[f.length - 1];
+  if(e.shiftKey && document.activeElement === pri){ e.preventDefault(); ult.focus(); }
+  else if(!e.shiftKey && document.activeElement === ult){ e.preventDefault(); pri.focus(); }
+});
 $('ixTodo').addEventListener('click', () => { ENCARGOS.forEach((_, i) => hechos.add(i)); enc = ENCARGOS.length - 1; ultimoRango = rangoDe(hechos.size).n; pintaEncargo(); guardaTurno(); });
 {
   let armado = false, reloj = 0;
@@ -1791,12 +1994,11 @@ function pintaSeki(){
 }
 function abreSeki(por){
   huevo('seki');
-  cierraPaneles(); entraTaller(false); $('mAjustes').hidden = true; $('mSello').hidden = true;
+  cierraModal();
   pintaSeki();
   $('lecSeki').innerHTML = 'La cuenta va sobre el problema que esté puesto en la tablilla: cambiadlo allí y volved, que el aspa se hace sola. ';
-  const p = $('pSeki'); p.hidden = false;
+  modalAbierto = 'sinBoton'; const p = $('mSeki'); p.hidden = false;
   p.querySelector('.aviso').textContent = 'Esta sala se ha abierto por ' + por + '. No sale en el índice.';
-  p.scrollIntoView({behavior:'smooth', block:'start'});
 }
 {
   let tecleado = '';
@@ -1888,14 +2090,13 @@ function corrige(dado){
   else { taller.racha = 0; ver.innerHTML = 'No. La respuesta era <b>' + solTxt(taller.ej) + '</b>. ' + taller.ej.exp; Ruido.mal(); }
   taller.corregido = true; $('verlo').hidden = !taller.ej.pon; pintaTipos(); guardaTurno();
 }
-function verEnSala(){ const e = taller.ej; if(!e || !e.pon) return; e.pon(); const s = e.sala || TIPOS[taller.tipo].sala; muestraSala(s); $(SALAS[s]).scrollIntoView({behavior:'smooth', block:'start'}); }
+function verEnSala(){ const e = taller.ej; if(!e || !e.pon) return; e.pon();
+  const s = e.sala || TIPOS[taller.tipo].sala; cierraModal(); muestraSala(s);
+  $(SALAS[s]).scrollIntoView({behavior:'smooth', block:'start'}); }
 function entraTaller(dentro){
-  taller.enTaller = dentro; $('bTaller').setAttribute('aria-pressed', String(dentro));
-  $('pTaller').hidden = !dentro; $('pEncargo').hidden = dentro; $('informe').hidden = dentro || !hechos.has(enc);
-  cierraPaneles();
-  if(dentro){ pintaTipos(); nuevoEjercicio(); for(const k in SALAS) $(SALAS[k]).hidden = true; } else pintaEncargo();
+  taller.enTaller = dentro;
+  if(dentro){ pintaTipos(); nuevoEjercicio(); }
 }
-$('bTaller').addEventListener('click', () => entraTaller(!taller.enTaller));
 $('corrige').addEventListener('click', () => corrige());
 $('bSi').addEventListener('click', () => corrige('sí'));
 $('bNo').addEventListener('click', () => corrige('no'));
@@ -1917,9 +2118,6 @@ $('hojaDiez').addEventListener('click', () => {
 });
 
 /* ═══ LOS AJUSTES Y LA TABLILLA ═══════════════════════════════════════ */
-$('bAjustes').addEventListener('click', () => { pintaAjustes(); $('mAjustes').hidden = false; });
-$('ajCerrar').addEventListener('click', () => { $('mAjustes').hidden = true; });
-$('mAjustes').addEventListener('click', e => { if(e.target.id === 'mAjustes') $('mAjustes').hidden = true; });
 
 function textoSello(){
   const n = hechos.size, r = rangoDe(n), min = Math.max(1, Math.round((Date.now() - t0) / 60000));
@@ -1938,9 +2136,6 @@ function textoSello(){
     + 'Sello: ' + sello;
 }
 function pintaSello(){ $('selloTexto').innerHTML = textoSello().replace(/</g, '&lt;').replace(/(Sello: .*)/, '<span class="sello">$1</span>'); }
-$('bSello').addEventListener('click', () => { pintaSello(); $('mSello').hidden = false; $('selloAviso').textContent = ''; });
-$('selloCerrar').addEventListener('click', () => { $('mSello').hidden = true; });
-$('mSello').addEventListener('click', e => { if(e.target.id === 'mSello') $('mSello').hidden = true; });
 $('selloNombre').addEventListener('input', () => { pintaSello(); guardaTurno(); });
 $('selloCopiar').addEventListener('click', async () => {
   const t = textoSello();
@@ -1954,13 +2149,12 @@ $('selloCopiar').addEventListener('click', async () => {
 
 /* ═══ LA GUÍA VISUAL ═════════════════════════════════════════════════ */
 const PASOS = [
-  {id:'franja',   t:'Tu grado', d:'Empiezas de discípulo. Cada tres cuentas subes un grado, como en las escuelas de wasan: shoden, chūden, okuden, kaiden. Con las quince, el que echa las cuentas: el título de Listaseki.'},
-  {id:'tablillas',t:'Las tablillas', d:'Una por cuenta hecha, colgadas en la pared del templo como las sangaku. Con las quince, la tuya.'},
+  {id:'franja',   t:'Tu grado', d:'Empiezas de discípulo. Cada tres cuentas subes un grado, como en las escuelas de wasan: shoden, chūden, okuden, kaiden. Con las quince, el que echa las cuentas: el título de Listaseki. Al lado, las tablillas: una por cuenta hecha, como las sangaku de los templos. Y tocando la franja se abre el índice de las salas.'},
   {id:'pEncargo', t:'El encargo', d:'Jefeyasu pide, en cabezas, patas, monedas y sacos. Se hace en la sala de abajo y se pulsa Comprobar. Contesta Listaseki, con el ábaco. Orizuru mira desde el borde.'},
   {sel:'.fila',   t:'Los mandos', d:'Lo que se puede tocar: las cabezas y las patas, el problema y la pareja, las filas del ábaco, qué se despeja, la segunda senda.'},
   {sel:'.escena', t:'La escena', d:'El estanque, la tablilla, el soroban, los sellos que bajan, las sendas del jardín. Cada incógnita lleva su color: azul la primera, verde la segunda.'},
   {sel:'.lectura',t:'La lectura', d:'La definición primero, y luego la cuenta hecha dos veces: como en la escuela y como se escribe con letras.'},
-  {id:'barra',    t:'La barra', d:'Taller para practicar libre, Salas para abrir cualquiera suelta, Glosario con las palabras del estanque, Deudas con lo que se demuestra y lo que se dice, La tablilla para llevarse la sesión y Ajustes para el tema.'}
+  {id:'barra',    t:'La regleta', d:'Seis acciones en letra pequeña, y cada una abre un papel encima que se cierra con su botón, con Escape o tocando fuera: Guía, Glosario con las palabras del estanque —y dentro, las deudas—, Taller para practicar suelto con hoja imprimible, Ajustes, Tablilla para llevarse la sesión y Aula para la pizarra. El modo papel y la vuelta a Materiales están dentro de Ajustes.'}
 ];
 let paso = 0;
 function elDe(p){
@@ -1992,8 +2186,78 @@ $('tourSalir').addEventListener('click', e => { e.stopPropagation(); cierraGuia(
 $('tourCapa').addEventListener('click', e => { if(e.target.id === 'tourCapa') cierraGuia(); });
 addEventListener('keydown', e => { if(e.key === 'Escape'){ cierraGuia(); $('mAjustes').hidden = true; $('mSello').hidden = true; } });
 
-/* ═══ EL ARRANQUE: el estanque al amanecer ═══════════════════════════ */
-{
+/* ── LA PUERTA ──────────────────────────────────────────────────────────
+   El arca de las llaves es de la casa entera: la portada y las trece
+   aplicaciones viven en el mismo sitio y cambia la carpeta, no el origen,
+   así que comparten localStorage. Lo que se abre en la portada lo sabe esta
+   página, y al revés.
+
+   Abren tres cosas: la palabra de este estanque, la maestra del profesor
+   —que para abrir las trece de golpe se escribe en la portada, que es la
+   que lleva la lista— y la tablilla de la aplicación anterior en la línea
+   del tiempo, si trae bastantes cuentas dentro del sello: la llave que se
+   gana quien termina.                                                    */
+const PUERTA = (() => {
+  const ARCA = 'casa.llaves.v1', YO = 'estanque-de-jefeyasu';
+  const PALABRA = 'junco', MAESTRA = 'hipatia';
+  const PREVIA = {sello:'CDR1.', umbral:10};   /* el comité de reclamaciones */
+  const limpia = t => String(t || '').toLowerCase().normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '').replace(/[^a-z0-9]/g, '');
+  let arca;
+  try{ const o = JSON.parse(localStorage.getItem(ARCA) || '{}');
+       arca = new Set(Array.isArray(o.a) ? o.a : []); }
+  catch(e){ arca = new Set(); }
+
+  /* Una tablilla pegada: se le saca el sello, se desenvuelve el base64 y se
+     cuentan las cuentas hechas. A medias no abre, y lo dice. */
+  function tablilla(txt){
+    const m = String(txt).match(/([A-Z]{2,4}\d)\.([A-Za-z0-9_-]{8,})/);
+    if(!m || m[1] + '.' !== PREVIA.sello) return 'no';
+    try{
+      const b = m[2].replace(/-/g, '+').replace(/_/g, '/');
+      const o = JSON.parse(decodeURIComponent(escape(atob(b + '==='.slice((b.length + 3) % 4)))));
+      return (Array.isArray(o.h) && o.h.length >= PREVIA.umbral) ? 'si' : 'poco';
+    }catch(e){ return 'no'; }
+  }
+
+  return {
+    abierta: arca.has(YO),
+    pide(sigue){
+      const caja = $('mPuerta'), campo = $('puLlave'), aviso = $('puAviso'), bot = $('boot');
+      bot.style.display = 'none';
+      caja.hidden = false; campo.focus();
+      const di = (t, c) => { aviso.textContent = t; aviso.className = 'avisoLl' + (c ? ' ' + c : ''); };
+      const intenta = () => {
+        const v = limpia(campo.value);
+        if(!v){ di('escribe la llave', 'mal'); return; }
+        if(v !== limpia(PALABRA) && v !== limpia(MAESTRA)){
+          const t = tablilla(campo.value);
+          if(t === 'poco'){ di('esa tablilla está a medias: vuelve y termínala', 'mal'); return; }
+          if(t !== 'si'){ di('esa llave no es de aquí', 'mal'); campo.select(); return; }
+        }
+        arca.add(YO);
+        try{ localStorage.setItem(ARCA, JSON.stringify({v:1, a:[...arca]})); }catch(e){}
+        di('adelante', 'bien');
+        setTimeout(() => { caja.hidden = true; bot.style.display = ''; sigue(); }, 420);
+      };
+      $('puAbrir').addEventListener('click', intenta);
+      campo.addEventListener('keydown', e => { if(e.key === 'Enter'){ e.preventDefault(); intenta(); } });
+      /* el tabulador no sale de la caja: detrás no hay nada que tocar */
+      caja.addEventListener('keydown', e => {
+        if(e.key !== 'Tab') return;
+        const f = [...caja.querySelectorAll('input,button,a')];
+        const pri = f[0], ult = f[f.length - 1];
+        if(e.shiftKey && document.activeElement === pri){ e.preventDefault(); ult.focus(); }
+        else if(!e.shiftKey && document.activeElement === ult){ e.preventDefault(); pri.focus(); }
+      });
+    }
+  };
+})();
+
+/* ═══ EL ARRANQUE: el estanque al amanecer ═══════════════════════════════
+   Con la puerta puesta no empieza hasta que se abre: el estanque al
+   amanecer es lo primero que se ve, y se ve entero o no se ve.        */
+function arranque(){
   const g = $('bootEstanque'), rapido = matchMedia('(prefers-reduced-motion: reduce)').matches, ys = 96;
   el(g, 'rect', {x:0, y:ys, width:240, height:104, rx:10, fill:'#3E5F86', 'fill-opacity':.85, class:'agua'});
   for(let i = 0; i < 6; i++) el(g, 'path', {d:'M' + (i * 44 - 4) + ' ' + ys + ' q11 -6 22 0 q11 6 22 0', fill:'none', stroke:'#7FB3C9', 'stroke-width':1});
@@ -2015,6 +2279,7 @@ addEventListener('keydown', e => { if(e.key === 'Escape'){ cierraGuia(); $('mAju
   $('boot').addEventListener('click', fuera);
   setTimeout(fuera, rapido ? 300 : 3300);
 }
+if(PUERTA.abierta) arranque(); else PUERTA.pide(arranque);
 
 /* ═══ EL AUTODIAGNÓSTICO ═════════════════════════════════════════════ */
 $('ixDiag').addEventListener('click', () => {

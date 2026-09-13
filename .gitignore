@@ -9,3 +9,6 @@
 .orizuru-desdoblada.svg
 .index.plantilla.html
 .arma.sh
+
+# las partes quedaron obsoletas al editar index.html directamente
+.obsoleto*
