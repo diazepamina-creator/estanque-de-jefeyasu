@@ -988,9 +988,8 @@ const Ruido = (() => {
 })();
 
 /* ── LOS AJUSTES. El tema es de tinta o de papel. ── */
-const AJ = {vista:'normal', tema:'tinta', texto:'normal', fuente:'legible', movimiento:'normal', sonido:'si', lang:'es'};
+const AJ = {tema:'tinta', texto:'normal', fuente:'legible', movimiento:'normal', sonido:'si', lang:'es'};
 const AJ_OPS = {
-  vista:     {etq:'vista',       ops:[['normal','normal'], ['aula','aula · pizarra']]},
   tema:      {etq:'tema',        ops:[['tinta','de tinta'], ['papel','de papel · proyector']]},
   texto:     {etq:'texto',       ops:[['normal','normal'], ['grande','grande']]},
   fuente:    {etq:'tipografía',  ops:[['legible','legible'], ['mincho','mincho']]},
@@ -1000,8 +999,6 @@ const AJ_OPS = {
 };
 function aplicaAjustes(){
   const r = document.documentElement;
-  document.body.dataset.aula = AJ.vista === 'aula' ? 'si' : 'no';
-  if(window.pintaAula) pintaAula();
   r.dataset.tema = AJ.tema; r.dataset.texto = AJ.texto; r.dataset.fuente = AJ.fuente; r.dataset.movimiento = AJ.movimiento;
   document.querySelectorAll('#aj button').forEach(b => b.setAttribute('aria-pressed', String(AJ[b.dataset.k] === b.dataset.v)));
 }
@@ -1675,6 +1672,7 @@ const HUEVO_DICE = {
 let ultimoRango = 'Discípulo';
 
 const GUARDADO = 'estanque.turno.v1';
+const AULA = 'aula.v1';   /* el modo aula es del aparato: llave aparte */
 const CADUCA = 4*60*60*1000;
 let t0 = Date.now();
 
@@ -2404,7 +2402,22 @@ Object.keys(SALAS).forEach(k => {
   };
   window.pintaAula = pinta;
   addEventListener('resize', pinta);
-  $('bAula').addEventListener('click', () => { AJ.vista = AJ.vista === 'aula' ? 'normal' : 'aula'; aplicaAjustes(); guardaTurno(); });
+  /* La palabra dice a dónde lleva el botón, no dónde estás: «Aula» para
+     entrar y «Salir del aula» para volver, que es como lo hace la terminal
+     J&L. El aula no es una preferencia que se marca en Ajustes: es un sitio
+     en el que se entra y del que se sale, y quien lo toca está de pie ante
+     la pizarra con treinta críos mirando.
+
+     Y como es de la pizarra y no del alumno, vive en su propia llave, no
+     dentro del turno, que caduca a las cuatro horas. */
+  $('bAula').addEventListener('click', () => {
+    const si = document.body.dataset.aula !== 'si';
+    document.body.dataset.aula = si ? 'si' : 'no';
+    try{ localStorage.setItem(AULA, si ? 'si' : 'no'); }catch(e){}
+    pinta();
+  });
+  try{ document.body.dataset.aula = localStorage.getItem(AULA) === 'si' ? 'si' : 'no'; }
+  catch(e){ document.body.dataset.aula = 'no'; }
   pinta();
 }
 </script>
