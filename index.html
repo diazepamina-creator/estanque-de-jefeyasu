@@ -366,25 +366,6 @@ a.b:hover{border-color:var(--acento)}
   border:1px solid var(--linea);background:var(--panel);color:var(--tinta);cursor:pointer}
 .tourGlobo button.pri{background:var(--acento);border-color:var(--acento);color:var(--acentoT)}
 
-/* ── LA PUERTA ──────────────────────────────────────────────────────────
-   El estanque cerrado hasta que llegue su lección. Esto no guarda un
-   secreto —el código de este archivo se lee con dos clics—: guarda el
-   ritmo, para que nadie se gaste las seis salas la semana antes de que
-   toquen. La llave la dice el profesor, y se recuerda en este navegador
-   junto con las de las demás aplicaciones: se pide una vez.            */
-.modal.puerta{z-index:10000}
-.puerta .etq{display:block;font-family:'Space Mono',monospace;font-size:10.5px;
-  letter-spacing:1.5px;text-transform:uppercase;color:var(--tenue);margin:0 0 7px;min-width:0}
-.puerta input{width:100%;background:var(--fondo);border:1px solid var(--linea);
-  border-radius:9px;padding:11px 12px;color:var(--tinta);
-  font-family:'Space Mono',monospace;font-size:14px;letter-spacing:1px}
-.puerta input:focus{outline:none;border-color:var(--acento)}
-.puerta .pista{font-size:13.5px;color:var(--tenue);margin:11px 0 0;line-height:1.5}
-.puerta .avisoLl{font-family:'Space Mono',monospace;font-size:11.5px;letter-spacing:1px;
-  min-height:17px;margin:9px 0 0;color:var(--tenue)}
-.puerta .avisoLl.bien{color:var(--bien)}
-.puerta .avisoLl.mal{color:var(--mal)}
-
 /* EL ARRANQUE: el estanque al amanecer. Salen las cabezas, se aclara el agua y se cuentan las patas. */
 .boot{position:fixed;inset:0;z-index:9999;background:#1A1719;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;
   transition:opacity .5s ease;cursor:pointer}
@@ -450,21 +431,6 @@ body[data-aula="si"] .regleta .acciones{justify-content:flex-start;gap:46px;widt
 </style>
 </head><body>
 
-<!-- ═══ LA PUERTA ═══ -->
-<div class="modal puerta" id="mPuerta" hidden>
- <div class="caja" role="dialog" aria-modal="true" aria-labelledby="puTit">
-  <div class="cab"><i aria-hidden="true"></i><div><b id="puTit">La puerta del estanque</b><small>esta lección aún no toca: hace falta la llave</small></div></div>
-  <label class="etq" for="puLlave">La llave</label>
-  <input id="puLlave" type="text" autocomplete="off" autocapitalize="off"
-    autocorrect="off" spellcheck="false" placeholder="una palabra">
-  <p class="pista">La dice el profesor cuando toca esta lección. También vale
-  la tablilla del comité de reclamaciones, si la has terminado: pégala aquí
-  entera. Se pide una sola vez: este navegador se acuerda.</p>
-  <p class="avisoLl" id="puAviso" role="status"></p>
-  <div class="pie"><button class="b ok" id="puAbrir">Abrir</button>
-    <a class="b" href="https://diazepamina-creator.github.io/">Volver a la casa</a></div>
- </div>
-</div>
 <div class="boot" id="boot" role="status" aria-live="polite">
   <div class="tit">El estanque de Jefeyasu</div>
   <div class="bootEscena" id="bootEscena">
@@ -2202,78 +2168,8 @@ $('tourSalir').addEventListener('click', e => { e.stopPropagation(); cierraGuia(
 $('tourCapa').addEventListener('click', e => { if(e.target.id === 'tourCapa') cierraGuia(); });
 addEventListener('keydown', e => { if(e.key === 'Escape'){ cierraGuia(); $('mAjustes').hidden = true; $('mSello').hidden = true; } });
 
-/* ── LA PUERTA ──────────────────────────────────────────────────────────
-   El arca de las llaves es de la casa entera: la portada y las trece
-   aplicaciones viven en el mismo sitio y cambia la carpeta, no el origen,
-   así que comparten localStorage. Lo que se abre en la portada lo sabe esta
-   página, y al revés.
-
-   Abren tres cosas: la palabra de este estanque, la maestra del profesor
-   —que para abrir las trece de golpe se escribe en la portada, que es la
-   que lleva la lista— y la tablilla de la aplicación anterior en la línea
-   del tiempo, si trae bastantes cuentas dentro del sello: la llave que se
-   gana quien termina.                                                    */
-const PUERTA = (() => {
-  const ARCA = 'casa.llaves.v1', YO = 'estanque-de-jefeyasu';
-  const PALABRA = 'junco', MAESTRA = 'hipatia';
-  const PREVIA = {sello:'CDR1.', umbral:10};   /* el comité de reclamaciones */
-  const limpia = t => String(t || '').toLowerCase().normalize('NFD')
-    .replace(/[\u0300-\u036f]/g, '').replace(/[^a-z0-9]/g, '');
-  let arca;
-  try{ const o = JSON.parse(localStorage.getItem(ARCA) || '{}');
-       arca = new Set(Array.isArray(o.a) ? o.a : []); }
-  catch(e){ arca = new Set(); }
-
-  /* Una tablilla pegada: se le saca el sello, se desenvuelve el base64 y se
-     cuentan las cuentas hechas. A medias no abre, y lo dice. */
-  function tablilla(txt){
-    const m = String(txt).match(/([A-Z]{2,4}\d)\.([A-Za-z0-9_-]{8,})/);
-    if(!m || m[1] + '.' !== PREVIA.sello) return 'no';
-    try{
-      const b = m[2].replace(/-/g, '+').replace(/_/g, '/');
-      const o = JSON.parse(decodeURIComponent(escape(atob(b + '==='.slice((b.length + 3) % 4)))));
-      return (Array.isArray(o.h) && o.h.length >= PREVIA.umbral) ? 'si' : 'poco';
-    }catch(e){ return 'no'; }
-  }
-
-  return {
-    abierta: arca.has(YO),
-    pide(sigue){
-      const caja = $('mPuerta'), campo = $('puLlave'), aviso = $('puAviso'), bot = $('boot');
-      bot.style.display = 'none';
-      caja.hidden = false; campo.focus();
-      const di = (t, c) => { aviso.textContent = t; aviso.className = 'avisoLl' + (c ? ' ' + c : ''); };
-      const intenta = () => {
-        const v = limpia(campo.value);
-        if(!v){ di('escribe la llave', 'mal'); return; }
-        if(v !== limpia(PALABRA) && v !== limpia(MAESTRA)){
-          const t = tablilla(campo.value);
-          if(t === 'poco'){ di('esa tablilla está a medias: vuelve y termínala', 'mal'); return; }
-          if(t !== 'si'){ di('esa llave no es de aquí', 'mal'); campo.select(); return; }
-        }
-        arca.add(YO);
-        try{ localStorage.setItem(ARCA, JSON.stringify({v:1, a:[...arca]})); }catch(e){}
-        di('adelante', 'bien');
-        setTimeout(() => { caja.hidden = true; bot.style.display = ''; sigue(); }, 420);
-      };
-      $('puAbrir').addEventListener('click', intenta);
-      campo.addEventListener('keydown', e => { if(e.key === 'Enter'){ e.preventDefault(); intenta(); } });
-      /* el tabulador no sale de la caja: detrás no hay nada que tocar */
-      caja.addEventListener('keydown', e => {
-        if(e.key !== 'Tab') return;
-        const f = [...caja.querySelectorAll('input,button,a')];
-        const pri = f[0], ult = f[f.length - 1];
-        if(e.shiftKey && document.activeElement === pri){ e.preventDefault(); ult.focus(); }
-        else if(!e.shiftKey && document.activeElement === ult){ e.preventDefault(); pri.focus(); }
-      });
-    }
-  };
-})();
-
-/* ═══ EL ARRANQUE: el estanque al amanecer ═══════════════════════════════
-   Con la puerta puesta no empieza hasta que se abre: el estanque al
-   amanecer es lo primero que se ve, y se ve entero o no se ve.        */
-function arranque(){
+/* ═══ EL ARRANQUE: el estanque al amanecer ═══════════════════════════ */
+{
   const g = $('bootEstanque'), rapido = matchMedia('(prefers-reduced-motion: reduce)').matches, ys = 96;
   el(g, 'rect', {x:0, y:ys, width:240, height:104, rx:10, fill:'#3E5F86', 'fill-opacity':.85, class:'agua'});
   for(let i = 0; i < 6; i++) el(g, 'path', {d:'M' + (i * 44 - 4) + ' ' + ys + ' q11 -6 22 0 q11 6 22 0', fill:'none', stroke:'#7FB3C9', 'stroke-width':1});
@@ -2295,7 +2191,6 @@ function arranque(){
   $('boot').addEventListener('click', fuera);
   setTimeout(fuera, rapido ? 300 : 3300);
 }
-if(PUERTA.abierta) arranque(); else PUERTA.pide(arranque);
 
 /* ═══ EL AUTODIAGNÓSTICO ═════════════════════════════════════════════ */
 $('ixDiag').addEventListener('click', () => {
